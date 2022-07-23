@@ -1,0 +1,115 @@
+
+.float-left {
+  float: left;
+}
+
+.clear {
+  &::after {
+    display: block;
+    clear: both;
+    content: ' ';
+  }
+}
+
+.hover {
+  &:hover {
+    cursor: pointer;
+    color: @hover;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-direction {
+  flex-direction: column;
+}
+
+.flex-one {
+  flex: 1 0 0;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-around {
+  justify-content: space-around;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.margin-l-5 {
+  margin-left: 5px !important;
+}
+
+.margin-lr-auto {
+  margin: 0 auto;
+}
+
+.margin-lr-10 {
+  margin: 0 10px;
+}
+
+.w_1200 {
+  width: 1200px;
+}
+
+.w_50 {
+  width: 50%;
+}
+
+.text-white {
+  color: @text-white;
+}
+
+.text-grey {
+  color: hsla(0, 0%, 100%, .65);
+}
+
+.text-desc {
+  color: @text-desc;
+}
+
+.primary {
+  color: @textPrimary;
+}
+
+.success {
+  color: @color;
+}
+
+.error {
+  color: @error;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.border {
+  border: 1px solid @border-color;
+}
+
+.border-bottom {
+  border-bottom: 1px solid @border-grey;
+}
+
+.bg-color {
+  background-color: @color;
+}
