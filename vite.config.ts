@@ -22,5 +22,17 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), eslintPlugin()]
+  plugins: [
+    react({
+      jsxRuntime: 'automatic',
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin']
+      }
+    }),
+    eslintPlugin(),
+  ],
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  }
 })

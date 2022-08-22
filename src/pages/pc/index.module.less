@@ -1,0 +1,108 @@
+.pcLayout {
+  height: 100%;
+
+  .header {
+    height: 55px;
+    line-height: 55px;
+
+    .menuGroup {
+      padding-left: 30px;
+
+      .menuItem {
+        padding: 0 30px;
+        display: inline-block;
+        color: hsla(0,0%,100%,.65);
+        transition: all .5s;
+
+        &:hover, &.active {
+          color: @text-white;
+          background-color: @hoverColor;
+        }
+      }
+    }
+  }
+
+  .logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .leftMenu {
+    border-right: 1px solid @border-color;
+  }
+
+  .linkGroup {
+    padding-right: 30px;
+
+    .link_group_link {
+      padding: 0 15px;
+      color: hsla(0, 0%, 100%, .65);
+      border-right: 1px solid hsla(0, 0%, 100%, .65);
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+
+  .siteLayoutBackground {
+    background: #fff;
+  }
+
+  .main-content {
+    padding: 0 24px;
+    margin: 0;
+    min-height: 280px;
+    overflow-y: auto;
+  }
+}
+
+// mode-layer
+.model-layer {
+  padding-top: 20px;
+
+  .ant-form {
+
+    .ant-form-item {
+      float: left;
+      padding: 0 10px;
+      width: 50%;
+
+      &.title {
+        width: 100%;
+      }
+
+      &.w_50 {
+        width: 50%;
+      }
+
+      .ant-form-item {
+        float: initial;
+        display: inline-block;
+        margin-bottom: 0;
+      }
+    }
+
+    .ant-form-item-label > label {
+      width: 80px;
+      justify-content: flex-end;
+      color: @text-grey;
+    }
+
+    .ant-form-item-control-input-content {
+      display: flex;
+
+      .ant-row {
+        padding-right: 0;
+      }
+    }
+
+    .content {
+      .ant-col .ant-form-item-control {
+        border: 1px solid #d8d8d8;
+      }
+    }
+  }
+}

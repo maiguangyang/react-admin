@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "antd": "^4.21.7",
     "hox": "2.0.0-alpha.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -16,6 +18,8 @@
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.9.2",
+    "@emotion/eslint-plugin": "^11.7.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",

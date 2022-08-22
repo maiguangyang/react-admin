@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: [
     'react',
+    '@emotion',
     '@typescript-eslint'
   ],
   rules: {
@@ -27,9 +28,14 @@ module.exports = {
       'error',
       { anonymous: 'always', named: 'never', asyncArrow: 'always' },
     ],
-    'generator-star-spacing': ['error', { before: false, after: true }],
-    'multiline-ternary': 'off',
-    'no-multi-spaces': 'off',
+    'generator-star-spacing' : ['error', { before: false, after: true }],
+    '@emotion/jsx-import'    : 'off',
+    'multiline-ternary'      : 'off',
+    'no-multi-spaces'        : 'off',
+    'object-curly-newline'   : 'off',
+    'object-property-newline': 'off',
+    'object-curly-spacing'   : 'off',
+    'key-spacing'            : 'off',
   },
   settings: {
     react: {
