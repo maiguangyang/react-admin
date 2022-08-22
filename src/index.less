@@ -1,0 +1,62 @@
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.clear {
+  clear: both;
+}
+
+.bf-container {
+  width: 100%;
+  border: 1px solid @borderColor;
+  border-radius: 2px;
+}
+
+.ant-layout {
+  height: 100%;
+}
+
+.ant-select-item, .ant-select-dropdown {
+  font-size: 12px;
+}
+
+.ant-table-tbody {
+  font-size: 12px;
+}
+
+.list-head-wapper {
+  position: sticky;
+  top: 0px;
+  z-index: 999;
+  padding: 10px 0;
+  background: @bgColorWhite;
+  border-bottom: 1px solid @borderGrey;
+}
+
+// 美化滚动条
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144,147,153,.5);
+  background-clip: padding-box;
+  min-height: 28px;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+  transition: background-color .3s;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144,147,153,.3);
+}
+
+.ant-form-item-with-help .ant-form-item-explain {
+  display: flex;
+  justify-content: space-between;
+}

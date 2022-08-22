@@ -2,12 +2,12 @@ import React         from 'react';
 import { useRoutes } from 'react-router';
 import { CustomRouteObject } from './types';
 
-import PcHome      from '~@/pages/pc';
-import PcHomeIndex from '~@/pages/pc/home/index/index';
+import Home      from '~@/pages/layout';
+import HomeIndex from '~@/pages/home/index/index';
 
 const routes: CustomRouteObject[] = [
-  { name: 'PcHome', path: '/', element: <PcHome />, children: [
-    { name: 'Home.Index', path: '/home', element: <PcHomeIndex /> },
+  { name: 'Home', path: '/', element: <Home />, children: [
+    { name: 'Home.Index', path: '/home', element: <HomeIndex /> },
   ]},
 ];
 

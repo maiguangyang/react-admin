@@ -12,6 +12,7 @@ export default defineConfig({
   },
   css: {
     modules: {
+      scopeBehaviour: 'local',
       localsConvention: 'camelCaseOnly'
     },
     preprocessorOptions: {
@@ -23,13 +24,14 @@ export default defineConfig({
     },
   },
   plugins: [
-    react({
-      jsxRuntime: 'automatic',
-      jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: ['@emotion/babel-plugin']
-      }
-    }),
+    react(),
+    // react({
+    //   jsxRuntime: 'automatic',
+    //   jsxImportSource: '@emotion/react',
+    //   babel: {
+    //     plugins: ['@emotion/babel-plugin']
+    //   }
+    // }),
     eslintPlugin(),
   ],
   esbuild: {

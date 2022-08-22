@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  height: 55px;
+  line-height: 55px;
+
+  .menuGroup {
+    padding-left: 30px;
+
+    .menuItem {
+      padding: 0 30px;
+      display: inline-block;
+      color: hsla(0,0%,100%,.65);
+      transition: all .5s;
+
+      &:hover, &.active {
+        color: @textWhite;
+        background-color: @hoverColor;
+      }
+    }
+  }
+
+  .logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.linkGroup {
+  padding-right: 30px;
+
+  .linkGroupLink {
+    padding: 0 15px;
+    color: hsla(0, 0%, 100%, .65);
+    border-right: 1px solid hsla(0, 0%, 100%, .65);
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+}

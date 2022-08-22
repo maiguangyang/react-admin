@@ -1,15 +1,11 @@
-import './App.css';
-import React                     from 'react';
-import RouterConfig              from './router';
-import { theme, GlobalStyles }   from './theme';
-import { Global, ThemeProvider } from '@emotion/react';
+// import './App.css';
+import '~@/assets/stylus/public.less';
+import React        from 'react';
+import RouterConfig from './router';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Global styles={GlobalStyles} />
-      <RouterConfig />
-    </ThemeProvider>
+    <RouterConfig />
   );
 }
 export default App;
