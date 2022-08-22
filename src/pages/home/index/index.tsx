@@ -1,16 +1,13 @@
 import React        from 'react';
-import { useTheme } from '~@/hooks/theme';
 
 const HomeIndex = () => {
-  const theme = useTheme();
-
   return (
     <>
       <header>
         <p>This is green since its inside a header</p>
       </header>
       <p>This is turquoise since its not inside a header.</p>
-      <footer css={{ color: theme.primaryColor }}>
+      <footer>
         <div className='float-left'>float-left</div>
         <div className='float-right'>float-right</div>
       </footer>
