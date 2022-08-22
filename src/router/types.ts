@@ -2,10 +2,11 @@ import { ReactElement } from 'react';
 import { RouteObject }  from 'react-router';
 
 export type CustomRouteObject = Omit<RouteObject, 'children'> & {
-  name?: string;
+  path: string,
+  title?: string;
+  hidden?: boolean;
   meta?: {
     icon?: ReactElement;
-    title?: string;
   };
   children?: Array<CustomRouteObject>;
 };

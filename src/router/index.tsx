@@ -1,14 +1,17 @@
 import React         from 'react';
 import { useRoutes } from 'react-router';
+import { UserOutlined } from '@ant-design/icons';
 import { CustomRouteObject } from './types';
 
 import Home      from '~@/pages/layout';
-import HomeIndex from '~@/pages/home/index/index';
+import HomeIndex from '~@/pages/home/index';
+import HomeAbout from '~@/pages/home/about';
 
-const routes: CustomRouteObject[] = [
-  { name: 'Home', path: '/', element: <Home />, children: [
-    { name: 'Home.Index', path: '/home', element: <HomeIndex /> },
+export const Routes: CustomRouteObject[] = [
+  { title: '管理中心', path: '/home', element: <Home />, children: [
+    { title: '首页', path: '/home', element: <HomeIndex />, meta: { icon: <UserOutlined /> } },
+    { title: '关于我们', path: 'about', element: <HomeAbout />, meta: { icon: <UserOutlined /> } },
   ]},
 ];
 
-export default () => useRoutes(routes);
+export default () => useRoutes(Routes);

@@ -10,7 +10,7 @@ import {
   Menu,
   message,
 } from 'antd';
-import { ItemType } from './types';
+import { HeaderLayerProps, ItemType } from './types';
 
 const dropdownItems: ItemType[] = [
   { label: '资质验证(未验证)', key: '1' },
@@ -28,13 +28,22 @@ const DropdownMenu = () => {
   );
 };
 
-const HeaderLayer: FC = () => {
+const HeaderLayer: FC<HeaderLayerProps> = (props) => {
+  const { current, data } = props;
+  console.log('current', current);
+  console.log('data', data);
+
   return (
     <Header className={classNames('flex align-center', styles.header)}>
       <div className={styles.logo} />
       <div className={classNames('flex flex-one align-center', styles.headerRight)}>
         <div className={classNames('flex-one', styles.menuGroup)}>
-          <NavLink className={styles.menuItem} to="/" title="首页">首页</NavLink>
+          {
+            data.map((item, key: number) =>
+              <NavLink key={key} className={classNames(styles.menuItem, current?.path === item.path ? styles.active : null)} to={item.path} title={item.title}>
+                { item.title }
+              </NavLink>)
+          }
         </div>
         <div className={classNames('flex align-center')}>
           <div className={styles.linkGroup}>

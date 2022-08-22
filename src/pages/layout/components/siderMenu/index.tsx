@@ -1,32 +1,15 @@
 import React, { FC }       from 'react';
-import { Menu, MenuProps } from 'antd';
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { Menu } from 'antd';
+import { MenuItem, SiderMenuProps } from './types';
 
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
+function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
+  return { key, icon, children, label } as MenuItem;
+}
 
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
+const SiderMenuLayer: FC<SiderMenuProps> = (props) => {
+  const { data } = props;
+  const items2: MenuItem[] = data.map((item, key: number) => getItem(item.title, key, item.meta?.icon));
 
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      }),
-    };
-  },
-);
-
-const SiderMenuLayer: FC = () => {
   return (
     <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={items2}></Menu>
   );

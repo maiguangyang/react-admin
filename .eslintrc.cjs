@@ -34,6 +34,7 @@ module.exports = {
     'object-property-newline': 'off',
     'object-curly-spacing'   : 'off',
     'key-spacing'            : 'off',
+    "react/display-name"     : 'off',
   },
   settings: {
     react: {
