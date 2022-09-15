@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {Helmet} from 'react-helmet';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Col, Input, Space } from 'antd';
 
 import { FilterLayer }  from '~@/components/Filter';
 import { Filter }       from '~@/common/utils/filter';
-// import { useAllRouter } from '~@/router/hooks';
+import { useAllRouter } from '~@/router/hooks';
 
 import { useFormData, ExtractColumnIndex } from '~@/hooks/formData';
 import { ColumnsDataType, FormTempTableListType, FormTempTableList, GenerateVariable, DeleteTableRows, TableWapper } from '~@/common/service/table';
@@ -34,7 +34,8 @@ export default () => {
   const [fetchStatus, setFetchStatus] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState(selectedRow);
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
-  // const route = useAllRouter(ComponentData.model);
+  const route = useAllRouter(ComponentData.model);
+  console.log(route.Detail);
 
   // 获取列表数据
   const columns: ColumnsDataType[] = [
@@ -74,8 +75,8 @@ export default () => {
       render: (text: any, record: any, index: number) => {
         return (
           <Space size="middle">
-            {/* <Link to={Router[`${ComponentData.model}Info`].path.replace(':id', record.id)}>查看</Link> */}
-            {/* <Link to={Router[`${ComponentData.model}Edit`].path.replace(':id', record.id)} className="primary">修改</Link> */}
+            <Link to={route.Detail.replace(':id', record.id)}>查看</Link>
+            <Link to={route.Edit.replace(':id', record.id)} className="primary">修改</Link>
             <DeleteTableRows type='row' model={`${ComponentData.model}Delete`} ids={[record.id]} onDeleteStatusChange={handleOnDeleteStatusChange} />
           </Space>
         );
