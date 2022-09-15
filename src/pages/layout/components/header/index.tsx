@@ -36,7 +36,7 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
       <div className={classNames('flex flex-one align-center', styles.headerRight)}>
         <div className={classNames('flex-one', styles.menuGroup)}>
           {
-            data.map((item, key: number) =>
+            data.filter(item => item.hidden !== true).map((item, key: number) =>
               <NavLink key={key}
                 className={classNames(styles.menuItem, current?.path === item.path && styles.active)}
                 to={item.path} title={item.title}

@@ -1,0 +1,43 @@
+.filter-layer {
+  position: sticky;
+  top: 0px;
+  padding-top: 15px;
+  z-index: 1000;
+  background: #fff;
+
+  > div {
+    margin-bottom: 10px;
+  }
+
+  .ant-col-xxl-6 {
+    text-align: center;
+  }
+
+  .filter-item {
+    .title {
+      width: 110px;
+      color: @textGrey;
+      text-align: right;
+    }
+
+    .ant-select {
+      flex: 1 0 0;
+      text-align: left;
+    }
+  }
+
+  .ant-select-item-option-content {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ant-radio-button-wrapper {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .filter-layer .ant-col-xxl-6 > * {
+    width: 80%;
+  }
+}

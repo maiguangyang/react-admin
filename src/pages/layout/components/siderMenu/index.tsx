@@ -12,7 +12,7 @@ const SiderMenuLayer: FC<SiderMenuProps> = (props) => {
   const navigate = useNavigate();
 
   const { data, selectedKeys } = props;
-  const items: MenuItem[] = data.map((item: CustomRouteObject) => {
+  const items: MenuItem[] = data.filter(item => item.hidden !== true).map((item: CustomRouteObject) => {
     return getItem(item.title, item.path, item.meta?.icon);
   });
 
