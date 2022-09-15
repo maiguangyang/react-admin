@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import React, { useEffect }  from 'react';
+import React, { useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
 import { useFormData, FormDefaultData, FormDefaultDataValue, Router, ComponentPropsDataType }  from '~@/hooks/formData';
-import { Form, Input, Cascader, InputNumber, Button, Row, Col, Switch, message, notification, Empty } from 'antd';
+import { Form, Input, InputNumber, Button, Row, Col, Switch, message, notification, Empty } from 'antd';
+import { useFormModel } from './hooks';
 
 type formDataType = FormDefaultData & {
   name: string,
@@ -11,35 +12,6 @@ type formDataType = FormDefaultData & {
   parentId: string,
   remark: string,
 }
-
-type cascaderType = {
-  id: string | null,
-  name: string,
-  children?: cascaderType,
-}
-
-type formTempType = {
-  cascader: cascaderType[],
-}
-
-type fieldNamesType = {
-  label: string,
-  value: string,
-  children: string,
-}
-
-const fieldNames: fieldNamesType = {
-  label: 'name',
-  value: 'id',
-  children: 'children',
-};
-
-const { TextArea } = Input;
-
-// 表单模板数据
-const formTemp: formTempType = {
-  cascader: [{ id: '0', name: '一级分类' }],
-};
 
 let isReadOnly: boolean = false;
 
@@ -53,72 +25,27 @@ export default (props: ComponentPropsDataType) => {
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { handleGetDetail } = useFormModel();
 
   const [form] = Form.useForm();
-
-  const variables = {
-    perPage: 0,
-    filter: {
-      id_ne: params.id,
-      parentId_null: true,
-    },
-  };
-
-  const { loading, data }: any = useFormData(`${props.model}s`, `{
-    id
-    name
-    parentText
-    parentId
-    children {
-      id
-      name
-      children {
-        ...FragmentFields
-      }
-    }
-  }`, variables, [], true);
-
-  if (data && !_.isEmpty(data.data)) {
-    const translator = (children: any) => {
-      children.forEach((item: any, index: number) => {
-        item.value = item.id;
-        item.label = item.name;
-        if (item.id === params.id) children.splice(index, 1);
-        else if (item.children && item.children.length > 0) translator(item.children);
-      });
-    };
-
-    translator(data.data);
-
-    formTemp.cascader = [{ id: '0', name: '一级分类' }].concat(data.data);
-  }
-
   const [formAdd]: any = useFormData(`${props.model}Add`);
   const [formEdit]: any = useFormData(`${props.model}Edit`);
 
   // 如果存在id，请求详情
   if (params.id) {
     isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
-
-    const { loading, data }: any = useFormData(`${props.model}Detail`, `{
-      id
-      name
-      parentText
-      parentId
-      remark
-      state
-      weight
-    }`, {
-      id: params.id,
-    });
-
-    useEffect(() => {
-      if (data) {
-        if (_.isEmpty(data.parentText)) data.parentText = '0';
-        data.parentText = data.parentText.split(',');
-        form.setFieldsValue({...data});
-      }
-    }, [loading]);
+    handleGetDetail(`${props.model}Detail`, params.id)
+      .then(({ data, loading }) => {
+        if (loading) setLoading(loading);
+        if (data) {
+          if (_.isEmpty(data.parentText)) data.parentText = '0';
+          data.parentText = data.parentText.split(',');
+          form.setFieldsValue({...data});
+        }
+      })
+      .catch((error: Error) => message.error(error.message))
+      .finally(() => setLoading(false));
   }
 
   // 提交
@@ -132,9 +59,6 @@ export default (props: ComponentPropsDataType) => {
     formData.parentId   = _.isArray(formData.parentText) ? formData.parentText[formData.parentText.length - 1] : formData.parentText;
     formData.parentText = _.isArray(formData.parentText) ? formData.parentText.join() : formData.parentText;
     if (_.isEmpty(formData.parentText) || formData.parentText === '0') formData.parentId = '';
-
-    // formData.parentText = _.isArray(formData.parentText) ? formData.parentText.join() : formData.parentText;
-    // if (_.isEmpty(data.parentText)) data.parentId = '';
 
     formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
 
@@ -173,16 +97,8 @@ export default (props: ComponentPropsDataType) => {
       <Row className="model-layer">
         <Col xs={24} sm={24} md={24} lg={20} xl={16} xxl={12}>
           <Form form={form} name="form" className='clear' initialValues={FormDefaultDataValue} scrollToFirstError onFinish={onFinish}>
-            <Form.Item label="分类名称" name="name" className='title w_50' rules={[{ required: true, message: '请输入分类名称' }]}>
-              <Input disabled={isReadOnly} allowClear placeholder='请输入分类名称' />
-            </Form.Item>
-
-            <Form.Item label="所属分类" name="parentText" className="clear" rules={[{ required: true, message: '请选择所属分类' }]}>
-              <Cascader disabled={isReadOnly} allowClear changeOnSelect options={formTemp.cascader} fieldNames={fieldNames} placeholder="请选择所属分类" />
-            </Form.Item>
-
-            <Form.Item label="备注" name="remark" className="title content">
-              <TextArea disabled={isReadOnly} placeholder="请输入备注" autoSize={{ minRows: 3, maxRows: 6 }} />
+            <Form.Item label="用户名称" name="username" className='title w_50' rules={[{ required: true, message: '请输入用户名称' }]}>
+              <Input disabled={isReadOnly} allowClear placeholder='请输入用户名称' />
             </Form.Item>
 
             <Form.Item label="排序" name="weight">
