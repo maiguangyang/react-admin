@@ -3,14 +3,11 @@ import styles from './index.module.less';
 
 import React, { FC, memo, useEffect, useState }      from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { Layout, ConfigProvider, notification } from 'antd';
 import zhCN       from 'antd/lib/locale/zh_CN';
 import classNames from 'classnames';
-import {
-  Layout,
-  ConfigProvider,
-  notification,
-} from 'antd';
 
+import { useBreadcrumb } from '~@/hooks';
 import HeaderLayer     from './components/header';
 import FooterLayer     from './components/footer';
 import BreadcrumbLayer from './components/breadcrumb';
@@ -35,14 +32,34 @@ ConfigProvider.config({
 
 const LayoutWapper: FC = memo(() => {
   const location = useLocation();
+  const { handleSetBreadcrumb } = useBreadcrumb();
+
   const [parenRoute, setParenRoute] = useState<CustomRouteObject>();
-  const [childMenu, setChildMenu] = useState<CustomRouteObject[]>([]);
+  const [childMenu, setChildMenu]   = useState<CustomRouteObject[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+
+  const handleFindRouteItem = (data: CustomRouteObject[], path: string) => {
+    return data.find(item => item.path === path) as CustomRouteObject;
+  };
 
   useEffect(() => {
-    const current: CustomRouteObject | undefined = Routes.find(item => item.path === location.pathname);
-    if (current) {
-      setParenRoute(current);
-      if (current.children) setChildMenu(current.children);
+    const array = location.pathname.split('/').filter(item => item !== '');
+    if (array.length > 0) {
+      const current = handleFindRouteItem(Routes, `/${array[0]}`);
+      if (current) {
+        setParenRoute(current);
+        if (current.children) setChildMenu(current.children);
+      }
+
+      if (array.length === 1) {
+        handleSetBreadcrumb([current]);
+        setSelectedKeys([current.path]);
+      } else {
+        const name = location.pathname.replace(current.path, '');
+        const children = current.children?.find(item => `/${item.path}` === name);
+        handleSetBreadcrumb([current, children as CustomRouteObject]);
+        children?.path && setSelectedKeys([children.path]);
+      }
     }
   }, [location]);
 
@@ -51,7 +68,7 @@ const LayoutWapper: FC = memo(() => {
       <HeaderLayer current={parenRoute} data={Routes} />
       <Layout>
         <Sider width={230} className={classNames(styles.leftMenu)} collapsible>
-          <SiderMenuLayer data={childMenu} />
+          <SiderMenuLayer data={childMenu} selectedKeys={selectedKeys} />
         </Sider>
         <Layout style={{ padding: '0 24px 0px' }}>
           <BreadcrumbLayer />
