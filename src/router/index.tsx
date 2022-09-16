@@ -14,14 +14,14 @@ import UserAdd    from '~@/pages/home/user/add';
 import UserEdit   from '~@/pages/home/user/edit';
 
 export const Routes: CustomRouteObject[] = [
-  { title: '管理中心', path: '/home', element: <Home />, children: [
+  { title: '技术分享', path: '/home', element: <Home />, children: [
     { title: '首页', path: '/home', element: <HomeIndex />, meta: { icon: <UserOutlined /> } },
     { title: '关于我们', path: 'about', element: <HomeAbout />, meta: { icon: <UserOutlined /> } },
 
     { title: '用户管理', path: 'user', element: <User />, meta: { icon: <UserOutlined /> } },
-    { title: '用户详情', path: 'user/:id', hidden: true, element: <UserDetail />, meta: { icon: <UserOutlined /> } },
     { title: '新增用户', path: 'user/add', hidden: true, element: <UserAdd />, meta: { icon: <UserOutlined /> } },
-    { title: '修改用户', path: 'user/edit/:id', hidden: true, element: <UserEdit />, meta: { icon: <UserOutlined /> } },
+    { title: '修改用户', path: 'user/:id/edit', hidden: true, element: <UserEdit />, meta: { icon: <UserOutlined /> } },
+    { title: '用户详情', path: 'user/:id', hidden: true, element: <UserDetail />, meta: { icon: <UserOutlined /> } },
   ]},
 ];
 

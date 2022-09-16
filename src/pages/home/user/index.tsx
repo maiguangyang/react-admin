@@ -35,7 +35,6 @@ export default () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(selectedRow);
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
   const route = useAllRouter(ComponentData.model);
-  console.log(route.Detail);
 
   // 获取列表数据
   const columns: ColumnsDataType[] = [
@@ -46,7 +45,7 @@ export default () => {
     },
     {
       title: '用户名称',
-      dataIndex: 'phone',
+      dataIndex: 'username',
       align: 'center',
     },
     {

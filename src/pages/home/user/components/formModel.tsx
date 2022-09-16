@@ -1,68 +1,64 @@
 import _ from 'lodash';
-import React, { useState }  from 'react';
+import React, { useEffect, useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
-import { useFormData, FormDefaultData, FormDefaultDataValue, Router, ComponentPropsDataType }  from '~@/hooks/formData';
-import { Form, Input, InputNumber, Button, Row, Col, Switch, message, notification, Empty } from 'antd';
-import { useFormModel } from './hooks';
-
-type formDataType = FormDefaultData & {
-  name: string,
-  parentText: string[] | string,
-  parentId: string,
-  remark: string,
-}
+import { FormDefaultDataValue, ComponentPropsDataType, useFormData }  from '~@/hooks/formData';
+import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, notification } from 'antd';
+import { useAllRouter } from '~@/router/hooks';
+import { FormDataType } from '../types';
 
 let isReadOnly: boolean = false;
 
 export default (props: ComponentPropsDataType) => {
+  const params    = useParams();
+  const location  = useLocation();
+  const navigate  = useNavigate();
+  const [loading] = useState<boolean>(false);
+  const route     = useAllRouter(props.model);
+
   if (_.isEmpty(props)) {
     return (
       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={<span>缺少props数据</span>} />
     );
   }
 
-  const location = useLocation();
-  const navigate = useNavigate();
-  const params = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
-  const { handleGetDetail } = useFormModel();
-
   const [form] = Form.useForm();
   const [formAdd]: any = useFormData(`${props.model}Add`);
   const [formEdit]: any = useFormData(`${props.model}Edit`);
 
-  // 如果存在id，请求详情
+  // 获取详情
   if (params.id) {
     isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
-    handleGetDetail(`${props.model}Detail`, params.id)
-      .then(({ data, loading }) => {
-        if (loading) setLoading(loading);
-        if (data) {
-          if (_.isEmpty(data.parentText)) data.parentText = '0';
-          data.parentText = data.parentText.split(',');
-          form.setFieldsValue({...data});
-        }
-      })
-      .catch((error: Error) => message.error(error.message))
-      .finally(() => setLoading(false));
+    const { data, loading, error } = useFormData(`${props.model}Detail`, `{
+      id
+      username
+      state
+      weight
+    }`, { id: params.id });
+
+    useEffect(() => {
+      if (error) {
+        message.error(error.message);
+        return;
+      }
+      if (data) {
+        if (_.isEmpty(data.parentText)) data.parentText = '0';
+        data.parentText = data.parentText.split(',');
+        form.setFieldsValue({...data});
+      }
+    }, [loading]);
   }
 
-  // 提交
-  const onFinish = async (formData: formDataType) => {
+  // 表单提交
+  const onFinish = async (formData: FormDataType) => {
     if (loading) {
       message.error('请勿重复提交');
       return;
     }
 
     // setLoading(true);
-    formData.parentId   = _.isArray(formData.parentText) ? formData.parentText[formData.parentText.length - 1] : formData.parentText;
-    formData.parentText = _.isArray(formData.parentText) ? formData.parentText.join() : formData.parentText;
-    if (_.isEmpty(formData.parentText) || formData.parentText === '0') formData.parentId = '';
-
     formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
 
-    // return;
     let variables: object = {
       data: { ...formData },
     };
@@ -85,7 +81,7 @@ export default (props: ComponentPropsDataType) => {
         message: '温馨提示',
         description: '操作成功',
       });
-      setTimeout(() => navigate(Router.Pc[props.model].path), 1000);
+      setTimeout(() => navigate(route.List), 1000);
     }
   };
 
@@ -112,7 +108,7 @@ export default (props: ComponentPropsDataType) => {
             <Form.Item wrapperCol={{ offset: 4 }}>
               {
                 isReadOnly
-                  ? <Button htmlType="submit" loading={loading} onClick={() => navigate(Router.Pc[`${props.model}Edit`].path.replace(':id', String(params.id)))}>编 辑</Button>
+                  ? <Button htmlType="submit" loading={loading} onClick={() => navigate(route.Edit.replace(':id', String(params.id)))}>编 辑</Button>
                   : <Button type="primary" htmlType="submit" loading={loading}>保 存</Button>
               }
               <Button type="link" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>

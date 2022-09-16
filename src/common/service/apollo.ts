@@ -34,7 +34,7 @@ export const useApollo = () => {
   });
 
   const cache = new InMemoryCache({
-    // addTypename: false,
+    addTypename: false,
     // dataIdFromObject(responseObject) {
     //   switch (responseObject.__typename) {
     //     default: return defaultDataIdFromObject(responseObject);
