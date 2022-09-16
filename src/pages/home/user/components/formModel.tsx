@@ -7,14 +7,13 @@ import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, not
 import { useAllRouter } from '~@/router/hooks';
 import { FormDataType } from '../types';
 
-let isReadOnly: boolean = false;
-
 export default (props: ComponentPropsDataType) => {
   const params    = useParams();
   const location  = useLocation();
   const navigate  = useNavigate();
   const [loading] = useState<boolean>(false);
   const route     = useAllRouter(props.model);
+  const isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
 
   if (_.isEmpty(props)) {
     return (
@@ -28,7 +27,6 @@ export default (props: ComponentPropsDataType) => {
 
   // 获取详情
   if (params.id) {
-    isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
     const { data, loading, error } = useFormData(`${props.model}Detail`, `{
       id
       username

@@ -55,10 +55,20 @@ const LayoutWapper: FC = memo(() => {
         handleSetBreadcrumb([current]);
         setSelectedKeys([current.path]);
       } else {
-        const name = location.pathname.replace(current.path, '');
-        const children = current.children?.find(item => `/${item.path}` === name);
-        handleSetBreadcrumb([current, children as CustomRouteObject]);
+        // const name = location.pathname.replace(current.path, '');
+        const name = array[1];
+        const children = current.children?.find(item => item.path === name);
+
+        const breadcrumb = [current, children as CustomRouteObject];
         children?.path && setSelectedKeys([children.path]);
+        if (/add/.test(location.pathname)) {
+          breadcrumb.push({ title: '添加', path: 'none' });
+        } else if (/edit.*/.test(location.pathname)) {
+          breadcrumb.push({ title: '修改', path: 'none' });
+        } else if (/\w{8}(-\w{4}){3}-\w{12}.*/.test(location.pathname)) {
+          breadcrumb.push({ title: '详情', path: 'none' });
+        }
+        handleSetBreadcrumb(breadcrumb);
       }
     }
   }, [location]);
