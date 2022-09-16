@@ -11,7 +11,7 @@ interface UserDataFields {
   data: UserDataItem[];
 }
 
-const GET_DOGS = gql`
+const GET_USERS = gql`
   query GetUsers {
     users {
       data {
@@ -24,7 +24,7 @@ const GET_DOGS = gql`
 `;
 
 const HomeAbout = () => {
-  const { loading, error, data } = useQuery(GET_DOGS);
+  const { loading, error, data } = useQuery(GET_USERS);
 
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
