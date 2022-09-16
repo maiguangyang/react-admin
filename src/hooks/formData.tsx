@@ -12,6 +12,7 @@ export type FormDefaultData = {
 export type ComponentPropsDataType = {
   title: string,
   model: string,
+  disabled: string[],
 }
 
 export { Router };

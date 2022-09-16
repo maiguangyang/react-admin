@@ -6,13 +6,16 @@ import { FormDefaultDataValue, ComponentPropsDataType, useFormData }  from '~@/h
 import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, notification } from 'antd';
 import { useAllRouter } from '~@/router/hooks';
 import { FormDataType } from '../types';
+import { isValidKey } from '~@/common/utils/utils';
 
 export default (props: ComponentPropsDataType) => {
+  const { title, model, disabled } = props;
+
   const params    = useParams();
   const location  = useLocation();
   const navigate  = useNavigate();
   const [loading] = useState<boolean>(false);
-  const route     = useAllRouter(props.model);
+  const route     = useAllRouter(model);
   const isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
 
   if (_.isEmpty(props)) {
@@ -22,13 +25,15 @@ export default (props: ComponentPropsDataType) => {
   }
 
   const [form] = Form.useForm();
-  const [formAdd]: any = useFormData(`${props.model}Add`);
-  const [formEdit]: any = useFormData(`${props.model}Edit`);
+  const [formAdd]: any = useFormData(`${model}Add`);
+  const [formEdit]: any = useFormData(`${model}Edit`);
 
   // 获取详情
   if (params.id) {
-    const { data, loading, error } = useFormData(`${props.model}Detail`, `{
+    const { data, loading, error } = useFormData(`${model}Detail`, `{
       id
+      phone
+      password
       username
       state
       weight
@@ -57,6 +62,10 @@ export default (props: ComponentPropsDataType) => {
     // setLoading(true);
     formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
 
+    disabled.forEach(item => {
+      if (isValidKey(item, formData) && formData[item]) delete formData[item];
+    });
+
     let variables: object = {
       data: { ...formData },
     };
@@ -73,7 +82,7 @@ export default (props: ComponentPropsDataType) => {
 
     // setLoading(false);
     let resData = res.data || {};
-    resData = resData[`create${props.model}`] || resData[`update${props.model}`] || {};
+    resData = resData[`create${model}`] || resData[`update${model}`] || {};
     if (resData.id) {
       notification.success({
         message: '温馨提示',
@@ -86,13 +95,27 @@ export default (props: ComponentPropsDataType) => {
   return (
     <>
       <Helmet>
-        <title>{props.title}</title>
+        <title>{title}</title>
       </Helmet>
       <Row className="model-layer">
         <Col xs={24} sm={24} md={24} lg={20} xl={16} xxl={12}>
           <Form form={form} name="form" className='clear' initialValues={FormDefaultDataValue} scrollToFirstError onFinish={onFinish}>
-            <Form.Item label="用户名称" name="username" className='title w_50' rules={[{ required: true, message: '请输入用户名称' }]}>
-              <Input disabled={isReadOnly} allowClear placeholder='请输入用户名称' />
+            <Form.Item label="登录账户" name="phone" className='title w_50'
+              hidden={disabled.includes('phone')}
+              rules={[{ required: !disabled.includes('phone'), message: '请输入登录账户' }]}>
+                <Input disabled={isReadOnly} allowClear placeholder='请输入登录账户' />
+            </Form.Item>
+
+            <Form.Item label="登录密码" name="password" className='title w_50'
+              hidden={disabled.includes('password')}
+              rules={[{ required: !disabled.includes('password'), message: '请输入登录密码' }]}>
+                <Input disabled={isReadOnly} allowClear placeholder='请输入登录密码' />
+            </Form.Item>
+
+            <Form.Item label="用户名称" name="username" className='title w_50'
+              hidden={disabled.includes('username')}
+              rules={[{ required: !disabled.includes('username'), message: '请输入用户名称' }]}>
+                <Input disabled={isReadOnly} allowClear placeholder='请输入用户名称' />
             </Form.Item>
 
             <Form.Item label="排序" name="weight">

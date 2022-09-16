@@ -3,6 +3,6 @@ import { ComponentData } from './index';
 
 export default () => {
   return (
-    <ComponentData.FormData title={`新增${ComponentData.title}`} model={ComponentData.model} />
+    <ComponentData.FormData title={`新增${ComponentData.title}`} model={ComponentData.model} disabled={[]} />
   );
 };
