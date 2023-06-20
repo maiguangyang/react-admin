@@ -4,7 +4,7 @@ import LocalStorage from '~@/common/utils/localStorage.cookie';
 import { message as msg } from 'antd';
 
 export const useApollo = () => {
-  const uri = process.env.NODE_ENV === 'production' ? 'http://192.167.167.228:8080/graphql' : 'http://192.167.167.228:8080/graphql';
+  const uri = process.env.NODE_ENV === 'production' ? 'http://localhost:8080/graphq' : 'http://localhost:8080/graphq';
   // LocalStorage.set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250ZW50Ijp7ImlkIjoiMjU0ZmVhN2ItM2Y3Mi00YmM3LThmNTctOGVlZWE2N2RiODFiIiwicm9sZSI6InVzZXIiLCJzaWduIjoiZDdiZjVlMTYxZTZmZTA3MzRhNzE4ZDUyOWQ2OGI3MWIifSwiZXhwIjoxNjY1NjY5MTY3LCJuYmYiOjE2NjMwNzcxNjd9.nLCYdzckbArQLbR4kGHMoPK1E7PURX0H6YlNEUqFKlI');
 
   const token = LocalStorage.get('Authorization') || {};
