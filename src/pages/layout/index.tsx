@@ -1,4 +1,4 @@
-import 'antd/dist/antd.variable.min.css';
+import 'antd/dist/reset.css';
 import styles from './index.module.less';
 
 import React, { FC, memo, useEffect, useState }      from 'react';
