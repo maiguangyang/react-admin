@@ -1,13 +1,13 @@
 import { useState }          from 'react';
 import { createGlobalStore } from 'hox';
-import { CustomRouteObject } from '~@/router/types';
+import { RouteObject } from '~@/router/types';
 
-const homeBreadcrumb: CustomRouteObject = { title: '首页', path: '/' };
+const homeBreadcrumb: RouteObject = { title: '首页', path: '/' };
 
 export const [useBreadcrumb] = createGlobalStore(() => {
-  const [breadcrumb, setBreadcrumb] = useState<CustomRouteObject[]>([homeBreadcrumb]);
+  const [breadcrumb, setBreadcrumb] = useState<RouteObject[]>([homeBreadcrumb]);
 
-  const handleSetBreadcrumb = (data: CustomRouteObject[]) => {
+  const handleSetBreadcrumb = (data: RouteObject[]) => {
     setBreadcrumb([homeBreadcrumb].concat(data.filter(item => item !== undefined)));
   };
 

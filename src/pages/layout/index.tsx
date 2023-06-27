@@ -14,7 +14,7 @@ import BreadcrumbLayer from './components/breadcrumb';
 import SiderMenuLayer  from './components/siderMenu';
 
 import { Routes } from '~@/router';
-import { CustomRouteObject } from '~@/router/types';
+import { RouteObject } from '~@/router/types';
 
 notification.config({
   top: 55,
@@ -23,29 +23,30 @@ notification.config({
 
 const { Content, Sider } = Layout;
 
-// 动态变更主题
-ConfigProvider.config({
-  theme: {
-    primaryColor: '#059c32',
-  },
-});
+// // 动态变更主题
+// ConfigProvider.config({
+//   theme: {
+//     primaryColor: '#059c32',
+//   },
+// });
 
-const LayoutWapper: FC = memo(() => {
+// LayoutWrapper ...
+const LayoutWrapper: FC = memo(() => {
   const location = useLocation();
   const { handleSetBreadcrumb } = useBreadcrumb();
 
-  const [parenRoute, setParenRoute] = useState<CustomRouteObject>();
-  const [childMenu, setChildMenu]   = useState<CustomRouteObject[]>([]);
+  const [parenRoute, setParenRoute] = useState<RouteObject>();
+  const [childMenu, setChildMenu]   = useState<RouteObject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  const handleFindRouteItem = (data: CustomRouteObject[], path: string) => {
-    return data.find(item => item.path === path) as CustomRouteObject;
+  const handleFindRouteItem = (data: RouteObject[], path: string) => {
+    return data.find(item => item.path === path) as RouteObject;
   };
 
   useEffect(() => {
     const array = location.pathname.split('/').filter(item => item !== '');
     if (array.length > 0) {
-      const current = handleFindRouteItem(Routes, `/${array[0]}`);
+      const current = handleFindRouteItem(Routes[0].children as RouteObject[], `/${array[0]}`);
       if (current) {
         setParenRoute(current);
         if (current.children) setChildMenu(current.children);
@@ -57,10 +58,10 @@ const LayoutWapper: FC = memo(() => {
       } else {
         // const name = location.pathname.replace(current.path, '');
         const name = array[1];
-        const children = current.children?.find(item => item.path === name);
+        const child = current.children?.find(item => item.path === name);
 
-        const breadcrumb = [current, children as CustomRouteObject];
-        children?.path && setSelectedKeys([children.path]);
+        const breadcrumb = [current, child as RouteObject];
+        child?.path && setSelectedKeys([child.path]);
         if (/add/.test(location.pathname)) {
           breadcrumb.push({ title: '添加', path: 'none' });
         } else if (/edit.*/.test(location.pathname)) {
@@ -74,30 +75,24 @@ const LayoutWapper: FC = memo(() => {
   }, [location]);
 
   return (
-    <Layout className={styles.pcLayout}>
-      <HeaderLayer current={parenRoute} data={Routes} />
-      <Layout>
-        <Sider width={230} className={classNames(styles.leftMenu)} collapsible>
-          <SiderMenuLayer data={childMenu} selectedKeys={selectedKeys} />
-        </Sider>
-        <Layout style={{ padding: '0 24px 0px' }}>
-          <BreadcrumbLayer />
-          <Content className={classNames('border', styles.mainContent)}>
-            <Outlet />
-          </Content>
-          <FooterLayer />
+    <ConfigProvider locale={zhCN}>
+      <Layout className={styles.pcLayout}>
+        <HeaderLayer current={parenRoute} data={Routes[0].children as RouteObject[]} />
+        <Layout>
+          <Sider width={230} className={classNames(styles.leftMenu)} collapsible>
+            <SiderMenuLayer data={childMenu} selectedKeys={selectedKeys} />
+          </Sider>
+          <Layout style={{ padding: '0 24px 0px' }}>
+            <BreadcrumbLayer />
+            <Content className={classNames('border', styles.mainContent)}>
+              <Outlet />
+            </Content>
+            <FooterLayer />
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
-  );
-});
-
-const LayoutWrapper = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <LayoutWapper />
     </ConfigProvider>
   );
-};
+});
 
 export default LayoutWrapper;

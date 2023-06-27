@@ -1,36 +1,20 @@
 import React, { FC } from 'react';
 import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
+import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 import { useBreadcrumb } from '~@/hooks';
-import { CustomRouteObject } from '~@/router/types';
-import { Link, useNavigate } from 'react-router-dom';
 
 const BreadcrumbLayer: FC = () => {
-  const navigate = useNavigate();
   const { breadcrumb } = useBreadcrumb();
 
   // 面包屑点击
-  const handleBreadcrumbOnClick = (e: any, item: any) => {
-    navigate(item.path);
+  const itemRender = (route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>, params: any, routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[], paths: string[]) => {
+    const last = routes.indexOf(route) === routes.length - 1;
+    return last ? <span>{route.title}</span> : <Link to={paths.join('/')}>{route.title}</Link>;
   };
 
   return (
-    <Breadcrumb style={{ margin: '16px 0' }}>
-      {
-        breadcrumb.map((item: CustomRouteObject, key: number) => {
-          return (
-            <Breadcrumb.Item key={key}>
-              {
-                item.path === 'none'
-                  ? item.title
-                  : <Link to={item.path} onClick={(e) => { e.preventDefault(); handleBreadcrumbOnClick(e, item); }}>
-                      {item.title}
-                    </Link>
-              }
-            </Breadcrumb.Item>
-          );
-        })
-      }
-    </Breadcrumb>
+    <Breadcrumb style={{ margin: '16px 0' }} itemRender={itemRender} items={breadcrumb} />
   );
 };
 

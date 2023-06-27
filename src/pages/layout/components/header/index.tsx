@@ -7,25 +7,19 @@ import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import {
   Avatar,
   Dropdown,
-  Menu,
+  MenuProps,
   message,
 } from 'antd';
-import { HeaderLayerProps, ItemType } from './types';
+import { HeaderLayerProps } from './types';
 
-const dropdownItems: ItemType[] = [
+const items: MenuProps['items'] = [
   { label: '资质验证(未验证)', key: '1' },
   { label: '修改密码', key: '2' },
   { label: '退出登录', key: '3' },
 ];
 
-// 下拉菜单
-const DropdownMenu = () => {
-  const onClick = ({ key }: { key: string }) => {
-    message.info(`Click on item${key}`);
-  };
-  return (
-    <Menu onClick={onClick} items={dropdownItems} />
-  );
+const onClick: MenuProps['onClick'] = ({ key }) => {
+  message.info(`Click on item ${key}`);
 };
 
 const HeaderLayer: FC<HeaderLayerProps> = (props) => {
@@ -51,7 +45,7 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
             <Link to='/' className={styles.linkGroupLink} title='帮助中心' target='_blank'>帮助中心</Link>
           </div>
           <Avatar size="large" icon={<UserOutlined />} />
-          <Dropdown className={styles.company} overlay={DropdownMenu}>
+          <Dropdown className={styles.company} menu={{items, onClick}}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
               <span className='margin-l-5'>中山华定科技有限公司</span>
               <DownOutlined className='margin-l-5' />
