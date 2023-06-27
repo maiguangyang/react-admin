@@ -1,6 +1,6 @@
 import React from 'react';
 import { TaskItemProps } from '../../types';
-import { useTaskStore } from '../../hook';
+import { useTaskStore } from '../../hooks';
 
 // item
 const TaskItem = (props: TaskItemProps) => {

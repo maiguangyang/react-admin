@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTaskStore } from '../../hook';
+import { useTaskStore } from '../../hooks';
 
 const ButtonWrapper = () => {
   const { addTask } = useTaskStore();

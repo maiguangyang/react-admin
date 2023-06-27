@@ -30,13 +30,16 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
       <div className={classNames('flex flex-one align-center', styles.headerRight)}>
         <div className={classNames('flex-one', styles.menuGroup)}>
           {
-            data.filter(item => item.hidden !== true).map((item, key: number) =>
-              <NavLink key={key}
-                className={classNames(styles.menuItem, current?.path === item.path && styles.active)}
-                to={item.path} title={item.title}
-              >
-                { item.title }
-              </NavLink>)
+            data.filter(item => item.hidden !== true).map((item, key: number) => {
+              return (
+                <NavLink key={key}
+                  className={classNames(styles.menuItem, current?.path === item.path && styles.active)}
+                  to={`${item.path}/${item.children?.[0]?.path}`} title={item.title}
+                >
+                  { item.title }
+                </NavLink>
+              );
+            })
           }
         </div>
         <div className={classNames('flex align-center')}>

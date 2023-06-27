@@ -1,8 +1,8 @@
 import { MenuProps } from 'antd';
-import { CustomRouteObject } from '~@/router/types';
+import { RouteObject } from '~@/router/types';
 
 export interface SiderMenuProps {
-  data: CustomRouteObject[];
+  data: RouteObject[];
   selectedKeys: string[];
 };
 

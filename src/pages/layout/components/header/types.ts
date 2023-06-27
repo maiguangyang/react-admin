@@ -1,8 +1,8 @@
-import { CustomRouteObject } from '~@/router/types';
+import { RouteObject } from '~@/router/types';
 
 export type { ItemType } from 'antd/lib/menu/hooks/useItems';
 
 export interface HeaderLayerProps {
-  current: CustomRouteObject | undefined;
-  data: CustomRouteObject[];
+  current: RouteObject | undefined;
+  data: RouteObject[];
 };
