@@ -1,5 +1,5 @@
 import React         from 'react';
-import { useRoutes } from 'react-router';
+import { useRoutes } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 
 import LayoutPage from '~@/pages/layout';

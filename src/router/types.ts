@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { NonIndexRouteObject }  from 'react-router';
+import { NonIndexRouteObject } from 'react-router-dom';
 
 export type RouteObject = Omit<NonIndexRouteObject, 'children'> & {
   path: string
