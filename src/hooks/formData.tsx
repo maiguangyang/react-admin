@@ -2,7 +2,7 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Router from '~@/router';
-export { ExtractColumnIndex } from '~@/common/utils/extract';
+export { ExtractColumnIndex } from '~@/utils/extract';
 
 export type FormDefaultData = {
   weight: number,

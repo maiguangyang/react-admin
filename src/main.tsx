@@ -3,7 +3,7 @@ import ReactDOM           from 'react-dom/client';
 import { BrowserRouter }  from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { HoxRoot }        from 'hox';
-import { useApollo } from '~@/common/service/apollo';
+import { useApollo } from '~@/services/apollo_service';
 import App                from './App';
 import './index.less';
 

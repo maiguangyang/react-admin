@@ -6,7 +6,8 @@ import LayoutPage from '~@/pages/layout';
 import HomeIndex  from '~@/pages/home/index';
 import HomeAbout  from '~@/pages/home/about';
 import HomeHox    from '~@/pages/home/hox';
-import User       from '~@/pages/user';
+import Project    from '~@/pages/project';
+
 import { RouteObject } from './types';
 
 export const Routes: RouteObject[] = [
@@ -15,8 +16,8 @@ export const Routes: RouteObject[] = [
     { title: '关于我们', path: 'about', element: <HomeAbout />, meta: { icon: <UserOutlined /> } },
     { title: 'hox', path: 'hox', element: <HomeHox />, meta: { icon: <UserOutlined /> } },
   ]},
-  { title: '用户管理', path: '/user', element: <LayoutPage />, children: [
-    { title: '用户列表', path: 'index', element: <User />, meta: { icon: <UserOutlined /> } },
+  { title: '项目管理', path: '/project', element: <LayoutPage />, children: [
+    { title: '项目列表', path: 'list', element: <Project />, meta: { icon: <UserOutlined /> } },
   ]},
 ];
 

@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import LocalStorage from '~@/common/utils/localStorage.cookie';
-import { message as msg } from 'antd';
+import LocalStorage from '~@/utils/localStorage.cookie';
+import { notification } from 'antd';
 
 export const useApollo = () => {
   const uri = process.env.NODE_ENV === 'production' ? 'http://localhost:8080/graphql' : 'http://localhost:8080/graphql';
@@ -24,13 +24,27 @@ export const useApollo = () => {
         if (message.indexOf('expired') !== -1) LocalStorage.remove('Authorization');
 
         if (message.indexOf('exist') !== -1) {
-          msg.error('该记录已存在', 5);
+          notification.error({
+            message: '',
+            description: '该记录已存在',
+            duration: 5,
+          });
         } else {
-          msg.error(`${path} → ${message}`, 5);
+          notification.error({
+            message: path,
+            description: message,
+            duration: 5,
+          });
         }
       });
     }
-    if (networkError) msg.error(`[Network error]: ${networkError}`, 5);
+    if (networkError) {
+      notification.error({
+        message: '[Network error]',
+        description: networkError.message,
+        duration: 5,
+      });
+    }
   });
 
   const cache = new InMemoryCache({

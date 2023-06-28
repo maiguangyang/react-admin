@@ -4,17 +4,20 @@ import { Link } from 'react-router-dom';
 import { Col, Input, Space } from 'antd';
 
 import { FilterLayer }  from '~@/components/Filter';
-import { Filter }       from '~@/common/utils/filter';
+import { Filter }       from '~@/utils/filter';
 import { useAllRouter } from '~@/router/hooks';
 
 import { useFormData, ExtractColumnIndex } from '~@/hooks/formData';
-import { ColumnsDataType, FormTempTableListType, FormTempTableList, GenerateVariable, DeleteTableRows, TableWapper } from '~@/common/service/table';
+import { FormTempTableList, GenerateVariable, DeleteTableRows, TableWapper } from '~@/services/table_service';
+import { IColumnsDataType } from '~@/types/extract_utils_type';
+import { IFormTempTableListType } from '~@/types/table_service_type';
 
 import FormData from './components/formModel';
+
 export const ComponentData = {
   FormData,
-  model: 'User',
-  title: '分类管理',
+  model: 'Project',
+  title: '项目管理',
 };
 
 const { Search } = Input;
@@ -27,7 +30,7 @@ const inputFilter: any = {
 // 排序和参数
 let { inputSort, variables } = GenerateVariable(inputFilter);
 
-const tableDefaultData: FormTempTableListType = FormTempTableList;
+const tableDefaultData: IFormTempTableListType = FormTempTableList;
 const selectedRow: string[] = [];
 
 export default () => {
@@ -37,27 +40,16 @@ export default () => {
   const route = useAllRouter(ComponentData.model);
 
   // 获取列表数据
-  const columns: ColumnsDataType[] = [
+  const columns: IColumnsDataType[] = [
     {
-      title: '登录账户',
-      dataIndex: 'phone',
+      title: '项目名称',
+      dataIndex: 'name',
       align: 'center',
     },
     {
-      title: '用户名称',
-      dataIndex: 'username',
+      title: '项目描述',
+      dataIndex: 'desc',
       align: 'center',
-    },
-    {
-      title: '状态',
-      dataIndex: 'state',
-      align: 'center',
-      width: 150,
-      render: (data: any, record: any, index: number) => {
-        return (
-          <span className={data === 2 ? 'error' : ''}>{Filter('state', data)}</span>
-        );
-      },
     },
     {
       title: '录入时间',

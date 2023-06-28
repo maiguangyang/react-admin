@@ -6,7 +6,7 @@ import { FormDefaultDataValue, ComponentPropsDataType, useFormData }  from '~@/h
 import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, notification } from 'antd';
 import { useAllRouter } from '~@/router/hooks';
 import { FormDataType } from '../types';
-import { isValidKey } from '~@/common/utils/utils';
+import { isValidKey } from '~@/utils/utils';
 
 export default (props: ComponentPropsDataType) => {
   const { title, model, disabled } = props;

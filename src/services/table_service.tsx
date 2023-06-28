@@ -2,43 +2,31 @@ import _ from 'lodash';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import { TablePaginationConfig, Button, Modal, Table, message } from 'antd';
+import { Button, Modal, Table, message } from 'antd';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { ColumnsDataType } from '~@/common/utils/extract';
-// export type { ColumnsDataType } from '~@/common/utils/extract';
 import { useFormData } from '~@/hooks/formData';
+import { IColumnsDataType } from '~@/types/extract_utils_type';
+import {
+  IDeleteTableRowsType,
+  IFormTempTableListType,
+  IGenerateVariableType,
+  IInputSortType,
+  IScrollType,
+  ITableCallback,
+  ITablePaginationType,
+  ITableWapperType,
+  IVariableType,
+  TablePaginationPosition,
+} from '~@/types/table_service_type';
 
-export type { ColumnsDataType };
 const { confirm } = Modal;
 
-// export type TableColumnsDataType<T> = ColumnsDataType & {
-
-// }
-
-type inputSortType = {
-  [key: string]: any,
-}
-
-export type VariableType<Filter> = {
-  currentPage: number,
-  perPage: number,
-  search: null,
-  rand: boolean,
-  filter: Filter,
-  sort: inputSortType,
-}
-
-type GenerateVariableType<Filter> = {
-  variables: VariableType<Filter>,
-  inputSort: inputSortType[],
-}
-
 // 生成参数
-export function GenerateVariable<T>(filter: T): GenerateVariableType<T> {
-  const inputSort: inputSortType[] = [{weight: 'ASC'}];
+export function GenerateVariable<T>(filter: T): IGenerateVariableType<T> {
+  const inputSort: IInputSortType[] = [{weight: 'ASC'}];
 
-  const variables: VariableType<T> = {
+  const variables: IVariableType<T> = {
     currentPage: 1,
     perPage: 10,
     search: null,
@@ -53,16 +41,8 @@ export function GenerateVariable<T>(filter: T): GenerateVariableType<T> {
   };
 };
 
-// table组件Config配置
-export type FormTempTableListType = {
-  current_page: number,
-  per_page: number,
-  data: any[],
-  total: number,
-  total_page: number,
-}
-
-export const FormTempTableList: FormTempTableListType = {
+// FormTempTableList ...
+export const FormTempTableList: IFormTempTableListType = {
   current_page: 1,
   per_page: 1,
   data: [],
@@ -70,22 +50,17 @@ export const FormTempTableList: FormTempTableListType = {
   total_page: 0,
 };
 
+// showTotal ...
 function showTotal(total: number): string {
   return `共 ${total} 条`;
 }
 
-interface TableFuc {
-  [key: string]: any,
-}
-
-type scrollType = ({x?: string | number | true | undefined; y?: string | number | undefined;} & { scrollToFirstRowOnChange?: boolean | undefined;}) | undefined;
-type TablePaginationType = false | TablePaginationConfig | undefined;
-
-export function TableConfig(rowSelection: TableRowSelection<{}>, columns: ColumnsType<{}>, formTempTable: FormTempTableListType, callback: TableFuc): any {
+// TableConfig ...
+export function TableConfig(rowSelection: TableRowSelection<{}>, columns: ColumnsType<{}>, formTempTable: IFormTempTableListType, callback: ITableCallback): any {
   const dataSource: readonly any[] = formTempTable.data;
-  const position: any = ['none', 'bottomCenter'];
-  const scroll: scrollType = { scrollToFirstRowOnChange: true, y: 550 };
-  const pagination: TablePaginationType = {
+  const position: TablePaginationPosition[] = ['none', 'bottomCenter'];
+  const scroll: IScrollType = { scrollToFirstRowOnChange: true, y: 550 };
+  const pagination: ITablePaginationType = {
     position,
     showTotal,
     pageSizeOptions: [10, 20, 50, 100],
@@ -117,16 +92,8 @@ export function DeleteRowAll<T>({...agm}: T) {
   });
 };
 
-// 批量删除
-type DeleteTableRowsType = {
-  model: string,
-  ids: string[] | number[],
-  type: string,
-  addUrl?: string,
-  onDeleteStatusChange: (ids: string[]) => void,
-};
-
-export function DeleteTableRows(props: DeleteTableRowsType) {
+// DeleteTableRows ...
+export function DeleteTableRows(props: IDeleteTableRowsType) {
   const navigate = useNavigate();
   const [formDelete, { loading, data }]: any = useFormData(props.model);
   const hasSelected = props.ids.length > 0;
@@ -160,19 +127,11 @@ export function DeleteTableRows(props: DeleteTableRowsType) {
   return (el);
 };
 
-type TableWapperType<Filter> = {
-  columns: ColumnsDataType[],
-  data: FormTempTableListType,
-  variables: VariableType<Filter>,
-  selectedRowKeys: string[],
-  setSelectedRowKeys: (res: string[]) => void,
-  setFetchStatus: () => void,
-}
-
-export function TableWapper<Filter>(props: TableWapperType<Filter>) {
-  const columns: ColumnsDataType[] = props.columns;
-  const formTempTable: FormTempTableListType = props.data;
-  const variables: VariableType<Filter> = props.variables;
+// TableWapper ...
+export function TableWapper<T>(props: ITableWapperType<T>) {
+  const columns: IColumnsDataType[] = props.columns;
+  const formTempTable: IFormTempTableListType = props.data;
+  const variables: IVariableType<T> = props.variables;
 
   // 选择改变
   const onSelectChange = (value: any[]) => {

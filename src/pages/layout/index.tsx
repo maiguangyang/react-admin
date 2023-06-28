@@ -28,7 +28,7 @@ const LayoutWrapper: FC = memo(() => {
   const { parenRoute, childMenu, selectedKeys } = useLayoutStore();
 
   return (
-    <ConfigProvider locale={zhCN}>
+    <ConfigProvider locale={zhCN} theme={{ token: { fontSize: 13 } }}>
       <Layout className={styles.pcLayout}>
         <HeaderLayer current={parenRoute.current} data={Routes as RouteObject[]} />
         <Layout>
