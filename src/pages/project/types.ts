@@ -1,14 +1,14 @@
-import { FormDefaultData } from "~@/hooks/formData";
+import { IFormDefaultData } from "~@/types/useFormData_hook_type";
 
-export interface FormDataType extends FormDefaultData {
+export interface IFormDataType extends IFormDefaultData {
   name: string,
   parentText: string[] | string,
   parentId: string,
   remark: string,
 }
 
-export interface FormSubmitParams {
+export interface IFormSubmitParams {
   id: string;
   model: string;
-  formData: FormDataType;
+  formData: IFormDataType;
 }

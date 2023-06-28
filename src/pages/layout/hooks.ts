@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { createGlobalStore } from 'hox';
-import { RouteObject } from '~@/router/types';
 import { useLocation } from 'react-router-dom';
-import { Routes } from '~@/router';
+import { RouteObject } from '~@/router/types';
+// import { Routes } from '~@/router';
 
 const homeBreadcrumb: RouteObject = { title: '首页', path: '/' };
-export const [useLayoutStore, getLayoutStore] = createGlobalStore(() => {
+
+export const useLayoutStore = (Routes: RouteObject[]) => {
   const location = useLocation();
   const [childMenu, setChildMenu] = useState<RouteObject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -19,7 +19,7 @@ export const [useLayoutStore, getLayoutStore] = createGlobalStore(() => {
 
   useEffect(() => {
     const array = location.pathname.split('/').filter(item => item !== '');
-    if (array.length > 0) {
+    if (array.length > 0 && Routes !== undefined && Routes.length > 0) {
       const current = handleFindRouteItem(Routes as RouteObject[], `/${array[0]}`);
       if (current) {
         parenRoute.current = current;
@@ -60,4 +60,4 @@ export const [useLayoutStore, getLayoutStore] = createGlobalStore(() => {
     selectedKeys,
     breadcrumbList,
   };
-});
+};

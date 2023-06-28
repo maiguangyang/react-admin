@@ -5,26 +5,26 @@ import { ColumnsType } from 'antd/lib/table';
 import { Button, Modal, Table, message } from 'antd';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { useFormData } from '~@/hooks/formData';
+import { useFormData } from '~@/hooks/useFormData';
 import { IColumnsDataType } from '~@/types/extract_utils_type';
 import {
   IDeleteTableRowsType,
   IFormTempTableListType,
   IGenerateVariableType,
-  IInputSortType,
   IScrollType,
   ITableCallback,
   ITablePaginationType,
   ITableWapperType,
   IVariableType,
-  TablePaginationPosition,
+  ITablePaginationPosition,
+  ISortInputType,
 } from '~@/types/table_service_type';
 
 const { confirm } = Modal;
 
 // 生成参数
 export function GenerateVariable<T>(filter: T): IGenerateVariableType<T> {
-  const inputSort: IInputSortType[] = [{weight: 'ASC'}];
+  const inputSort: ISortInputType[] = [{weight: 'ASC'}];
 
   const variables: IVariableType<T> = {
     currentPage: 1,
@@ -58,7 +58,7 @@ function showTotal(total: number): string {
 // TableConfig ...
 export function TableConfig(rowSelection: TableRowSelection<{}>, columns: ColumnsType<{}>, formTempTable: IFormTempTableListType, callback: ITableCallback): any {
   const dataSource: readonly any[] = formTempTable.data;
-  const position: TablePaginationPosition[] = ['none', 'bottomCenter'];
+  const position: ITablePaginationPosition[] = ['none', 'bottomCenter'];
   const scroll: IScrollType = { scrollToFirstRowOnChange: true, y: 550 };
   const pagination: ITablePaginationType = {
     position,

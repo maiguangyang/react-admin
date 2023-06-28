@@ -25,7 +25,7 @@ const { Content, Sider } = Layout;
 
 // LayoutWrapper ...
 const LayoutWrapper: FC = memo(() => {
-  const { parenRoute, childMenu, selectedKeys } = useLayoutStore();
+  const { parenRoute, childMenu, selectedKeys } = useLayoutStore(Routes);
 
   return (
     <ConfigProvider locale={zhCN} theme={{ token: { fontSize: 13 } }}>

@@ -1,23 +1,13 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import Router from '~@/router';
+import { IFormDefaultData } from '~@/types/useFormData_hook_type';
+
 export { ExtractColumnIndex } from '~@/utils/extract';
-
-export type FormDefaultData = {
-  weight: number,
-  state: boolean | number,
-}
-
-export type ComponentPropsDataType = {
-  title: string,
-  model: string,
-  disabled: string[],
-}
-
 export { Router };
 
-export const FormDefaultDataValue: FormDefaultData = {
+export const FormDefaultDataValue: IFormDefaultData = {
   weight: 1,
   state: true,
 };
@@ -121,13 +111,13 @@ export const useFormData = (mode: string, reqData?: string, agm?: any, fields: s
       }
     `;
     // let { loading, error, data, client }: any = useQuery(text, { variables });
-    const { ...agm }: any = useQuery(text, { variables });
+    const [getList, { ...agm }]: any = useLazyQuery(text, { variables });
 
     if (agm.data) {
       agm.data = agm.data[name];
     }
 
-    return agm;
+    return [getList, agm];
   }
 
   // 详情

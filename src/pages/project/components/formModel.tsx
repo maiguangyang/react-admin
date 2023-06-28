@@ -2,13 +2,14 @@ import _ from 'lodash';
 import React, { useEffect, useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
-import { FormDefaultDataValue, ComponentPropsDataType, useFormData }  from '~@/hooks/formData';
+import { FormDefaultDataValue, useFormData }  from '~@/hooks/useFormData';
 import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, notification } from 'antd';
 import { useAllRouter } from '~@/router/hooks';
-import { FormDataType } from '../types';
+import { IFormDataType } from '../types';
 import { isValidKey } from '~@/utils/utils';
+import { IComponentPropsDataType } from '~@/types/useFormData_hook_type';
 
-export default (props: ComponentPropsDataType) => {
+export default (props: IComponentPropsDataType) => {
   const { title, model, disabled } = props;
 
   const params    = useParams();
@@ -53,7 +54,7 @@ export default (props: ComponentPropsDataType) => {
   }
 
   // 表单提交
-  const onFinish = async (formData: FormDataType) => {
+  const onFinish = async (formData: IFormDataType) => {
     if (loading) {
       message.error('请勿重复提交');
       return;

@@ -16,6 +16,11 @@ export const Routes: RouteObject[] = [
     { title: '关于我们', path: 'about', element: <HomeAbout />, meta: { icon: <UserOutlined /> } },
     { title: 'hox', path: 'hox', element: <HomeHox />, meta: { icon: <UserOutlined /> } },
   ]},
+  { title: '物料市场', path: '/material', element: <LayoutPage />, children: [
+    { title: '物料市场', path: 'list', element: <HomeIndex />, meta: { icon: <UserOutlined /> } },
+    { title: '物料提供', path: 'supply', element: <HomeIndex />, meta: { icon: <UserOutlined /> } },
+    { title: '物料需求', path: 'need', element: <HomeIndex />, meta: { icon: <UserOutlined /> } },
+  ]},
   { title: '项目管理', path: '/project', element: <LayoutPage />, children: [
     { title: '项目列表', path: 'list', element: <Project />, meta: { icon: <UserOutlined /> } },
   ]},
