@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {Helmet} from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Col, Input, Space } from 'antd';
@@ -10,19 +10,14 @@ import { useAllRouter } from '~@/router/hooks';
 import { DeleteTableRows, TableWapper } from '~@/services/table_service';
 import { IColumnsDataType } from '~@/types/extract_utils_type';
 
-import FormData from './components/formModel';
 import { useTableList } from '~@/hooks/useTableList';
-
-export const ComponentData = {
-  FormData,
-  model: 'Project',
-  title: '项目管理',
-};
+import { useAction } from './hooks';
 
 const { Search } = Input;
 
-export default () => {
-  const route = useAllRouter(ComponentData.model);
+const ProjectPage: FC = () => {
+  const { title, model } = useAction();
+  const route = useAllRouter(model);
 
   // 获取列表数据
   const columns: IColumnsDataType[] = [
@@ -53,7 +48,7 @@ export default () => {
           <Space size="middle">
             <Link to={route.Detail.replace(':id', record.id)}>查看</Link>
             <Link to={route.Edit.replace(':id', record.id)} className="primary">修改</Link>
-            <DeleteTableRows type='row' model={`${ComponentData.model}Delete`} ids={[record.id]} onDeleteStatusChange={onDeleteStatusChange} />
+            <DeleteTableRows type='row' model={`${model}Delete`} ids={[record.id]} onDeleteStatusChange={onDeleteStatusChange} />
           </Space>
         );
       },
@@ -70,12 +65,12 @@ export default () => {
     onSearchCallback,
     onFilterChange,
     onDeleteStatusChange,
-  } = useTableList(ComponentData.model, columns);
+  } = useTableList(model, columns);
 
   return (
     <>
       <Helmet>
-        <title>{ComponentData.title}</title>
+        <title>{title}</title>
       </Helmet>
       <FilterLayer onFilterChange={onFilterChange}>
         <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
@@ -86,8 +81,8 @@ export default () => {
         </Col>
       </FilterLayer>
 
-      <DeleteTableRows type='list' model={`${ComponentData.model}Delete`} ids={selectedRowKeys} addUrl={'add'} onDeleteStatusChange={onDeleteStatusChange} />
-      <TableWapper data={formTempTable}
+      <DeleteTableRows type='list' model={`${model}Delete`} ids={selectedRowKeys} addUrl={'add'} onDeleteStatusChange={onDeleteStatusChange} />
+      <TableWapper<any> data={formTempTable}
         selectedRowKeys={selectedRowKeys}
         setSelectedRowKeys={(value: string[]) => setSelectedRowKeys(value)}
         setFetchStatus={() => setFetchStatus(!fetchStatus)}
@@ -96,3 +91,5 @@ export default () => {
     </>
   );
 };
+
+export default ProjectPage;

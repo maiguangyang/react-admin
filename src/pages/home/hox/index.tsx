@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import ButtonWrapper from './components/button';
 import TaskList from './components/task';
 // import { TaskStoreProvider } from './components/task/hook';
 
-const HomeHox = () => {
+const HomeHox: FC = () => {
   return (
     <>
-      <header>header</header>
+      <header>header12</header>
       {/* <TaskStoreProvider> */}
         <ButtonWrapper />
         <TaskList />

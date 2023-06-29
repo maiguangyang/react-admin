@@ -1,7 +1,12 @@
-import React from 'react';
-import { ComponentData } from './index';
+import React, { FC } from 'react';
+import { useAction } from './hooks';
 
-export default () => {
-  const disabled: string[] = ['password'];
-  return <ComponentData.FormData title={`修改${ComponentData.title}`} model={ComponentData.model} disabled={disabled} />;
+ const Edit: FC = () => {
+  const { title, model, FormData } = useAction();
+ 
+  return (
+    <FormData title={`修改${title}`} model={model} disabled={[]} />
+  );
 };
+
+export default Edit;

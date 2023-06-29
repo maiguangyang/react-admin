@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import { Button, Modal, Table, message } from 'antd';
@@ -93,7 +93,7 @@ export function DeleteRowAll<T>({...agm}: T) {
 };
 
 // DeleteTableRows ...
-export function DeleteTableRows(props: IDeleteTableRowsType) {
+export const DeleteTableRows: FC<IDeleteTableRowsType> = (props) => {
   const navigate = useNavigate();
   const [formDelete, { loading, data }]: any = useFormData(props.model);
   const hasSelected = props.ids.length > 0;
@@ -115,23 +115,29 @@ export function DeleteTableRows(props: IDeleteTableRowsType) {
     });
   };
 
-  const el = props.type === 'list'
-    ? <div className="list-head-wapper">
-        <Button type="primary" onClick={() => navigate(String(props.addUrl))}>新增</Button>
-        <Button className="margin-lr-10" type="primary" danger onClick={handleDeleteRowAll} disabled={!hasSelected} loading={loading}>批量删除</Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `已选 ${props.ids.length} 条` : ''}
-        </span>
-      </div>
-    : <a className="text-desc" onClick={handleDeleteRowAll}>删除</a>;
-  return (el);
+  if (props.type !== 'list') {
+    return (
+      <a className="text-desc" onClick={handleDeleteRowAll}>删除</a>
+    );
+  }
+
+  return (
+    <div className="list-head-wapper">
+      <Button type="primary" onClick={() => navigate(String(props.addUrl))}>新增</Button>
+      <Button className="margin-lr-10" type="primary" danger onClick={handleDeleteRowAll} disabled={!hasSelected} loading={loading}>批量删除</Button>
+      <span style={{ marginLeft: 8 }}>
+        {hasSelected ? `已选 ${props.ids.length} 条` : ''}
+      </span>
+    </div>
+  );
 };
 
 // TableWapper ...
+// export const TableWapper: FC<ITableWapperType<any>> = (props) => {
 export function TableWapper<T>(props: ITableWapperType<T>) {
   const columns: IColumnsDataType[] = props.columns;
   const formTempTable: IFormTempTableListType = props.data;
-  const variables: IVariableType<T> = props.variables;
+  const variables: IVariableType<any> = props.variables;
 
   // 选择改变
   const onSelectChange = (value: any[]) => {

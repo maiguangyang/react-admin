@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { RouteObject } from '~@/router/types';
-// import { Routes } from '~@/router';
+import { Routes } from '~@/router';
 
 const homeBreadcrumb: RouteObject = { title: '首页', path: '/' };
 
-export const useLayoutStore = (Routes: RouteObject[]) => {
+export const useLayoutStore = () => {
   const location = useLocation();
   const [childMenu, setChildMenu] = useState<RouteObject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -13,18 +13,23 @@ export const useLayoutStore = (Routes: RouteObject[]) => {
   const parenRoute = useRef<RouteObject>();
   const breadcrumbList = useRef<RouteObject[]>([]);
 
+  const routers: RouteObject[] = Routes?.[0].children || [];
+
   const handleFindRouteItem = (data: RouteObject[], path: string) => {
     return data.find(item => item.path === path) as RouteObject;
   };
 
   useEffect(() => {
     const array = location.pathname.split('/').filter(item => item !== '');
-    if (array.length > 0 && Routes !== undefined && Routes.length > 0) {
-      const current = handleFindRouteItem(Routes as RouteObject[], `/${array[0]}`);
-      if (current) {
-        parenRoute.current = current;
-        if (current.children?.length) setChildMenu(current.children);
+    if (array.length > 0 && routers !== undefined && routers.length > 0) {
+      const current = handleFindRouteItem(routers, `${array[0]}`);
+      if (!current) {
+        setChildMenu([]);
+        return;
       }
+
+      parenRoute.current = current;
+      if (current.children?.length) setChildMenu(current.children);
 
       if (array.length === 1) {
         handleSetBreadcrumb([current]);

@@ -1,10 +1,14 @@
 import './index.less';
 
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Row, Col, Select, Radio } from 'antd';
+import { IFilterLayerProps } from './types';
+import { ISortInputType } from '~@/types/table_service_type';
+// import { IFilterInputType } from '~@/types/useTableList_hook_type';
+
 const { Option } = Select;
 
-const FilterLayer = (props: any) => {
+const FilterLayer: FC<IFilterLayerProps> = (props) => {
   type sortsType = {
     label: string,
     value: string,
@@ -46,7 +50,7 @@ const FilterLayer = (props: any) => {
 
   // 过滤器回调
   function onFilterChange(data: any, state?: any) {
-    let sort: any = [];
+    let sort: ISortInputType[] = [];
     if (data) {
       const label = data.split('.')[0];
       const value = data.split('.')[1];
@@ -56,10 +60,15 @@ const FilterLayer = (props: any) => {
     const filter: any = {};
     if (state) filter.state = state;
 
-    props.onFilterChange({
-      sort,
-      filter,
-    });
+    // todo
+    console.log('sort', sort);
+
+    // let variables: IVariableType<IFilterInputType> = {};
+
+    // props.onFilterChange({
+    //   sort,
+    //   filter,
+    // });
   }
 
   function sortFilter(value: any) {

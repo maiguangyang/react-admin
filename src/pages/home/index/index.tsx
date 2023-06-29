@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const HomeIndex = () => {
+const HomeIndex: FC = () => {
   return (
     <div style={{ color: '#666' }}>
       <p style={{ lineHeight: '25px' }}>xxx是一个结合AI的低代码平台：主打的就是一个快速开发、快速上线，不想写的功能，别人帮你写</p>

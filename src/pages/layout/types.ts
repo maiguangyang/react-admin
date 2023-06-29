@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
 
 export interface LayoutWrapperProps {
-  children: ReactNode
+  element: React.ReactElement<any, string | React.JSXElementConstructor<any>> | null
 }

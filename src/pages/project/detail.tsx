@@ -1,8 +1,12 @@
-import React from 'react';
-import { ComponentData } from './index';
+import React, { FC } from 'react';
+import { useAction } from './hooks';
 
-export default () => {
+ const Detail: FC = () => {
+  const { title, model, FormData } = useAction();
+ 
   return (
-    <ComponentData.FormData title={`${ComponentData.title}详情`} model={ComponentData.model} disabled={[]} />
+    <FormData title={`${title}详情`} model={model} disabled={[]} />
   );
 };
+
+export default Detail;

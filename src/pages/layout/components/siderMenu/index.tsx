@@ -1,4 +1,4 @@
-import React, { FC }                from 'react';
+import React, { FC, memo }                from 'react';
 import { Menu }                     from 'antd';
 import { Link } from 'react-router-dom';
 import { MenuItem, SiderMenuProps } from './types';
@@ -9,9 +9,9 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const SiderMenuLayer: FC<SiderMenuProps> = (props) => {
-  const { data, selectedKeys } = props;
+  const { data, selectedKeys, paren } = props;
   const items: MenuItem[] = data.filter(item => item.hidden !== true).map((item: RouteObject) => {
-    return getItem(<Link to={item.path}>{item.title}</Link>, item.path, item.meta?.icon);
+    return getItem(<Link to={`${paren?.path}/${item.path}`}>{item.title}</Link>, item.path, item.meta?.icon);
   });
 
   return (
@@ -19,4 +19,4 @@ const SiderMenuLayer: FC<SiderMenuProps> = (props) => {
   );
 };
 
-export default SiderMenuLayer;
+export default memo(SiderMenuLayer);

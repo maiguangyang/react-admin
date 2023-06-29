@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { TaskItemProps } from '../../types';
 import { useTaskStore } from '../../hooks';
 
@@ -12,7 +12,7 @@ const TaskItem = (props: TaskItemProps) => {
 };
 
 // list
-const TaskList = () => {
+const TaskList: FC = () => {
   const { tasks } = useTaskStore();
   return (
     <>
