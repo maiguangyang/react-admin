@@ -3,7 +3,7 @@ import styles from './index.module.less';
 
 import React, { FC, memo, Suspense }  from 'react';
 import { Outlet } from 'react-router-dom';
-import { Layout, ConfigProvider, notification } from 'antd';
+import { Layout, ConfigProvider, notification, Spin } from 'antd';
 import zhCN       from 'antd/lib/locale/zh_CN';
 import classNames from 'classnames';
 
@@ -26,7 +26,7 @@ const { Content, Sider } = Layout;
 
 // LayoutWrapper ...
 const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
-  const routes: RouteObject[] = Routes?.[0].children || [];
+  const routes: RouteObject[] = Routes || [];
   const { parenRoute, childMenu, selectedKeys } = useLayoutStore();
 
   return (
@@ -39,8 +39,8 @@ const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
           </Sider>
           <Layout style={{ padding: '0 24px 0px' }}>
             <BreadcrumbLayer />
-            <Content className={classNames('border', styles.mainContent)}>
-              <Suspense>{element}</Suspense>
+            <Content className={classNames('flex', 'flex-direction', 'border', styles.mainContent)}>
+              <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
               <Outlet />
             </Content>
             <FooterLayer />

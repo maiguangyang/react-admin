@@ -11,7 +11,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 const SiderMenuLayer: FC<SiderMenuProps> = (props) => {
   const { data, selectedKeys, paren } = props;
   const items: MenuItem[] = data.filter(item => item.hidden !== true).map((item: RouteObject) => {
-    return getItem(<Link to={`${paren?.path}/${item.path}`}>{item.title}</Link>, item.path, item.meta?.icon);
+    return getItem(<Link to={`${paren?.path}/${item.path}`}>{item.title}</Link>, item.path ?? '', item.meta?.icon);
   });
 
   return (

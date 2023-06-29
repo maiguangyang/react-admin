@@ -1,5 +1,5 @@
 import styles from './index.module.less';
-import React, { FC }     from 'react';
+import React, { FC, memo }     from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import classNames        from 'classnames';
 import { Header }        from 'antd/lib/layout/layout';
@@ -11,6 +11,8 @@ import {
   message,
 } from 'antd';
 import { HeaderLayerProps } from './types';
+import { RouteObject } from '~@/router/types';
+import utils from '~@/utils/utils';
 
 const items: MenuProps['items'] = [
   { label: '资质验证(未验证)', key: '1' },
@@ -24,17 +26,18 @@ const onClick: MenuProps['onClick'] = ({ key }) => {
 
 const HeaderLayer: FC<HeaderLayerProps> = (props) => {
   const { current, data } = props;
+
   return (
     <Header className={classNames('flex align-center', styles.header)}>
       <div className={styles.logo} />
       <div className={classNames('flex flex-one align-center', styles.headerRight)}>
         <div className={classNames('flex-one', styles.menuGroup)}>
           {
-            data.filter(item => item.hidden !== true).map((item, key: number) => {
+            data.filter(item => item.hidden !== true).map((item: RouteObject, key: number) => {
               return (
                 <NavLink key={key}
                   className={classNames(styles.menuItem, current?.path === item.path && styles.active)}
-                  to={`${item.path}/${item.children?.[0]?.path}`} title={item.title}
+                  to={utils.firstChildPath(item)} title={item.title}
                 >
                   { item.title }
                 </NavLink>
@@ -60,4 +63,4 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
   );
 };
 
-export default HeaderLayer;
+export default memo(HeaderLayer);

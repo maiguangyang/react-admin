@@ -6,7 +6,7 @@ import { FormDefaultDataValue, useFormData }  from '~@/hooks/useFormData';
 import { Form, Input, InputNumber, Button, Row, Col, Switch, message, Empty, notification } from 'antd';
 import { useAllRouter } from '~@/router/hooks';
 import { IFormDataType } from '../types';
-import { isValidKey } from '~@/utils/utils';
+import utils from '~@/utils/utils';
 import { IComponentPropsDataType } from '~@/types/useFormData_hook_type';
 
 const formModel: FC<IComponentPropsDataType> = (props) => {
@@ -64,7 +64,7 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
     formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
 
     disabled.forEach(item => {
-      if (isValidKey(item, formData) && formData[item]) delete formData[item];
+      if (utils.isValidKey(item, formData) && formData[item]) delete formData[item];
     });
 
     let variables: object = {

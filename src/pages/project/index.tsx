@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import {Helmet} from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Col, Input, Space } from 'antd';
@@ -69,25 +69,32 @@ const ProjectPage: FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
-      <FilterLayer onFilterChange={onFilterChange}>
-        <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
-          <div className="filter-item flex align-center">
-            <span className='title'>类别名称：</span>
-            <Search placeholder="输入类别名称" onSearch={(value: string) => onSearchCallback(value, 'name_like')} />
-          </div>
-        </Col>
-      </FilterLayer>
-
-      <DeleteTableRows type='list' model={`${model}Delete`} ids={selectedRowKeys} addUrl={'add'} onDeleteStatusChange={onDeleteStatusChange} />
-      <TableWapper<any> data={formTempTable}
-        selectedRowKeys={selectedRowKeys}
-        setSelectedRowKeys={(value: string[]) => setSelectedRowKeys(value)}
-        setFetchStatus={() => setFetchStatus(!fetchStatus)}
-        columns={columns} variables={variables}
-      />
+      {
+        useMemo(() => {
+          return (
+            <>
+            <Helmet>
+              <title>{title}</title>
+            </Helmet>
+            <FilterLayer onFilterChange={onFilterChange}>
+              <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
+                <div className="filter-item flex align-center">
+                  <span className='title'>类别名称：</span>
+                  <Search placeholder="输入类别名称" onSearch={(value: string) => onSearchCallback(value, 'name_like')} />
+                </div>
+              </Col>
+            </FilterLayer>
+            <DeleteTableRows type='list' model={`${model}Delete`} ids={selectedRowKeys} addUrl={'add'} onDeleteStatusChange={onDeleteStatusChange} />
+            <TableWapper<any> data={formTempTable}
+              selectedRowKeys={selectedRowKeys}
+              setSelectedRowKeys={(value: string[]) => setSelectedRowKeys(value)}
+              setFetchStatus={() => setFetchStatus(!fetchStatus)}
+              columns={columns} variables={variables}
+            />
+          </>
+          );
+        }, [])
+      }
     </>
   );
 };
