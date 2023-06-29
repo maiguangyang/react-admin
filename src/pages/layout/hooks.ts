@@ -4,16 +4,18 @@ import { useLocation } from 'react-router-dom';
 import { RouteObject } from '~@/router/types';
 import { Routes } from '~@/router';
 import utils from '~@/utils/utils';
+import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 
-const homeBreadcrumb: RouteObject = { title: '首页', path: '/' };
+// const homeBreadcrumb: RouteObject = { title: '首页', path: '/' };
 
 export const useLayoutStore = () => {
   const location = useLocation();
+  const { handleSetBreadcrumb } = useBreadcrumb();
   const [childMenu, setChildMenu] = useState<RouteObject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   const parenRoute = useRef<RouteObject>();
-  const breadcrumbList = useRef<RouteObject[]>([]);
+  // const breadcrumbList = useRef<RouteObject[]>([]);
 
   const routers: RouteObject[] = Routes || [];
 
@@ -37,29 +39,24 @@ export const useLayoutStore = () => {
       newCurrent.path = utils.firstChildPath(newCurrent);
 
       const lastChild = current.children?.find(item => item.path === name);
-      const breadcrumb = [newCurrent];
+      const breadcrumbList = [newCurrent];
 
       if (lastChild) {
         if (lastChild?.path) setSelectedKeys([lastChild.path]);
-        breadcrumb.push({ title: lastChild.title, path: `/${newCurrent.path}` });
+        breadcrumbList.push({ title: lastChild.title, path: `/${newCurrent.path}` });
       }
 
       if (/add/.test(location.pathname)) {
-        breadcrumb.push({ title: '添加', path: 'none' });
+        breadcrumbList.push({ title: '添加', path: 'none' });
       } else if (/edit.*/.test(location.pathname)) {
-        breadcrumb.push({ title: '修改', path: 'none' });
+        breadcrumbList.push({ title: '修改', path: 'none' });
       } else if (/\w{8}(-\w{4}){3}-\w{12}.*/.test(location.pathname)) {
-        breadcrumb.push({ title: '详情', path: 'none' });
+        breadcrumbList.push({ title: '详情', path: 'none' });
       }
 
-      handleSetBreadcrumb(breadcrumb);
+      handleSetBreadcrumb(breadcrumbList);
     }
   }, [location]);
-
-  // handleSetBreadcrumb ...
-  const handleSetBreadcrumb = (data: RouteObject[]) => {
-    breadcrumbList.current = [homeBreadcrumb].concat(data.filter(item => item !== undefined));
-  };
 
   const handleFindRouteItem = (data: RouteObject[], path: string) => {
     const item = data.find(item => item.path === path) as RouteObject;
@@ -70,6 +67,5 @@ export const useLayoutStore = () => {
     parenRoute,
     childMenu,
     selectedKeys,
-    breadcrumbList,
   };
 };

@@ -25,8 +25,8 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
   }, []);
 
   useEffect(() => {
-    if (loading && data) setFormTempTable({...formTempTable, ...data});
-  }, [loading, data]);
+    if (data) setFormTempTable({...formTempTable, ...data});
+  }, [data]);
 
   // 搜索
   const onSearchCallback = (value: IValueBaseType, key: string) => {

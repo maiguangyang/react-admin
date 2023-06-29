@@ -3,7 +3,7 @@ import styles from './index.module.less';
 
 import React, { FC, memo, Suspense }  from 'react';
 import { Outlet } from 'react-router-dom';
-import { Layout, ConfigProvider, notification, Spin } from 'antd';
+import { App, Layout, ConfigProvider, notification, Spin } from 'antd';
 import zhCN       from 'antd/lib/locale/zh_CN';
 import classNames from 'classnames';
 
@@ -31,22 +31,24 @@ const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
 
   return (
     <ConfigProvider locale={zhCN} theme={{ token: { fontSize: 13 } }}>
-      <Layout className={styles.pcLayout}>
-        <HeaderLayer current={parenRoute.current} data={routes} />
-        <Layout>
-          <Sider width={230} className={classNames(styles.leftMenu)} collapsible>
-            <SiderMenuLayer paren={parenRoute.current} data={childMenu} selectedKeys={selectedKeys} />
-          </Sider>
-          <Layout style={{ padding: '0 24px 0px' }}>
-            <BreadcrumbLayer />
-            <Content className={classNames('flex', 'flex-direction', 'border', styles.mainContent)}>
-              <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
-              <Outlet />
-            </Content>
-            <FooterLayer />
+      <App>
+        <Layout className={styles.pcLayout}>
+          <HeaderLayer current={parenRoute.current} data={routes} />
+          <Layout>
+            <Sider width={230} className={classNames(styles.leftMenu)} collapsible>
+              <SiderMenuLayer paren={parenRoute.current} data={childMenu} selectedKeys={selectedKeys} />
+            </Sider>
+            <Layout style={{ padding: '0 24px 0px' }}>
+              <BreadcrumbLayer />
+              <Content className={classNames('flex', 'flex-direction', 'border', styles.mainContent)}>
+                <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
+                <Outlet />
+              </Content>
+              <FooterLayer />
+            </Layout>
           </Layout>
         </Layout>
-      </Layout>
+      </App>
     </ConfigProvider>
   );
 };

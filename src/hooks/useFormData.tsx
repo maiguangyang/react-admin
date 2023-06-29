@@ -124,8 +124,8 @@ export const useFormData = (mode: string, reqData?: string, agm?: any, fields: s
   if (mode.slice(mode.length - 6) === 'Detail') {
     mode = mode.replace('Detail', '');
     const name = mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase());
-    const text: any = gql`query ${mode} ($id: ID, $search: String, $filter: ${mode}FilterType) {
-      ${name}(id: $id, q: $search, filter: $filter)
+    const text: any = gql`query ${mode} ($id: ID, $filter: ${mode}FilterType) {
+      ${name}(id: $id, filter: $filter)
         ${reqData}
     }`;
     const { ...agm }: any = useQuery(text, { variables });

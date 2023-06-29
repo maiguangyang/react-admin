@@ -4,6 +4,7 @@ import { NonIndexRouteObject } from 'react-router-dom';
 export type RouteObject = Omit<NonIndexRouteObject, 'children'> & {
   path?: string
   title?: string
+  model?: string
   hidden?: boolean
   meta?: {
     icon?: ReactElement

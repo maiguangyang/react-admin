@@ -23,6 +23,8 @@ export const Routes: RouteObject[] = [
   { title: '项目管理', path: 'project', element: <Outlet />, children: [
     { title: 'bbq列表', path: 'bbq', element: <Project />, meta: { icon: <UserOutlined /> } },
     { title: '新增项目', path: 'bbq/add', element: <ProjectAdd />, meta: { icon: <UserOutlined /> } },
+    { title: '编辑项目', path: 'bbq/:id/edit', element: <ProjectAdd />, meta: { icon: <UserOutlined /> } },
+    { title: '查看项目', path: 'bbq/:id', element: <ProjectAdd />, meta: { icon: <UserOutlined /> } },
   ]},
 ];
 
