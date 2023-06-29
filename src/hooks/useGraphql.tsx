@@ -2,7 +2,7 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import Router from '~@/router';
-import { IFormDefaultData } from '~@/types/useFormData_hook_type';
+import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
 export { ExtractColumnIndex } from '~@/utils/extract';
 export { Router };
@@ -12,7 +12,7 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export const useFormData = (mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) => {
+export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) => {
   // 删除空值的key
   let variables = _.cloneDeep(agm);
   _.forEach(variables, (item, key) => {

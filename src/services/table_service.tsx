@@ -5,7 +5,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { Button, Modal, Table, message } from 'antd';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { useFormData } from '~@/hooks/useFormData';
+import { useGraphql } from '~@/hooks/useGraphql';
 import { IColumnsDataType } from '~@/types/extract_utils_type';
 import {
   IDeleteTableRowsType,
@@ -95,7 +95,7 @@ export function DeleteRowAll<T>({...agm}: T) {
 // DeleteTableRows ...
 export const DeleteTableRows: FC<IDeleteTableRowsType> = (props) => {
   const navigate = useNavigate();
-  const [formDelete, { loading, data }]: any = useFormData(props.model);
+  const [formDelete, { loading, data }]: any = useGraphql(props.model);
   const hasSelected = props.ids.length > 0;
 
   useEffect(() => {

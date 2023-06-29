@@ -1,4 +1,4 @@
-import { IFormDefaultData } from "~@/types/useFormData_hook_type";
+import { IFormDefaultData } from "~@/types/useGraphql_hook_type";
 
 export interface IFormDataType extends IFormDefaultData {
   name: string,

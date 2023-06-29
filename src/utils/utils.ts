@@ -17,7 +17,8 @@ const firstChildPath = (item: RouteObject) => {
 
 // checkIsFormModel ...
 const checkIsFormModel = (text: string) => {
-  const isFormModel = !/add/.test(text) && !/edit.*/.test(text) && !/\w{8}(-\w{4}){3}-\w{12}.*/.test(text);
+  // const isFormModel = !/add/.test(text) && !/edit.*/.test(text) && !/\w{8}(-\w{4}){3}-\w{12}.*/.test(text);
+  const isFormModel = !/add/.test(text) && !/:id.*/.test(text);
   return isFormModel;
 };
 

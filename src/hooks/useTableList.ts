@@ -4,7 +4,7 @@ import { IValueBaseType } from '~@/types/base_type';
 import { IColumnsDataType } from '~@/types/extract_utils_type';
 import { IFormTempTableListType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType } from '~@/types/useTableList_hook_type';
-import { ExtractColumnIndex, useFormData } from './useFormData';
+import { ExtractColumnIndex, useGraphql } from './useGraphql';
 
 export const useTableList = (model: string, columns: IColumnsDataType[]) => {
   // 排序和参数
@@ -18,7 +18,7 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
 
   const fields: string = ExtractColumnIndex(columns);
-  const [getList, { loading, data }]: any = useFormData(`${model}s`, fields, variables);
+  const [getList, { loading, data }]: any = useGraphql(`${model}s`, fields, variables);
 
   useEffect(() => {
     getList();

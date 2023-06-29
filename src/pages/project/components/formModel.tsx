@@ -2,11 +2,11 @@ import _ from 'lodash';
 import React, { FC, useEffect, useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
-import { FormDefaultDataValue, useFormData }  from '~@/hooks/useFormData';
+import { FormDefaultDataValue, useGraphql }  from '~@/hooks/useGraphql';
 import { Form, Input, InputNumber, Button, Switch, Empty, Tabs } from 'antd';
 import { IFormDataType } from '../types';
 import utils from '~@/utils/utils';
-import { IComponentPropsDataType } from '~@/types/useFormData_hook_type';
+import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -32,12 +32,12 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
   }
 
   const [form] = Form.useForm();
-  const [formAdd] = useFormData(`${model}Add`);
-  const [formEdit] = useFormData(`${model}Edit`);
+  const [formAdd] = useGraphql(`${model}Add`);
+  const [formEdit] = useGraphql(`${model}Edit`);
 
   // 获取详情
   if (params.id) {
-    const { data, loading, error } = useFormData(`${model}Detail`, `{
+    const { data, loading, error } = useGraphql(`${model}Detail`, `{
       id
       name
       desc
