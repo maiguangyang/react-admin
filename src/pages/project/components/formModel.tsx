@@ -31,8 +31,8 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
   }
 
   const [form] = Form.useForm();
-  const [formAdd]: any = useFormData(`${model}Add`);
-  const [formEdit]: any = useFormData(`${model}Edit`);
+  const [formAdd] = useFormData(`${model}Add`);
+  const [formEdit] = useFormData(`${model}Edit`);
 
   // 获取详情
   if (params.id) {
@@ -129,10 +129,10 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
             <Form.Item wrapperCol={{ offset: 4 }}>
               {
                 isReadOnly
-                  ? <Button htmlType="submit" loading={loading} onClick={() => navigate('edit')}>编 辑</Button>
-                  : <Button type="primary" htmlType="submit" loading={loading}>保 存</Button>
+                  ? <Button type="link" loading={loading} onClick={() => navigate('edit')}>编 辑</Button>
+                  : <Button htmlType="submit" loading={loading}>保 存</Button>
               }
-              <Button type="link" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
+              <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
             </Form.Item>
           </Form>
         </Col>

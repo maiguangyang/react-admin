@@ -46,8 +46,8 @@ export const useFormData = (mode: string, reqData?: string, agm?: any, fields: s
         id
       }
     }`;
-
-    return useMutation(text);
+    const [func, { ...agm }] = useMutation(text);
+    return [func, agm];
   }
 
   // 修改
@@ -59,7 +59,8 @@ export const useFormData = (mode: string, reqData?: string, agm?: any, fields: s
       }
     }`;
 
-    return useMutation(text);
+    const [func, { ...agm }] = useMutation(text);
+    return [func, agm];
   }
 
   // 删除
