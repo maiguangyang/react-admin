@@ -28,16 +28,6 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
 
   variables = _.omitBy(variables, (item) => _.isNull(item) || (_.isObject(item) && _.isEmpty(item)) || _.isUndefined(item));
 
-  // for (const key in variables) {
-  //   if (_.isObject(variables[key]) && !_.isArray(variables[key])) {
-  //     for (const key1 in variables[key]) {
-  //       if (_.isEmpty(variables[key][key1])) delete variables[key][key1];
-  //     }
-  //   }
-
-  //   if (_.isEmpty(variables[key])) delete variables[key];
-  // }
-
   // 新增
   if (mode.slice(mode.length - 3) === 'Add') {
     mode = mode.slice(0, mode.length - 3);
@@ -46,8 +36,9 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
         id
       }
     }`;
-    const [func, { ...agm }] = useMutation(text);
-    return [func, agm];
+
+    const [func, { loading, ...agm }] = useMutation(text);
+    return [func, { addLoading: loading, ...agm}];
   }
 
   // 修改
@@ -59,8 +50,8 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
       }
     }`;
 
-    const [func, { ...agm }] = useMutation(text);
-    return [func, agm];
+    const [func, { loading, ...agm }] = useMutation(text);
+    return [func, { editLoading: loading, ...agm}];
   }
 
   // 删除
@@ -85,7 +76,9 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
     const text = gql`mutation ${mode}Recovery ($id: [ID!]!) {
       recovery${mode}(id: $id)
     }`;
-    return useMutation(text);
+
+    const [func, { ...agm }] = useMutation(text);
+    return [func, agm];
   }
 
   // 列表
@@ -112,7 +105,7 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
       }
     `;
     // let { loading, error, data, client }: any = useQuery(text, { variables });
-    const [getList, { ...agm }]: any = useLazyQuery(text, { variables });
+    const [getList, { ...agm }] = useLazyQuery(text, { variables });
 
     if (agm.data) {
       agm.data = agm.data[name];

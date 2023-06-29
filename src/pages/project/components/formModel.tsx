@@ -4,24 +4,21 @@ import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
 import { FormDefaultDataValue, useGraphql }  from '~@/hooks/useGraphql';
 import { Form, Input, InputNumber, Button, Switch, Empty, Tabs } from 'antd';
-import { IFormDataType } from '../types';
-import utils from '~@/utils/utils';
 import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
 import { Tab } from 'rc-tabs/lib/interface';
+import { useFormModel } from '~@/hooks/useFormModel';
 
 const formModel: FC<IComponentPropsDataType> = (props) => {
   const { title, model, disabled } = props;
+  const [loading, setLoading] = useState<boolean>(false);
 
   const params    = useParams();
   const location  = useLocation();
-  const navigate  = useNavigate();
-
   const { breadcrumb } = useBreadcrumb();
-  const { message, notification } = useAntdAction();
-
-  const [loading] = useState<boolean>(false);
+  const { message } = useAntdAction();
+  const navigate  = useNavigate();
 
   const isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
 
@@ -32,8 +29,14 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
   }
 
   const [form] = Form.useForm();
-  const [formAdd] = useGraphql(`${model}Add`);
-  const [formEdit] = useGraphql(`${model}Edit`);
+  const [formAdd, { addLoading }] = useGraphql(`${model}Add`);
+  const [formEdit, { editLoading }] = useGraphql(`${model}Edit`);
+
+  useEffect(() => {
+    setLoading(addLoading !== editLoading);
+  }, [addLoading, editLoading]);
+
+  const { onFinish } = useFormModel({ model, loading, formAdd, formEdit, disabled, params, breadcrumb, navigate });
 
   // 获取详情
   if (params.id) {
@@ -57,51 +60,6 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
       }
     }, [loading]);
   }
-
-  // 表单提交
-  const onFinish = async (formData: IFormDataType) => {
-    if (loading) {
-      notification.error({
-        message: '温馨提示',
-        description: '请勿重复提交',
-      });
-      return;
-    }
-
-    // setLoading(true);
-    formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
-
-    disabled.forEach(item => {
-      if (utils.isValidKey(item, formData) && formData[item]) delete formData[item];
-    });
-
-    let variables: object = {
-      data: { ...formData },
-    };
-
-    let res: any = {};
-    // 编辑
-    if (params.id) {
-      variables = {...variables, id: params.id};
-      res = await formEdit({ variables }).catch((err: any) => message.error(err.message)) || {};
-    } else {
-      // 新增
-      res = await formAdd({ variables }).catch((err: any) => message.error(err.message)) || {};
-    }
-
-    // setLoading(false);
-    let resData = res.data || {};
-    resData = resData[`create${model}`] || resData[`update${model}`] || {};
-    if (resData.id) {
-      message.success('操作成功');
-      const url = utils.getListRoutePath(breadcrumb);
-      setTimeout(() => navigate(url), 1000);
-    }
-  };
-
-  const onChange = (key: string) => {
-    console.log(key);
-  };
 
   // 表单模板
   const formTemp = [];
@@ -129,7 +87,7 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
     <Form.Item wrapperCol={{ offset: 1 }}>
       {
         isReadOnly
-          ? <Button type="link" loading={loading} onClick={() => navigate('edit')}>编 辑</Button>
+          ? <Button type="link" onClick={() => navigate('edit')}>编 辑</Button>
           : <Button htmlType="submit" loading={loading}>保 存</Button>
       }
       <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
@@ -146,11 +104,7 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <Tabs
-        onChange={onChange}
-        type="card"
-        items={tabItems}
-      />
+      <Tabs type="card" items={tabItems} />
     </>
   );
 };

@@ -43,7 +43,7 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
     variables = {...variables, filter, sort};
     setSelectedRowKeys([]);
     setFetchStatus(!fetchStatus);
-    // getList();
+    getList();
   };
 
   // 删除选中项目
