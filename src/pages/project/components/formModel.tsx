@@ -3,12 +3,13 @@ import React, { FC, useEffect, useState }  from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, useLocation, useParams }  from 'react-router-dom';
 import { FormDefaultDataValue, useFormData }  from '~@/hooks/useFormData';
-import { Form, Input, InputNumber, Button, Row, Col, Switch, Empty } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Empty, Tabs } from 'antd';
 import { IFormDataType } from '../types';
 import utils from '~@/utils/utils';
 import { IComponentPropsDataType } from '~@/types/useFormData_hook_type';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
+import { Tab } from 'rc-tabs/lib/interface';
 
 const formModel: FC<IComponentPropsDataType> = (props) => {
   const { title, model, disabled } = props;
@@ -98,45 +99,58 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
     }
   };
 
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
+  // 表单模板
+  const formTemp = [];
+  formTemp.push(<Form form={form} name="form" className='clear' initialValues={FormDefaultDataValue} scrollToFirstError onFinish={onFinish}>
+    <Form.Item label="项目名称" name="name" className='title w_50'
+      hidden={disabled.includes('name')}
+      rules={[{ required: !disabled.includes('name'), message: '请输入项目名称' }]}>
+        <Input disabled={isReadOnly} allowClear placeholder='请输入项目名称' />
+    </Form.Item>
+
+    <Form.Item label="项目描述" name="desc" className='title w_50'
+      hidden={disabled.includes('desc')}
+      rules={[{ required: !disabled.includes('desc'), message: '请输入项目描述' }]}>
+        <Input disabled={isReadOnly} allowClear placeholder='请输入项目描述' />
+    </Form.Item>
+
+    <Form.Item label="排序" name="weight">
+      <InputNumber disabled={isReadOnly} min={1} />
+    </Form.Item>
+
+    <Form.Item label="状态" name="state" valuePropName="checked">
+      <Switch disabled={isReadOnly} checkedChildren="开启" unCheckedChildren="关闭" defaultChecked />
+    </Form.Item>
+
+    <Form.Item wrapperCol={{ offset: 1 }}>
+      {
+        isReadOnly
+          ? <Button type="link" loading={loading} onClick={() => navigate('edit')}>编 辑</Button>
+          : <Button htmlType="submit" loading={loading}>保 存</Button>
+      }
+      <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
+    </Form.Item>
+  </Form>);
+
+  // tabItems ...
+  const tabItems: Tab[] = formTemp.map((item, index) => {
+    return { key: String(index), label: title, children: item };
+  });
+
   return (
     <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <Row className="model-layer">
-        <Col xs={24} sm={24} md={24} lg={20} xl={16} xxl={12}>
-          <Form form={form} name="form" className='clear' initialValues={FormDefaultDataValue} scrollToFirstError onFinish={onFinish}>
-            <Form.Item label="项目名称" name="name" className='title w_50'
-              hidden={disabled.includes('name')}
-              rules={[{ required: !disabled.includes('name'), message: '请输入项目名称' }]}>
-                <Input disabled={isReadOnly} allowClear placeholder='请输入项目名称' />
-            </Form.Item>
-
-            <Form.Item label="项目描述" name="desc" className='title w_50'
-              hidden={disabled.includes('desc')}
-              rules={[{ required: !disabled.includes('desc'), message: '请输入项目描述' }]}>
-                <Input disabled={isReadOnly} allowClear placeholder='请输入项目描述' />
-            </Form.Item>
-
-            <Form.Item label="排序" name="weight">
-              <InputNumber disabled={isReadOnly} min={1} />
-            </Form.Item>
-
-            <Form.Item label="状态" name="state" valuePropName="checked">
-              <Switch disabled={isReadOnly} checkedChildren="开启" unCheckedChildren="关闭" defaultChecked />
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 4 }}>
-              {
-                isReadOnly
-                  ? <Button type="link" loading={loading} onClick={() => navigate('edit')}>编 辑</Button>
-                  : <Button htmlType="submit" loading={loading}>保 存</Button>
-              }
-              <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
+      <Tabs
+        onChange={onChange}
+        type="card"
+        items={tabItems}
+      />
     </>
   );
 };
