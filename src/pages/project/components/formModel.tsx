@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import React, { FC, useEffect }  from 'react';
 import { useNavigate, useParams }  from 'react-router-dom';
 import { useGraphql }  from '~@/hooks/useGraphql';
-import { Form, Empty, Tabs } from 'antd';
+import { Form, Tabs } from 'antd';
 import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
@@ -12,20 +11,13 @@ import { useAction } from '../hooks';
 import { GenerateFormTemp } from './formTemp';
 import { HelmetWrapper } from '~@/services/table_service';
 
-const formModel: FC<IComponentPropsDataType> = (props) => {
-  const { title, model, disabled } = props;
+const formModel: FC<IComponentPropsDataType> = ({ title, model, disabled }) => {
   const navigate  = useNavigate();
 
   const params    = useParams();
   const { breadcrumb } = useBreadcrumb();
   const { message } = useAntdAction();
   const { isReadOnly, loading, setLoading } = useAction();
-
-  if (_.isEmpty(props)) {
-    return (
-      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={<span>缺少props数据</span>} />
-    );
-  }
 
   const [form] = Form.useForm();
   const [formAdd, { addLoading }] = useGraphql(`${model}Add`);
