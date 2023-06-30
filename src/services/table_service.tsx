@@ -24,21 +24,18 @@ import {
 const { confirm } = Modal;
 
 // 生成参数
-export function GenerateVariable<T>(filter: T): IGenerateVariableType<T> {
-  const inputSort: ISortInputType[] = [{weight: 'ASC'}];
-
+export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerateVariableType<T> {
   const variables: IVariableType<T> = {
     currentPage: 1,
     perPage: 10,
     search: null,
     rand: false,
     filter,
-    sort: inputSort,
+    sort,
   };
 
   return {
     variables,
-    inputSort,
   };
 };
 

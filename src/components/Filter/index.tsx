@@ -6,7 +6,6 @@ import { IFilterLayerProps } from './types';
 import { ISortInputType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType } from '~@/types/useTableList_hook_type';
 import { useTableListStore } from '~@/hooks/useTableList';
-// import { IFilterInputType } from '~@/types/useTableList_hook_type';
 
 const { Option } = Select;
 

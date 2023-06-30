@@ -7,7 +7,6 @@ export interface ISortInputType {
 
 export interface IGenerateVariableType<T> {
   variables: IVariableType<T>
-  inputSort: ISortInputType[]
 }
 
 export interface IVariableType<T> {

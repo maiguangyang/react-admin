@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
-
 import { Filter } from '~@/utils/filter';
 
-import { DeleteTableRowsWrapper, HelmetWrapper, TableWrapper } from '~@/services/table_service';
 import { IColumnsDataType } from '~@/types/extract_utils_type';
 import { TableListStoreProvider } from '~@/hooks/useTableList';
+import { DeleteTableRowsWrapper, HelmetWrapper, TableWrapper } from '~@/services/table_service';
 import { FilterWrapper } from './filter';
 import { useAction } from './hooks';
 import { ITabelColumnType } from './types';
