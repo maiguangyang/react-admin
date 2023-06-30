@@ -1,15 +1,15 @@
 import React, { FC, useEffect }  from 'react';
-import { useNavigate, useParams }  from 'react-router-dom';
-import { useGraphql }  from '~@/hooks/useGraphql';
 import { Form, Tabs } from 'antd';
-import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
+import { useNavigate, useParams }  from 'react-router-dom';
+import { Tab } from 'rc-tabs/lib/interface';
+import { useGraphql }  from '~@/hooks/useGraphql';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
-import { Tab } from 'rc-tabs/lib/interface';
 import { useFormModel } from '~@/hooks/useFormModel';
+import { HelmetWrapper } from '~@/services/table_service';
+import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import { useAction } from '../hooks';
 import { GenerateFormTemp } from './formTemp';
-import { HelmetWrapper } from '~@/services/table_service';
 
 const formModel: FC<IComponentPropsDataType> = ({ title, model, disabled }) => {
   const navigate  = useNavigate();

@@ -1,4 +1,5 @@
 import { PaginationProps } from 'antd';
+import { ITabelColumnType } from '~@/pages/project/types';
 import { IValueBaseType } from './base_type';
 
 export interface ISortInputType {
@@ -34,6 +35,7 @@ export interface IFormTempTableListType {
 // 批量删除
 export interface IDeleteTableRowsType {
   type: string
+  row?: ITabelColumnType
 };
 
 export interface ITablePaginationConfig extends PaginationProps {

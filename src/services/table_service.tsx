@@ -91,7 +91,7 @@ export function DeleteRowAll<T>({...agm}: T) {
 };
 
 // DeleteTableRows ...
-export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = (props) => {
+export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = ({ type, row }) => {
   const navigate = useNavigate();
   const { model, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
   const [formDelete, { loading, data }]: any = useGraphql(`${model}Delete`);
@@ -107,14 +107,15 @@ export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = (props) => {
   }, [loading]);
 
   const handleDeleteRowAll = () => {
+    const ids = type === 'list' ? selectedRowKeys : [row?.id];
     DeleteRowAll({
       onOk() {
-        formDelete({ variables: { id: selectedRowKeys } }).catch((_: Error) => message.error('删除失败'));
+        formDelete({ variables: { id: ids } }).catch((_: Error) => message.error('删除失败'));
       },
     });
   };
 
-  if (props.type !== 'list') {
+  if (type !== 'list') {
     return (
       <a className="text-desc" onClick={handleDeleteRowAll}>删除</a>
     );

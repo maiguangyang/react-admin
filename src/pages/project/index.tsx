@@ -42,7 +42,7 @@ const ProjectPage: FC = () => {
           <Space size="middle">
             <Link to={record.id}>查看</Link>
             <Link to={`${record.id}/edit`} className="primary">修改</Link>
-            <DeleteTableRowsWrapper type='row' />
+            <DeleteTableRowsWrapper type='row' row={record} />
           </Space>
         );
       },
