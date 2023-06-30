@@ -164,8 +164,11 @@ export const TableWrapper: FC = () => {
 };
 
 // HelmetWrapper ...
-export const HelmetWrapper: FC<IHelmetWrapperProps> = ({ title }) => {
+export const HelmetWrapper: FC<IHelmetWrapperProps> = ({ title, children }) => {
   return (
-    <Helmet><title>{title}</title></Helmet>
+    <>
+      <Helmet><title>{title}</title></Helmet>
+      { children }
+    </>
   );
 };

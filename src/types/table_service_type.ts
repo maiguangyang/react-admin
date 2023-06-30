@@ -42,6 +42,7 @@ export interface ITablePaginationConfig extends PaginationProps {
 
 export interface IHelmetWrapperProps {
   title: string
+  children?: React.ReactNode
 }
 
 export type IScrollType = ({x?: string | number | true | undefined; y?: string | number | undefined;} & { scrollToFirstRowOnChange?: boolean | undefined;}) | undefined;

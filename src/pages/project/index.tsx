@@ -51,10 +51,11 @@ const ProjectPage: FC = () => {
 
   return (
     <TableListStoreProvider model={model} columns={columns}>
-      <HelmetWrapper title={title} />
-      <FilterWrapper />
-      <DeleteTableRowsWrapper type='list' />
-      <TableWrapper />
+      <HelmetWrapper title={title}>
+        <FilterWrapper />
+        <DeleteTableRowsWrapper type='list' />
+        <TableWrapper />
+      </HelmetWrapper>
     </TableListStoreProvider>
   );
 };

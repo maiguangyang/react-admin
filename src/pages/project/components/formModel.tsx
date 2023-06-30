@@ -1,26 +1,25 @@
 import _ from 'lodash';
-import React, { FC, useEffect, useState }  from 'react';
-import { Helmet } from 'react-helmet';
-import { useNavigate, useLocation, useParams }  from 'react-router-dom';
-import { FormDefaultDataValue, useGraphql }  from '~@/hooks/useGraphql';
-import { Form, Input, InputNumber, Button, Switch, Empty, Tabs } from 'antd';
+import React, { FC, useEffect }  from 'react';
+import { useNavigate, useParams }  from 'react-router-dom';
+import { useGraphql }  from '~@/hooks/useGraphql';
+import { Form, Empty, Tabs } from 'antd';
 import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { useFormModel } from '~@/hooks/useFormModel';
+import { useAction } from '../hooks';
+import { GenerateFormTemp } from './formTemp';
+import { HelmetWrapper } from '~@/services/table_service';
 
 const formModel: FC<IComponentPropsDataType> = (props) => {
   const { title, model, disabled } = props;
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const params    = useParams();
-  const location  = useLocation();
-  const { breadcrumb } = useBreadcrumb();
-  const { message } = useAntdAction();
   const navigate  = useNavigate();
 
-  const isReadOnly = !/add.*/.test(location.pathname) && !/edit.*/.test(location.pathname);
+  const params    = useParams();
+  const { breadcrumb } = useBreadcrumb();
+  const { message } = useAntdAction();
+  const { isReadOnly, loading, setLoading } = useAction();
 
   if (_.isEmpty(props)) {
     return (
@@ -49,63 +48,22 @@ const formModel: FC<IComponentPropsDataType> = (props) => {
     }`, { id: params.id });
 
     useEffect(() => {
-      if (error) {
-        message.error(error.message);
-        return;
-      }
-      if (data) {
-        if (_.isEmpty(data.parentText)) data.parentText = '0';
-        data.parentText = data.parentText.split(',');
-        form.setFieldsValue({...data});
-      }
+      if (error) message.error(error.message);
+      else if (data) form.setFieldsValue({...data});
     }, [loading]);
   }
 
   // 表单模板
-  const formTemp = [];
-  formTemp.push(<Form form={form} name="form" className='clear' initialValues={FormDefaultDataValue} scrollToFirstError onFinish={onFinish}>
-    <Form.Item label="项目名称" name="name" className='title w_50'
-      hidden={disabled.includes('name')}
-      rules={[{ required: !disabled.includes('name'), message: '请输入项目名称' }]}>
-        <Input disabled={isReadOnly} allowClear placeholder='请输入项目名称' />
-    </Form.Item>
-
-    <Form.Item label="项目描述" name="desc" className='title w_50'
-      hidden={disabled.includes('desc')}
-      rules={[{ required: !disabled.includes('desc'), message: '请输入项目描述' }]}>
-        <Input disabled={isReadOnly} allowClear placeholder='请输入项目描述' />
-    </Form.Item>
-
-    <Form.Item label="排序" name="weight">
-      <InputNumber disabled={isReadOnly} min={1} />
-    </Form.Item>
-
-    <Form.Item label="状态" name="state" valuePropName="checked">
-      <Switch disabled={isReadOnly} checkedChildren="开启" unCheckedChildren="关闭" defaultChecked />
-    </Form.Item>
-
-    <Form.Item wrapperCol={{ offset: 1 }}>
-      {
-        isReadOnly
-          ? <Button type="link" onClick={() => navigate('edit')}>编 辑</Button>
-          : <Button htmlType="submit" loading={loading}>保 存</Button>
-      }
-      <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
-    </Form.Item>
-  </Form>);
-
+  const formTemp = GenerateFormTemp({ form, disabled, loading, isReadOnly, onFinish });
   // tabItems ...
   const tabItems: Tab[] = formTemp.map((item, index) => {
     return { key: String(index), label: title, children: item };
   });
 
   return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
+    <HelmetWrapper title={title}>
       <Tabs type="card" items={tabItems} />
-    </>
+    </HelmetWrapper>
   );
 };
 
