@@ -1,6 +1,5 @@
 import { PaginationProps } from 'antd';
 import { IValueBaseType } from './base_type';
-import { IColumnsDataType } from './extract_utils_type';
 
 export interface ISortInputType {
   [key: string]: IValueBaseType
@@ -35,24 +34,15 @@ export interface IFormTempTableListType {
 
 // 批量删除
 export interface IDeleteTableRowsType {
-  model: string
-  ids: string[] | number[]
   type: string
-  addUrl?: string
-  onDeleteStatusChange: (ids: string[]) => void
 };
-
-export interface ITableWapperType<T> {
-  columns: IColumnsDataType[]
-  data: IFormTempTableListType
-  variables: IVariableType<T>
-  selectedRowKeys: string[]
-  setSelectedRowKeys: (res: string[]) => void
-  setFetchStatus: () => void
-}
 
 export interface ITablePaginationConfig extends PaginationProps {
   position?: ITablePaginationPosition[];
+}
+
+export interface IHelmetWrapperProps {
+  title: string
 }
 
 export type IScrollType = ({x?: string | number | true | undefined; y?: string | number | undefined;} & { scrollToFirstRowOnChange?: boolean | undefined;}) | undefined;

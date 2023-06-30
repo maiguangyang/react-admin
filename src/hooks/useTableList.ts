@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { createStore } from 'hox';
 import { FormTempTableList, GenerateVariable } from '~@/services/table_service';
 import { IValueBaseType } from '~@/types/base_type';
-import { IColumnsDataType } from '~@/types/extract_utils_type';
 import { IFormTempTableListType, IVariableType } from '~@/types/table_service_type';
-import { IFilterInputType } from '~@/types/useTableList_hook_type';
+import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
 import { ExtractColumnIndex, useGraphql } from './useGraphql';
 
-export const useTableList = (model: string, columns: IColumnsDataType[]) => {
+export const [useTableListStore, TableListStoreProvider] = createStore((props: ITableListStoreProps<any>) => {
+  const { model, columns } = props;
+
   // 排序和参数
   const filterInput = useRef<IFilterInputType>({});
   const tableDefaultData: IFormTempTableListType = FormTempTableList;
@@ -18,6 +20,7 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
 
   const fields: string = ExtractColumnIndex(columns);
+
   const [getList, { loading, data }]: any = useGraphql(`${model}s`, fields, variables);
 
   useEffect(() => {
@@ -30,24 +33,23 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
 
   // 搜索
   const onSearchCallback = (value: IValueBaseType, key: string) => {
-    // filterInput.name_like = value;
     filterInput.current = { ...filterInput.current, [key]: value };
     variables.filter = {...filterInput.current, ...variables.filter, [key]: value};
-    onFilterChange(variables);
+    onFilterChangeCallback(variables);
   };
 
   // 过滤筛选
-  const onFilterChange = (value: IVariableType<IFilterInputType>) => {
+  const onFilterChangeCallback = (value: IVariableType<IFilterInputType>) => {
+    console.log('value', value);
     const filter = {...filterInput.current, ...value.filter};
     const sort = value.sort.length > 0 ? value.sort : inputSort;
     variables = {...variables, filter, sort};
     setSelectedRowKeys([]);
     setFetchStatus(!fetchStatus);
-    getList();
   };
 
   // 删除选中项目
-  const onDeleteStatusChange = (ids: string[]) => {
+  const onDeleteStatusChangeCallback = (ids: string[]) => {
     const data = formTempTable.data.filter((item) => ids.indexOf(item.id) === -1);
     const keys = selectedRowKeys.filter((item) => ids.indexOf(item) === -1);
 
@@ -56,7 +58,9 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
   };
 
   return {
+    model,
     loading,
+    columns,
     variables,
     fetchStatus,
     setFetchStatus,
@@ -65,7 +69,7 @@ export const useTableList = (model: string, columns: IColumnsDataType[]) => {
     formTempTable,
     setFormTempTable,
     onSearchCallback,
-    onFilterChange,
-    onDeleteStatusChange,
+    onFilterChangeCallback,
+    onDeleteStatusChangeCallback,
   };
-};
+});

@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import React, { FC, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import { Button, Modal, Table, message } from 'antd';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useGraphql } from '~@/hooks/useGraphql';
-import { IColumnsDataType } from '~@/types/extract_utils_type';
+import { useTableListStore } from '~@/hooks/useTableList';
 import {
   IDeleteTableRowsType,
   IFormTempTableListType,
@@ -14,10 +15,10 @@ import {
   IScrollType,
   ITableCallback,
   ITablePaginationType,
-  ITableWapperType,
   IVariableType,
   ITablePaginationPosition,
   ISortInputType,
+  IHelmetWrapperProps,
 } from '~@/types/table_service_type';
 
 const { confirm } = Modal;
@@ -93,24 +94,25 @@ export function DeleteRowAll<T>({...agm}: T) {
 };
 
 // DeleteTableRows ...
-export const DeleteTableRows: FC<IDeleteTableRowsType> = (props) => {
+export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = (props) => {
   const navigate = useNavigate();
-  const [formDelete, { loading, data }]: any = useGraphql(props.model);
-  const hasSelected = props.ids.length > 0;
+  const { model, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
+  const [formDelete, { loading, data }]: any = useGraphql(`${model}Delete`);
+
+  const hasSelected = selectedRowKeys.length > 0;
 
   useEffect(() => {
     // 回调组件方法
     if (data === true) {
       message.success('删除成功');
-      if (props.onDeleteStatusChange && _.isFunction(props.onDeleteStatusChange)) props.onDeleteStatusChange(props.ids);
-      // props.onDeleteStatusChange();
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(selectedRowKeys);
     }
   }, [loading]);
 
   const handleDeleteRowAll = () => {
     DeleteRowAll({
       onOk() {
-        formDelete({ variables: { id: props.ids } }).catch((_: Error) => message.error('删除失败'));
+        formDelete({ variables: { id: selectedRowKeys } }).catch((_: Error) => message.error('删除失败'));
       },
     });
   };
@@ -123,38 +125,50 @@ export const DeleteTableRows: FC<IDeleteTableRowsType> = (props) => {
 
   return (
     <div className="list-head-wapper">
-      <Button type="primary" onClick={() => navigate(String(props.addUrl))}>新增</Button>
+      <Button type="primary" onClick={() => navigate('add')}>新增</Button>
       <Button className="margin-lr-10" type="primary" danger onClick={handleDeleteRowAll} disabled={!hasSelected} loading={loading}>批量删除</Button>
       <span style={{ marginLeft: 8 }}>
-        {hasSelected ? `已选 ${props.ids.length} 条` : ''}
+        {hasSelected ? `已选 ${selectedRowKeys.length} 条` : ''}
       </span>
     </div>
   );
 };
 
-// TableWapper ...
-// export const TableWapper: FC<ITableWapperType<any>> = (props) => {
-export function TableWapper<T>(props: ITableWapperType<T>) {
-  const columns: IColumnsDataType[] = props.columns;
-  const formTempTable: IFormTempTableListType = props.data;
-  const variables: IVariableType<any> = props.variables;
+// TableWrapper ...
+export const TableWrapper: FC = () => {
+  const { columns, variables, formTempTable, selectedRowKeys, fetchStatus, setSelectedRowKeys, setFetchStatus } = useTableListStore((store) => [
+    store.columns,
+    store.variables,
+    store.formTempTable,
+    store.selectedRowKeys,
+    store.fetchStatus,
+  ]);
 
   // 选择改变
   const onSelectChange = (value: any[]) => {
-    props.setSelectedRowKeys(value);
+    setSelectedRowKeys(value);
   };
 
-  const rowSelection = { selectedRowKeys: props.selectedRowKeys, onChange: onSelectChange };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   // 页数改变
   const onChange = (page: number, pageSize: number) => {
     variables.currentPage = page;
     variables.perPage = pageSize;
-    // props.setFetchStatus(variables);
-    props.setFetchStatus();
+    setFetchStatus(!fetchStatus);
   };
 
   return (
     <Table className='table-layer' rowKey="id" {...TableConfig(rowSelection, columns, formTempTable, { onChange })} />
+  );
+};
+
+// HelmetWrapper ...
+export const HelmetWrapper: FC<IHelmetWrapperProps> = ({ title }) => {
+  return (
+    <Helmet><title>{title}</title></Helmet>
   );
 };

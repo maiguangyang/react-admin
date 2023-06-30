@@ -3,5 +3,4 @@ import { IFilterInputType } from '~@/types/useTableList_hook_type';
 
 export interface IFilterLayerProps {
   children?: React.ReactNode;
-  onFilterChange: (value: IVariableType<IFilterInputType>) => void
 }

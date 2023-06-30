@@ -3,12 +3,16 @@ import './index.less';
 import React, { FC, useState } from 'react';
 import { Row, Col, Select, Radio } from 'antd';
 import { IFilterLayerProps } from './types';
-import { ISortInputType } from '~@/types/table_service_type';
+import { ISortInputType, IVariableType } from '~@/types/table_service_type';
+import { IFilterInputType } from '~@/types/useTableList_hook_type';
+import { useTableListStore } from '~@/hooks/useTableList';
 // import { IFilterInputType } from '~@/types/useTableList_hook_type';
 
 const { Option } = Select;
 
 const FilterLayer: FC<IFilterLayerProps> = (props) => {
+  const { onFilterChangeCallback } = useTableListStore();
+
   type sortsType = {
     label: string,
     value: string,
@@ -60,15 +64,11 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
     const filter: any = {};
     if (state) filter.state = state;
 
-    // todo
-    console.log('sort', sort);
-
-    // let variables: IVariableType<IFilterInputType> = {};
-
-    // props.onFilterChange({
-    //   sort,
-    //   filter,
-    // });
+    const variables: IVariableType<IFilterInputType> = {
+      sort,
+      filter,
+    } as IVariableType<IFilterInputType>;
+    onFilterChangeCallback(variables);
   }
 
   function sortFilter(value: any) {
