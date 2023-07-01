@@ -22,7 +22,7 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
   const [fetchStatus, setFetchStatus] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState(selectedRow);
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
-  const fields: string = ExtractColumnIndex(columns);
+  const fields: string = ExtractColumnIndex(columns, ['isDelete']);
   const [getList, { loading, data }]: any = useGraphql(`${model}s`, fields, variables);
 
   useEffect(() => {
@@ -54,11 +54,11 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
 
   // 删除选中项目
   const onDeleteStatusChangeCallback = (ids: string[]) => {
-    const data = formTempTable.data.filter((item) => ids.indexOf(item.id) === -1);
-    const keys = selectedRowKeys.filter((item) => ids.indexOf(item) === -1);
-
-    setFormTempTable({...formTempTable, data});
-    setSelectedRowKeys(keys);
+    const cloneData = _.cloneDeep(formTempTable);
+    cloneData.data.forEach((item) => {
+      if (ids.includes(item.id)) item.isDelete = item.isDelete === 1 ? 2 : 1;
+    });
+    setFormTempTable(cloneData);
   };
 
   return {

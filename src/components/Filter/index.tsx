@@ -3,14 +3,12 @@ import './index.less';
 import React, { FC, useState } from 'react';
 import { Row, Col, Select, Radio } from 'antd';
 import { IFilterLayerProps } from './types';
-import { ISortInputType, IVariableType } from '~@/types/table_service_type';
-import { IFilterInputType } from '~@/types/useTableList_hook_type';
 import { useTableListStore } from '~@/hooks/useTableList';
 
 const { Option } = Select;
 
 const FilterLayer: FC<IFilterLayerProps> = (props) => {
-  const { onFilterChangeCallback } = useTableListStore();
+  const { onSearchCallback } = useTableListStore();
 
   type sortsType = {
     label: string,
@@ -24,15 +22,8 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
   ];
 
   const [selectOpen, setSelectOpen] = useState(false);
-  const [stateValue, setStateValue] = useState(null);
   const [sortValue, setSortValue] = useState(null);
   const [sortsWeightValue, setSortsWeightValue] = useState<string | null>(null);
-
-  // 状态选择
-  function handleStateOnChange(value: any) {
-    setStateValue(value);
-    onFilterChange(sortsWeightValue, value);
-  }
 
   // 排序选择
   function handleRadioOnChange(e: any) {
@@ -41,33 +32,12 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
     setSortValue(value.split('.')[0]);
     setSortsWeightValue(value);
     setSelectOpen(!selectOpen);
-    onFilterChange(value, stateValue);
   }
 
   // 清除排序
   function handleSortValueOnClear() {
     setSortValue(null);
     setSortsWeightValue(null);
-    onFilterChange('', stateValue);
-  }
-
-  // 过滤器回调
-  function onFilterChange(data: any, state?: any) {
-    let sort: ISortInputType[] = [];
-    if (data) {
-      const label = data.split('.')[0];
-      const value = data.split('.')[1];
-      sort = [{[label]: value}];
-    }
-
-    const filter: any = {};
-    if (state) filter.state = state;
-
-    const variables: IVariableType<IFilterInputType> = {
-      sort,
-      filter,
-    } as IVariableType<IFilterInputType>;
-    onFilterChangeCallback(variables);
   }
 
   function sortFilter(value: any) {
@@ -85,15 +55,21 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
       <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
         <div className="filter-item flex align-center">
         <span className='title'>状态：</span>
-          <Select allowClear value={stateValue} onChange={handleStateOnChange} placeholder='请选择状态'>
+          <Select allowClear onChange={(value: number) => onSearchCallback(value, 'state')} placeholder='请选择状态'>
             <Option value={1}>启用</Option>
             <Option value={2}>禁用</Option>
-            <Option value={3}>下架</Option>
-            <Option value={4}>删除</Option>
           </Select>
         </div>
       </Col>
-
+      <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
+        <div className="filter-item flex align-center">
+        <span className='title'>是否删除：</span>
+          <Select allowClear onChange={(value: number) => onSearchCallback(value, 'isDelete')} placeholder='请选择状态'>
+            <Option value={1}>正常</Option>
+            <Option value={2}>删除</Option>
+          </Select>
+        </div>
+      </Col>
       <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
         <div className="filter-item flex align-center" id='sort'>
         <span className='title'>排序：</span>

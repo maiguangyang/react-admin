@@ -37,7 +37,7 @@ export function GenerateFormTemp(props: IFormTempProps<IFormDataType>) {
       {
         isReadOnly
           ? <Button type="link" onClick={() => navigate('edit')}>编 辑</Button>
-          : <Button htmlType="submit" loading={loading}>保 存</Button>
+          : <Button type='primary' htmlType="submit" loading={loading}>保 存</Button>
       }
       <Button type="text" htmlType="button" onClick={() => navigate(-1)}>取 消</Button>
     </Form.Item>

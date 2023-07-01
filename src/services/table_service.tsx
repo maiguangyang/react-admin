@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import { Button, Modal, Table, message } from 'antd';
+import { Button, Table } from 'antd';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useGraphql } from '~@/hooks/useGraphql';
@@ -20,8 +20,8 @@ import {
   ISortInputType,
   IHelmetWrapperProps,
 } from '~@/types/table_service_type';
-
-const { confirm } = Modal;
+import { useAntdAction } from '~@/hooks/useAntd';
+import { ModalFunc } from 'antd/es/modal/confirm';
 
 // 生成参数
 export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerateVariableType<T> {
@@ -78,11 +78,11 @@ export function TableConfig(rowSelection: TableRowSelection<{}>, columns: Column
 };
 
 // 删除tabel row数据
-export function DeleteRowAll<T>({...agm}: T) {
+export function DeleteRowAll<T>(confirm: ModalFunc, {...agm}: T) {
   confirm({
-    title: '是否要删除选中项？',
+    // title: '是否要删除选中项？',
     icon: <ExclamationCircleOutlined />,
-    content: '删除后不可恢复，请小心操作',
+    // content: '删除后不可恢复，请小心操作',
     okText: '确认',
     okType: 'danger',
     cancelText: '取消',
@@ -93,23 +93,53 @@ export function DeleteRowAll<T>({...agm}: T) {
 // DeleteTableRows ...
 export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = ({ type, row }) => {
   const navigate = useNavigate();
-  const { model, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
-  const [formDelete, { loading, data }]: any = useGraphql(`${model}Delete`);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { message, Modal } = useAntdAction();
+  const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.formTempTable, store.selectedRowKeys]);
+  const [formDelete, { deleteLoading, deleteData }]: any = useGraphql(`${model}Delete`);
+  const [formRecovery, { recoveryLoading, recoveryData }]: any = useGraphql(`${model}Recovery`);
 
+  // const ids = type === 'list' ? selectedRowKeys : [row?.id];
+  const ids: string[] = [];
   const hasSelected = selectedRowKeys.length > 0;
+  if (!hasSelected) ids.push(row?.id!);
+
+  // 排除已删除状态的id
+  selectedRowKeys.forEach((key) => {
+    const item = formTempTable.data.find(item => item.id === key && item.isDelete === 1);
+    if (item) ids.push(item.id);
+  });
 
   useEffect(() => {
-    // 回调组件方法
-    if (data === true) {
+    setLoading(deleteLoading !== recoveryLoading);
+  }, [deleteLoading, recoveryLoading]);
+
+  // 删除回调
+  useEffect(() => {
+    if (deleteData) {
       message.success('删除成功');
-      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(selectedRowKeys);
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids);
     }
-  }, [loading]);
+  }, [deleteData]);
+
+  // 恢复删除回调
+  useEffect(() => {
+    if (recoveryData) {
+      message.success('恢复成功');
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids);
+    }
+  }, [recoveryData]);
 
   const handleDeleteRowAll = () => {
-    const ids = type === 'list' ? selectedRowKeys : [row?.id];
-    DeleteRowAll({
+    DeleteRowAll(Modal.confirm, {
+      title: '温馨提示',
+      content: `是否确认要${!hasSelected && row?.isDelete !== 1 ? '恢复' : '删除'}`,
       onOk() {
+        if (ids.length <= 0) return;
+        if (!hasSelected && row?.isDelete !== 1) {
+          formRecovery({ variables: { id: ids } }).catch((_: Error) => message.error('恢复失败'));
+          return;
+        }
         formDelete({ variables: { id: ids } }).catch((_: Error) => message.error('删除失败'));
       },
     });
@@ -117,7 +147,13 @@ export const DeleteTableRowsWrapper: FC<IDeleteTableRowsType> = ({ type, row }) 
 
   if (type !== 'list') {
     return (
-      <a className="text-desc" onClick={handleDeleteRowAll}>删除</a>
+      <>
+        {
+          hasSelected
+            ? null
+            : <a className="text-desc" onClick={handleDeleteRowAll}>{ row?.isDelete !== 1 ? '恢复' : '删除' }</a>
+        }
+      </>
     );
   }
 

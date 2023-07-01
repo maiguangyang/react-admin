@@ -26,6 +26,14 @@ const ProjectPage: FC = () => {
       align: 'center',
     },
     {
+      title: '删除状态',
+      align: 'center',
+      width: 200,
+      render: (data: string, row) => {
+        return row?.isDelete !== 1 ? '已删除' : '正常';
+      },
+    },
+    {
       title: '录入时间',
       dataIndex: 'createdAt',
       align: 'center',
@@ -37,12 +45,12 @@ const ProjectPage: FC = () => {
       dataIndex: 'action',
       align: 'center',
       width: 200,
-      render: (text: any, record) => {
+      render: (text: any, row) => {
         return (
           <Space size="middle">
-            <Link to={record.id}>查看</Link>
-            <Link to={`${record.id}/edit`} className="primary">修改</Link>
-            <DeleteTableRowsWrapper type='row' row={record} />
+            <Link to={row.id}>查看</Link>
+            <Link to={`${row.id}/edit`} className="primary">修改</Link>
+            <DeleteTableRowsWrapper type='row' row={row} />
           </Space>
         );
       },

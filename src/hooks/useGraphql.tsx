@@ -62,23 +62,22 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
       delete${name}(id: $id)
     }`;
 
-    const [func, { ...agm }]: any = useMutation(text);
-    if (agm.data) {
-      // agm = {...agm, delData: agm.data[`delete${name}`]};
-      agm.data = agm.data[`delete${name}`];
-    }
-    return [func, agm];
+    const [func, { loading, data, error, ...agm }]: any = useMutation(text);
+    const deleteData = (data && data[`delete${name}`]) ? data[`delete${name}`] : false;
+    return [func, { deleteLoading: loading, deleteData, deleteError: error, ...agm}];
   }
 
   // 恢复
   if (mode.slice(mode.length - 8) === 'Recovery') {
     mode = mode.slice(0, mode.length - 8);
-    const text = gql`mutation ${mode}Recovery ($id: [ID!]!) {
-      recovery${mode}(id: $id)
+    const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
+    const text = gql`mutation ${name}Recovery ($id: [ID!]!) {
+      recovery${name}(id: $id)
     }`;
 
-    const [func, { ...agm }] = useMutation(text);
-    return [func, agm];
+    const [func, { loading, data, error, ...agm }] = useMutation(text);
+    const recoveryData = (data && data[`recovery${name}`]) ? data[`recovery${name}`] : false;
+    return [func, { recoveryLoading: loading, recoveryData, recoveryError: error, ...agm}];
   }
 
   // 列表
