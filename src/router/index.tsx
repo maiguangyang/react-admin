@@ -7,7 +7,6 @@ const HomeIndex  = lazy(() => import('~@/pages/home/index'));
 const HomeAbout  = lazy(() => import('~@/pages/home/about'));
 const HomeHox  = lazy(() => import('~@/pages/home/hox'));
 const Project  = lazy(() => import('~@/pages/project'));
-const ProjectDownload  = lazy(() => import('~@/pages/project/download'));
 const ProjectAdd  = lazy(() => import('~@/pages/project/add'));
 const ProjectEdit  = lazy(() => import('~@/pages/project/edit'));
 const ProjectDetail  = lazy(() => import('~@/pages/project/detail'));
@@ -25,7 +24,6 @@ export const Routes: RouteObject[] = [
   ]},
   { title: '项目管理', path: 'project', element: <Outlet />, children: [
     { title: '项目列表', path: 'bbq', element: <Project />, meta: { icon: <UserOutlined /> } },
-    { title: '编译下载', path: 'download', element: <ProjectDownload />, meta: { icon: <UserOutlined /> } },
     { title: '新增项目', path: 'bbq/add', element: <ProjectAdd />, meta: { icon: <UserOutlined /> } },
     { title: '编辑项目', path: 'bbq/:id/edit', element: <ProjectEdit />, meta: { icon: <UserOutlined /> } },
     { title: '查看项目', path: 'bbq/:id', element: <ProjectDetail />, meta: { icon: <UserOutlined /> } },
