@@ -24,10 +24,10 @@ export interface ITableCallback {
 }
 
 // table组件Config配置
-export interface IFormTempTableListType {
+export interface IFormTempTableListType<T extends any> {
   current_page: number
   per_page: number
-  data: any[]
+  data: T[]
   total: number
   total_page: number
 }

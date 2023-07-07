@@ -5,7 +5,7 @@ const Add: FC = () => {
   const { title, model, FormData } = useAction();
 
   return (
-    <FormData title={`新增${title}`} model={model} disabled={[]} />
+    <FormData title={`新增${title}`} model={model} disabled={[]} required={[]} />
   );
 };
 

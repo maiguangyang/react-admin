@@ -7,4 +7,5 @@ export interface IComponentPropsDataType {
   title: string,
   model: string,
   disabled: string[],
+  required: string[],
 }

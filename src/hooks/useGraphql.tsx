@@ -12,7 +12,8 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) => {
+// export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) => {
+export function useGraphql<T extends any>(mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) {
   // 删除空值的key
   let variables = _.cloneDeep(agm);
   _.forEach(variables, (item, key) => {
@@ -104,10 +105,11 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
       }
     `;
     // let { loading, error, data, client }: any = useQuery(text, { variables });
-    const [getList, { ...agm }] = useLazyQuery(text, { variables });
+    const [getList, { ...agm }] = useLazyQuery<T>(text, { variables });
 
     if (agm.data) {
-      agm.data = agm.data[name];
+      const resData = agm.data[name as keyof T];
+      agm.data = resData as T;
     }
 
     return [getList, agm];
@@ -131,5 +133,8 @@ export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: st
   }
 
   const text = gql`${mode}`;
-  return text;
+  // const [func] = useMutation(text, { variables });
+
+  const [func, { ...agm1 }] = useMutation(text, { variables });
+  return [func, { ...agm1}];
 };

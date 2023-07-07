@@ -5,6 +5,7 @@ import { FormDefaultDataValue } from '~@/hooks/useGraphql';
 import { IFormTempProps } from '~@/types/base_type';
 import { IFormDataType } from '../types';
 
+const { TextArea } = Input;
 // 生成表单模板
 export function GenerateFormTemp(props: IFormTempProps<IFormDataType>) {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export function GenerateFormTemp(props: IFormTempProps<IFormDataType>) {
     <Form.Item label="项目描述" name="desc" className='title w_50'
       hidden={disabled.includes('desc')}
       rules={[{ required: !disabled.includes('desc'), message: '请输入项目描述' }]}>
-        <Input disabled={isReadOnly} allowClear placeholder='请输入项目描述' />
+        <TextArea rows={3} disabled={isReadOnly} allowClear placeholder='请输入项目描述' />
     </Form.Item>
 
     <Form.Item label="排序" name="weight">

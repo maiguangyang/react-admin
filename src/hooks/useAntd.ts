@@ -1,5 +1,5 @@
 // Entry component
-import { App } from 'antd';
+import { App, Modal } from 'antd';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import type { NotificationInstance } from 'antd/es/notification/interface';
@@ -7,12 +7,15 @@ import type { NotificationInstance } from 'antd/es/notification/interface';
 export const useAntdAction = () => {
   const staticFunction = App.useApp();
   const message: MessageInstance = staticFunction.message;
-  const Modal: Omit<ModalStaticFunctions, 'warn'> = staticFunction.modal;
+  const modal: Omit<ModalStaticFunctions, 'warn'> = staticFunction.modal;
   const notification: NotificationInstance = staticFunction.notification;
+
+  const destroy = Modal;
 
   return {
     message,
     notification,
-    Modal,
+    modal,
+    destroy,
   };
 };

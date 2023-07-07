@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Space } from 'antd';
+import { Space, Tooltip } from 'antd';
 import { Filter } from '~@/utils/filter';
 
 import { IColumnsDataType } from '~@/types/extract_utils_type';
@@ -24,6 +24,14 @@ const ProjectPage: FC = () => {
       title: '项目描述',
       dataIndex: 'desc',
       align: 'center',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (data: string) => (
+        <Tooltip placement="top" title={data}>
+          {data}
+        </Tooltip>
+      ),
     },
     {
       title: '删除状态',

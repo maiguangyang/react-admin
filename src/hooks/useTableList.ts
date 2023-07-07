@@ -15,7 +15,7 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
   const filterInputRef = useRef<IFilterInputType>({});
   const sortInputRef = useRef<ISortInputType[]>(sortInput);
 
-  const tableDefaultData: IFormTempTableListType = FormTempTableList;
+  const tableDefaultData: IFormTempTableListType<any> = FormTempTableList;
   const selectedRow: string[] = [];
   let { variables } = GenerateVariable(filterInputRef.current, sortInputRef.current);
 
