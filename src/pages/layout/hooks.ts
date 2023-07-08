@@ -64,6 +64,7 @@ export const useLayoutStore = () => {
   };
 
   return {
+    location,
     parenRoute,
     childMenu,
     selectedKeys,

@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Col, Progress, Row, Spin, Tooltip } from 'antd';
-import { ExclamationCircleFilled, EditOutlined, CloudSyncOutlined, CloudDownloadOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Dropdown, MenuProps, Progress, Row, Spin, Tooltip } from 'antd';
+import { ExclamationCircleFilled, CiOutlined, CloudSyncOutlined, CloudDownloadOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Filter } from '~@/utils/filter';
 
 import { IColumnsDataType } from '~@/types/extract_utils_type';
@@ -79,23 +79,23 @@ const ProjectPage: FC = () => {
     setTableData(data);
   }, [data]);
 
-  // 云编译
+  // 同步
   const downLoadConfirm = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, row: ITabelColumnType) => {
     event.stopPropagation();
     modal.confirm({
       title: '温馨提示',
       icon: <ExclamationCircleFilled />,
-      content: '确定要对该项目进行编译？',
+      content: '是否要对该项目进行同步操作？',
       async onOk() {
         destroy.destroyAll();
         notification.success({
           message: '温馨提示',
-          description: '后台执行中，请留意编译进度',
+          description: '后台执行中，请留意同步进度',
         });
         handleTableDataRowUpdate(true, row.id);
         await mutation({ variables: { id: row.id } });
         handleTableDataRowUpdate(false, row.id);
-        message.success('编译任务完成');
+        message.success('同步任务完成');
       },
     });
   };
@@ -140,11 +140,21 @@ const ProjectPage: FC = () => {
     }, 250);
   };
 
-  // navigateTo ...
-  const navigateTo = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, url: string) => {
+  // // navigateTo ...
+  // const navigateTo = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, url: string) => {
+  //   event.stopPropagation();
+  //   navigate(url);
+  // };
+
+  const handleOnCi = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, row: ITabelColumnType) => {
     event.stopPropagation();
-    navigate(url);
+    message.success('这是ci操作：在线编译打包');
   };
+
+  const items: MenuProps['items'] = [
+    { key: '1', label: (<Button type='link'>管理后台</Button>) },
+    { key: '2', label: (<Button type='link'>服务端Api</Button>) },
+  ];
 
   return (
     <Row gutter={[16, 24]}>
@@ -165,9 +175,20 @@ const ProjectPage: FC = () => {
                 hoverable
                 cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
                 actions={[
-                  <CloudSyncOutlined key="cloudSync" style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />,
-                  <CloudDownloadOutlined key="download" style={{ fontSize: '20px' }} />,
-                  <EditOutlined key="edit" style={{ fontSize: '20px' }} onClick={(e) => navigateTo(e, `${item.id}/edit`)} />,
+                  <Tooltip key="cloudSync" title="同步更改内容">
+                    <CloudSyncOutlined style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />
+                  </Tooltip>,
+                  <Tooltip key="ci" title="在线编译打包">
+                    <CiOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                  </Tooltip>,
+                  <Tooltip key="download" title="下载编译文件">
+                    <CloudDownloadOutlined style={{ fontSize: '20px' }} />
+                  </Tooltip>,
+                  <Tooltip key="ellipsis" title="在线预览">
+                    <Dropdown menu={{ items }} placement="bottomRight" arrow>
+                      <EllipsisOutlined style={{ fontSize: '20px' }} />
+                    </Dropdown>
+                  </Tooltip>,
                 ]}
                 onClick={() => navigate(item.id)}
               >

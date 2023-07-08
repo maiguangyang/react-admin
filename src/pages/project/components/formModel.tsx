@@ -1,61 +1,58 @@
-import React, { FC, useEffect }  from 'react';
-import { Form, Tabs } from 'antd';
-import { useNavigate, useParams }  from 'react-router-dom';
+import React, { FC }  from 'react';
+import { Layout, Menu, MenuProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { useGraphql }  from '~@/hooks/useGraphql';
-import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
-import { useAntdAction } from '~@/hooks/useAntd';
-import { useFormModel } from '~@/hooks/useFormModel';
-import { HelmetWrapper } from '~@/services/table_service';
+import { UserOutlined } from '@ant-design/icons';
+import Sider from 'antd/es/layout/Sider';
+import { Content } from 'antd/es/layout/layout';
 import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
-import { useAction } from '../hooks';
-import { GenerateFormTemp } from './formTemp';
 
-const formModel: FC<IComponentPropsDataType> = ({ title, model, disabled }) => {
-  const navigate  = useNavigate();
+import '../styles.less';
+import { FieldTemp } from './fieldTemp';
+import { RenderTemp } from './renderTemp';
+import { ITableTemp } from '../types';
 
-  const params    = useParams();
-  const { breadcrumb } = useBreadcrumb();
-  const { message } = useAntdAction();
-  const { isReadOnly, loading, setLoading } = useAction();
+const formModel: FC<IComponentPropsDataType> = () => {
+  const items: MenuProps['items'] = [UserOutlined].map((icon, index) => {
+    const key = String(index + 1);
+    return {
+      key: `sub${key}`,
+      label: `subnav ${key}`,
 
-  const [form] = Form.useForm();
-  const [formAdd, { addLoading }] = useGraphql(`${model}Add`);
-  const [formEdit, { editLoading }] = useGraphql(`${model}Edit`);
+      children: new Array(4).fill(null).map((_, j) => {
+        const subKey = index * 4 + j + 1;
+        return {
+          key: subKey,
+          label: `option${subKey}`,
+        };
+      }),
+    };
+  });
 
-  useEffect(() => {
-    setLoading(addLoading !== editLoading);
-  }, [addLoading, editLoading]);
+  const tableTemp: ITableTemp[] = [
+    { label: '字段管理', children: <FieldTemp /> },
+    { label: '渲染管理', children: <RenderTemp /> },
+  ];
 
-  const { onFinish } = useFormModel({ model, loading, formAdd, formEdit, disabled, params, breadcrumb, navigate });
-
-  // 获取详情
-  if (params.id) {
-    const { data, loading, error } = useGraphql(`${model}Detail`, `{
-      id
-      name
-      desc
-      state
-      weight
-    }`, { id: params.id });
-
-    useEffect(() => {
-      if (error) message.error(error.message);
-      else if (data) form.setFieldsValue({...data});
-    }, [loading]);
-  }
-
-  // 表单模板
-  const formTemp = GenerateFormTemp({ form, disabled, loading, isReadOnly, onFinish });
   // tabItems ...
-  const tabItems: Tab[] = formTemp.map((item, index) => {
-    return { key: String(index), label: title, children: item };
+  const tabItems: Tab[] = tableTemp.map((item, index) => {
+    return { key: String(index), label: item.label, children: item.children };
   });
 
   return (
-    <HelmetWrapper title={title}>
-      <Tabs type="card" items={tabItems} />
-    </HelmetWrapper>
+    <Layout style={{ background: '#fff' }}>
+      <Sider width={180} style={{ background: '#fff' }}>
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          style={{ height: '100%', background: '#fff' }}
+          items={items}
+        />
+      </Sider>
+      <Content style={{ padding: '10px' }}>
+        <Tabs type="card" items={tabItems} />
+      </Content>
+    </Layout>
   );
 };
 
