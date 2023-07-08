@@ -9,6 +9,7 @@ import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
 import '../styles.less';
 import { FieldTemp } from './fieldTemp';
 import { RenderTemp } from './renderTemp';
+import { NavTemp } from './navTemp';
 import { ITableTemp } from '../types';
 
 const formModel: FC<IComponentPropsDataType> = () => {
@@ -29,8 +30,10 @@ const formModel: FC<IComponentPropsDataType> = () => {
   });
 
   const tableTemp: ITableTemp[] = [
+    { label: '实时预览', children: <>实时预览</> },
     { label: '字段管理', children: <FieldTemp /> },
     { label: '渲染管理', children: <RenderTemp /> },
+    { label: '导航设置', children: <NavTemp /> },
   ];
 
   // tabItems ...

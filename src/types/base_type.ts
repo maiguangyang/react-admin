@@ -14,3 +14,8 @@ export interface IFormTempProps<T extends any> {
   isReadOnly: boolean
   onFinish: (formData: IFormDataType) => Promise<void>
 }
+export interface IOption {
+  value: IValueBaseType
+  label: string
+  children?: IOption[]
+}
