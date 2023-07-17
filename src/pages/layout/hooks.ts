@@ -20,7 +20,7 @@ export const useLayoutStore = () => {
   const routers: RouteObject[] = Routes || [];
 
   useEffect(() => {
-    const array = location.pathname.split('/').filter(item => item !== '');
+    const array = location.pathname.split('/').filter((item) => item !== '');
 
     if (array.length > 0 && routers !== undefined && routers.length > 0) {
       const current = handleFindRouteItem(routers, `${array[0]}`);

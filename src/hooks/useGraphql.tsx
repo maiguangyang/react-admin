@@ -1,6 +1,5 @@
-import _ from 'lodash';
 import pluralize from 'pluralize';
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { gql, useQuery, useMutation, TypedDocumentNode } from '@apollo/client';
 import Router from '~@/router';
 import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
@@ -12,129 +11,103 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-// export const useGraphql = (mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) => {
-export function useGraphql<T extends any>(mode: string, reqData?: string, agm?: any, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children: boolean = false) {
-  // 删除空值的key
-  let variables = _.cloneDeep(agm);
-  _.forEach(variables, (item, key) => {
-    if (_.isPlainObject(item)) {
-      variables[key] = _.omitBy(item, el => !el);
-    } else if (_.isArray(item)) {
-      _.forEach(item, (_item, _index) => {
-        variables[key][_index] = _.omitBy(_item, el => !el);
-      });
-      variables[key] = _.filter(variables[key], (_item) => !_.isEmpty(item));
-    }
-  });
+export function useGraphql<TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children = false) {
+  return {
+    // 新增
+    Create() {
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        mutation ${mode}Add ($data: ${mode}CreateInput!) {
+          create${mode}(input: $data) {
+            id
+          }
+        }
+      `;
+      return useMutation(text);
+    },
 
-  variables = _.omitBy(variables, (item) => _.isNull(item) || (_.isObject(item) && _.isEmpty(item)) || _.isUndefined(item));
-
-  // 新增
-  if (mode.slice(mode.length - 3) === 'Add') {
-    mode = mode.slice(0, mode.length - 3);
-    const text = gql`mutation ${mode}Add ($data: ${mode}CreateInput!) {
-      create${mode}(input: $data) {
-        id
-      }
-    }`;
-
-    const [func, { loading, ...agm }] = useMutation(text);
-    return [func, { addLoading: loading, ...agm}];
-  }
-
-  // 修改
-  if (mode.slice(mode.length - 4) === 'Edit') {
-    mode = mode.slice(0, mode.length - 4);
-    const text = gql`mutation ${mode}Edit ($id: ID!, $data: ${mode}UpdateInput!) {
-      update${mode}(id: $id, input: $data) {
-        id
-      }
-    }`;
-
-    const [func, { loading, ...agm }] = useMutation(text);
-    return [func, { editLoading: loading, ...agm}];
-  }
-
-  // 删除
-  if (mode.slice(mode.length - 6) === 'Delete') {
-    mode = mode.slice(0, mode.length - 6);
-    const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
-    const text = gql`mutation ${name}Delete ($id: [ID!]!) {
-      delete${name}(id: $id)
-    }`;
-
-    const [func, { loading, data, error, ...agm }]: any = useMutation(text);
-    const deleteData = (data && data[`delete${name}`]) ? data[`delete${name}`] : false;
-    return [func, { deleteLoading: loading, deleteData, deleteError: error, ...agm}];
-  }
-
-  // 恢复
-  if (mode.slice(mode.length - 8) === 'Recovery') {
-    mode = mode.slice(0, mode.length - 8);
-    const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
-    const text = gql`mutation ${name}Recovery ($id: [ID!]!) {
-      recovery${name}(id: $id)
-    }`;
-
-    const [func, { loading, data, error, ...agm }] = useMutation(text);
-    const recoveryData = (data && data[`recovery${name}`]) ? data[`recovery${name}`] : false;
-    return [func, { recoveryLoading: loading, recoveryData, recoveryError: error, ...agm}];
-  }
-
-  // 列表
-  if (mode.slice(mode.length - 1) === 's') {
-    mode = mode.slice(0, mode.length - 1);
-    const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase()));
-    const FragmentFields = !children ? '' : gql`
-      fragment FragmentFields on ${mode} {
-        id
-        name
-        children {
+    // 修改
+    Update() {
+      const text: TypedDocumentNode<TData, TVariables> = gql`mutation ${mode}Edit ($id: ID!, $data: ${mode}UpdateInput!) {
+        update${mode}(id: $id, input: $data) {
           id
-          name
         }
-      }
-    `;
-    const text = gql`
-      ${FragmentFields}
-      query ${mode}s ($currentPage: Int = 1, $perPage: Int = 10, $sort: [${mode}SortType!], $search: String, $filter: ${mode}FilterType, $rand: Boolean = false) {
-        ${name}(current_page: $currentPage, per_page: $perPage, sort: $sort, q: $search, filter: $filter, rand: $rand) {
-          ${fields}
-          data ${reqData}
+      }`;
+
+      return useMutation(text);
+    },
+
+    // 删除
+    Delete() {
+      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        mutation ${name}Delete ($id: [ID!]!) {
+          delete${name}(id: $id)
         }
+      `;
+
+      return useMutation(text);
+    },
+
+    // 恢复
+    Recovery() {
+      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        mutation ${name}Recovery ($id: [ID!]!) {
+          recovery${name}(id: $id)
+        }
+      `;
+
+      return useMutation(text);
+    },
+
+    // 列表
+    List() {
+      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase()));
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        query ${name} ($current_page: Int = 1, $per_page: Int = 10, $sort: [${mode}SortType!], $q: String, $filter: ${mode}FilterType, $rand: Boolean = false) {
+          ${name}(current_page: $current_page, per_page: $per_page, sort: $sort, q: $q, filter: $filter, rand: $rand) {
+            ${fields}
+            data ${columns}
+          }
+        }
+      `;
+
+      const res = useQuery<TData, TVariables>(text, { variables });
+      if (res.data) {
+        res.data = (res.data[name as keyof TData] as unknown as TData);
       }
-    `;
-    // let { loading, error, data, client }: any = useQuery(text, { variables });
-    const [getList, { ...agm }] = useLazyQuery<T>(text, { variables });
+      return res;
+    },
 
-    if (agm.data) {
-      const resData = agm.data[name as keyof T];
-      agm.data = resData as T;
-    }
+    // 详情
+    Detail() {
+      const name = mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase());
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        query ${name} ($id: ID, $filter: ${mode}FilterType) {
+          ${name}(id: $id, filter: $filter)
+            ${columns}
+        }
+      `;
 
-    return [getList, agm];
-  }
+      const res = useQuery<TData, TVariables>(text, { variables });
+      if (res.data) {
+        res.data = (res.data[name as keyof TData] as unknown as TData);
+      }
+      return res;
+    },
 
-  // 详情
-  if (mode.slice(mode.length - 6) === 'Detail') {
-    mode = mode.replace('Detail', '');
-    const name = mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase());
-    const text: any = gql`query ${mode} ($id: ID, $filter: ${mode}FilterType) {
-      ${name}(id: $id, filter: $filter)
-        ${reqData}
-    }`;
-    const { ...agm }: any = useQuery(text, { variables });
-    if (agm.data) {
-      agm.data = agm.data[name];
-      agm.data = { ...agm.data, state: agm.data.state === 1 };
-    }
+    // 其他查询
+    Query() {
+      const text: TypedDocumentNode<TData, TVariables> = gql`${mode}`;
+      const res = useQuery(text, { variables });
+      return res;
+    },
 
-    return agm;
-  }
-
-  const text = gql`${mode}`;
-  // const [func] = useMutation(text, { variables });
-
-  const [func, { ...agm1 }] = useMutation(text, { variables });
-  return [func, { ...agm1}];
-};
+    // 其他更改
+    Mutation() {
+      const text: TypedDocumentNode<TData, TVariables> = gql`${mode}`;
+      const res = useMutation(text, { variables });
+      return res;
+    },
+  };
+}

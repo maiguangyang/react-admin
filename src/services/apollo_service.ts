@@ -1,10 +1,11 @@
+import { notification } from 'antd';
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import LocalStorage from '~@/utils/localStorage.cookie';
-import { notification } from 'antd';
+import Env from '~@/env';
 
 export const useApollo = () => {
-  const uri = process.env.NODE_ENV === 'production' ? 'http://localhost:8080/graphql' : 'http://localhost:8080/graphql';
+  const uri = Env.baseUri;
   // LocalStorage.set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250ZW50Ijp7ImlkIjoiMjU0ZmVhN2ItM2Y3Mi00YmM3LThmNTctOGVlZWE2N2RiODFiIiwicm9sZSI6InVzZXIiLCJzaWduIjoiZDdiZjVlMTYxZTZmZTA3MzRhNzE4ZDUyOWQ2OGI3MWIifSwiZXhwIjoxNjY1NjY5MTY3LCJuYmYiOjE2NjMwNzcxNjd9.nLCYdzckbArQLbR4kGHMoPK1E7PURX0H6YlNEUqFKlI');
 
   const token = LocalStorage.get('Authorization') || {};
@@ -20,7 +21,7 @@ export const useApollo = () => {
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, locations, path }) => {
+      graphQLErrors.forEach(({ message, path }) => {
         if (message.indexOf('expired') !== -1) LocalStorage.remove('Authorization');
 
         if (message.indexOf('exist') !== -1) {

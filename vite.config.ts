@@ -7,7 +7,7 @@ import eslintPlugin     from 'vite-plugin-eslint';
 export default defineConfig({
   resolve: {
     alias: {
-      '~@': resolve('src'),
+      '~@': resolve('src')
     },
   },
   css: {

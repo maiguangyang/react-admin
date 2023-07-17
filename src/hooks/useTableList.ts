@@ -1,33 +1,32 @@
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { Key, useEffect, useRef, useState } from 'react';
 import { createStore } from 'hox';
-import { FormTempTableList, GenerateVariable } from '~@/services/table_service';
+import { GenerateDefaultResult, GenerateVariable } from '~@/services/table_service';
 import { IValueBaseType } from '~@/types/base_type';
-import { IFormTempTableListType, ISortInputType, IVariableType } from '~@/types/table_service_type';
+import { ISortInputType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
 import { ExtractColumnIndex, useGraphql } from './useGraphql';
+import { Project, QueryProjectsArgs } from '~@/__generated__/graphql';
+import { IProjectResultType } from '~@/pages/project/types';
 
 const sortInput: ISortInputType[] = [{weight: 'ASC'}];
-export const [useTableListStore, TableListStoreProvider] = createStore((props: ITableListStoreProps<any>) => {
+export const [useTableListStore, TableListStoreProvider] = createStore((props: ITableListStoreProps) => {
   const { model, columns } = props;
 
   // 排序和参数
   const filterInputRef = useRef<IFilterInputType>({});
   const sortInputRef = useRef<ISortInputType[]>(sortInput);
 
-  const tableDefaultData: IFormTempTableListType<any> = FormTempTableList;
+  const tableDefaultData = GenerateDefaultResult<Project>();
   const selectedRow: string[] = [];
   let { variables } = GenerateVariable(filterInputRef.current, sortInputRef.current);
 
   const [fetchStatus, setFetchStatus] = useState(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState(selectedRow);
-  const [formTempTable, setFormTempTable] = useState(tableDefaultData);
-  const fields: string = ExtractColumnIndex(columns, ['isDelete']);
-  const [getList, { loading, data }]: any = useGraphql(`${model}s`, fields, variables);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>(selectedRow);
 
-  useEffect(() => {
-    getList();
-  }, []);
+  const [formTempTable, setFormTempTable] = useState(tableDefaultData);
+  const fields: string = ExtractColumnIndex<{}>(columns, ['isDelete']);
+  const { loading, data } = useGraphql<IProjectResultType, QueryProjectsArgs>(model, fields, variables).List();
 
   useEffect(() => {
     if (data) setFormTempTable({...formTempTable, ...data});

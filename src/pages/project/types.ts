@@ -1,10 +1,5 @@
-import { ITabelColumnBase } from "~@/types/base_type";
 import { IFormDefaultData } from "~@/types/useGraphql_hook_type";
-
-export type ITabelColumnType = IFormDataType & ITabelColumnBase & {
-  isBuild?: boolean
-  percent?: number
-}
+import { Project, ProjectResultType } from "~@/__generated__/graphql";
 
 export interface IFormDataType extends IFormDefaultData {
   id: string
@@ -38,4 +33,17 @@ export interface IDataType {
   indexName: string;
   defaultValue: string;
   validator: string;
+}
+
+// 上面的类型即将废弃
+
+export interface IColumnType extends Project {}
+
+export interface IProject extends Project {
+  isBuild?: boolean
+  percent?: number
+}
+
+export type IProjectResultType = Omit<ProjectResultType, 'data'> & {
+  data: Array<IProject>
 }

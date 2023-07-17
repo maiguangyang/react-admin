@@ -1,5 +1,5 @@
 import { PaginationProps } from 'antd';
-import { ITabelColumnType } from '~@/pages/project/types';
+import { InputMaybe, Scalars } from '~@/__generated__/graphql';
 import { IValueBaseType } from './base_type';
 
 export interface ISortInputType {
@@ -23,20 +23,20 @@ export interface ITableCallback {
   [key: string]: ((page: number, pageSize: number) => void) | undefined
 }
 
-// table组件Config配置
-export interface IFormTempTableListType<T extends any> {
-  current_page: number
-  per_page: number
-  data: T[]
-  total: number
-  total_page: number
+// 批量删除
+export interface IDeleteTableRowsType<TData> {
+  type: string
+  row?: TData
+};
+
+export interface ITableRowItemProps {
+  ids: string[]
 }
 
-// 批量删除
-export interface IDeleteTableRowsType {
-  type: string
-  row?: ITabelColumnType
-};
+export interface ITDeleteOrRecoveryVariables {
+  id: Array<Scalars['ID']['input']>;
+  unscoped?: InputMaybe<Scalars['Boolean']['input']>;
+}
 
 export interface ITablePaginationConfig extends PaginationProps {
   position?: ITablePaginationPosition[];
@@ -48,6 +48,5 @@ export interface IHelmetWrapperProps {
 }
 
 export type IScrollType = ({x?: string | number | true | undefined; y?: string | number | undefined;} & { scrollToFirstRowOnChange?: boolean | undefined;}) | undefined;
-export type ITablePaginationType = false | ITablePaginationConfig | undefined;
 
-export type ITablePaginationPosition = 'none' | 'topLeft' | 'topCenter' | 'topRight' | 'bottomLeft' | 'bottomCenter' | 'bottomRight';
+export type ITablePaginationPosition = 'topLeft' | 'topCenter' | 'topRight' | 'bottomLeft' | 'bottomCenter' | 'bottomRight';

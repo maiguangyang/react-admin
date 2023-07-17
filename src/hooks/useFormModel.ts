@@ -3,8 +3,9 @@ import { IFormModelType } from '~@/types/useFormModel_hook_type';
 import utils from '~@/utils/utils';
 import { useAntdAction } from './useAntd';
 
-export const useFormModel = (props: IFormModelType) => {
-  const { model, loading, formAdd, formEdit, disabled, params, breadcrumb, navigate } = props;
+// export const useFormModel: = (props: IFormModelType) => {
+export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVariables>) {
+  const { model, loading, onCallback, disabled, params, breadcrumb, navigate } = props;
   const { message, notification } = useAntdAction();
 
   // 表单提交
@@ -24,19 +25,22 @@ export const useFormModel = (props: IFormModelType) => {
       if (utils.isValidKey(item, formData) && formData[item]) delete formData[item];
     });
 
-    let variables: object = {
+    let variables: TVariables = {
       data: { ...formData },
     };
 
-    let res: any = {};
+    // let res: any = {};
     // 编辑
     if (params.id) {
       variables = {...variables, id: params.id};
-      res = await formEdit({ variables }).catch((err: any) => message.error(err.message)) || {};
-    } else {
-      // 新增
-      res = await formAdd({ variables }).catch((err: any) => message.error(err.message)) || {};
+      // res = await formEdit({ variables }).catch((err: any) => message.error(err.message)) || {};
     }
+    // else {
+    //   // 新增
+    //   // res = await formAdd({ variables }).catch((err: any) => message.error(err.message)) || {};
+    // }
+
+    const res = await onCallback?.({ variables }).catch((err) => message.error(err.message)) || {};
 
     // setLoading(false);
     let resData = res.data || {};
@@ -51,4 +55,4 @@ export const useFormModel = (props: IFormModelType) => {
   return {
     onFinish,
   };
-};
+}

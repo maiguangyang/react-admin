@@ -1,9 +1,10 @@
+import { ColumnType } from 'antd/lib/table/interface';
 import { IValueBaseType } from './base_type';
-import { IColumnsDataType } from './extract_utils_type';
 
-export interface ITableListStoreProps<T> {
-  model: string,
-  columns: IColumnsDataType<T>[],
+export interface ITableListStoreProps {
+  model: string
+  // columns: IColumnsDataType<ITabelColumnType>[]
+  columns: ColumnType<{}>[]
 }
 
 export interface IFilterInputType {

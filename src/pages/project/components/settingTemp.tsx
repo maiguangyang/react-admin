@@ -1,4 +1,4 @@
-import { Cascader, Form } from 'antd';
+import { Cascader, Col, Form, Radio } from 'antd';
 import React, { FC } from 'react';
 import { IOption, IValueBaseType } from '~@/types/base_type';
 
@@ -25,16 +25,22 @@ const options: IOption[] = [
   },
 ];
 
-export const NavTemp: FC = () => {
+export const SettingTemp: FC = () => {
   const onChange = (value: IValueBaseType[]) => {
     console.log(value);
   };
 
   return (
-    <Form name="basic" autoComplete="off" style={{ maxWidth: 300 }}>
-      <Form.Item label="菜单导航" name="username" rules={[{ required: true, message: 'Please input your username!' }]} >
+    <Col className="gutter-row" span={6}>
+      <Form.Item label="菜单导航" name="username" rules={[{ required: true, message: 'Please input your username!' }]}>
         <Cascader options={options} onChange={onChange} placeholder="请选择设置为菜单导航" />
       </Form.Item>
-    </Form>
+      <Form.Item label="权限验证" name="username">
+        <Radio.Group value={1}>
+          <Radio value={1}>否</Radio>
+          <Radio value={2}>是</Radio>
+        </Radio.Group>
+      </Form.Item>
+    </Col>
   );
 };

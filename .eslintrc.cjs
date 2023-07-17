@@ -6,7 +6,12 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
     'standard'
+    // 'eslint:recommended',
+    // 'plugin:react-hooks/recommended',
+    // 'plugin:prettier/recommended',
+    // 'plugin:react/jsx-runtime'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -35,6 +40,7 @@ module.exports = {
     'object-curly-spacing'   : 'off',
     'key-spacing'            : 'off',
     "react/display-name"     : 'off',
+    "@typescript-eslint/ban-types"     : 'off',
   },
   settings: {
     react: {

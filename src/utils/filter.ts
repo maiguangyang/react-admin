@@ -1,13 +1,14 @@
 import _      from 'lodash';
 import dayjs  from 'dayjs';
+import { IValueBaseType } from '~@/types/base_type';
 
 type labelType = {
   label: string,
-  value: any,
+  value: IValueBaseType,
 }
 
 interface FilterDataType {
-  [key: string]: labelType[] | any,
+  [key: string]: labelType[] | Function,
 }
 
 export const FilterData: FilterDataType = {
@@ -28,21 +29,21 @@ export const FilterData: FilterDataType = {
   ],
 
   // 时间戳转时间
-  formatDate: (data: any, iteratee: string = 'YYYY-MM-DD HH:mm:ss'): string => {
+  formatDate: (data: string | number, iteratee = 'YYYY-MM-DD HH:mm:ss'): string => {
     if (!data) return '';
     const text = dayjs(data).format(iteratee) || data;
-    return text;
+    return text.toString();
   },
 
   // 时间转时间戳
   formTimestamp: (data: string = dayjs().format('YYYY-MM-DD HH:mm:ss')): number => {
     if (!data) data = dayjs().format('YYYY-MM-DD HH:mm:ss');
-    const text: any = dayjs(data).valueOf();
+    const text = dayjs(data).valueOf();
     return text;
   },
 };
 
-export function Filter(key: string, data: any = [], agm?: any): any {
+export function Filter(key: string, data: string | IValueBaseType[] = [], agm?: IValueBaseType) {
   const dict = FilterData[key];
 
   // 如果类型是function的话，回调
@@ -55,16 +56,19 @@ export function Filter(key: string, data: any = [], agm?: any): any {
     return dict;
   }
 
-  let item: any = dict.find((el: any) => el.value === data);
+  if (_.isArray(dict)) {
+    let item = dict.find((el) => el.value === data);
 
-  if (!_.isEmpty(item)) {
-    return item.label;
-  }
+    if (!_.isEmpty(item)) {
+      return item.label;
+    }
 
-  item = dict.find((el: any) => el.label === data);
-  if (!_.isEmpty(item)) {
-    return item.value;
+    item = dict.find((el) => el.label === data);
+
+    if (!_.isEmpty(item)) {
+      return item.value;
+    }
   }
 
   return data;
-};
+}
