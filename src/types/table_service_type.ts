@@ -1,6 +1,6 @@
 import { PaginationProps } from 'antd';
 import { InputMaybe, Scalars } from '~@/__generated__/graphql';
-import { IValueBaseType } from './base_type';
+import { IBaseListResultType, IValueBaseType } from './base_type';
 
 export interface ISortInputType {
   [key: string]: IValueBaseType
@@ -23,14 +23,21 @@ export interface ITableCallback {
   [key: string]: ((page: number, pageSize: number) => void) | undefined
 }
 
+export type IRowData<T> = Omit<T, 'id, isDelete'> & {
+  id: string
+  isDelete: number
+}
+
 // 批量删除
 export interface IDeleteTableRowsType<TData> {
   type: string
-  row?: TData
+  row?: IRowData<TData>
+  // value: IBaseListResultType<IRowData<TData>>
 };
 
-export interface ITableRowItemProps {
+export interface ITableRowItemProps<TData> {
   ids: string[]
+  // value: IBaseListResultType<IRowData<TData>>
 }
 
 export interface ITDeleteOrRecoveryVariables {

@@ -1,21 +1,20 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Space, Tooltip } from 'antd';
+import { ColumnType } from 'antd/lib/table/interface';
 import { Filter } from '~@/utils/filter';
-
-import { TableListStoreProvider } from '~@/hooks/useTableList';
 import { DeleteTableRowsWrapper, HelmetWrapper, TableWrapper } from '~@/services/table_service';
+import { Project } from '~@/__generated__/graphql';
+import { IRowData } from '~@/types/table_service_type';
+import { TableListStoreProvider } from '~@/hooks/useTableList';
 import { FilterWrapper } from './filter';
 import { useAction } from './hooks';
-// import { ITabelColumnType } from './types';
-import { Project } from '~@/__generated__/graphql';
-import { ColumnType } from 'antd/lib/table/interface';
 
 const ProjectPage: FC = () => {
   const { title, model } = useAction();
 
   // 获取列表数据
-  const columns: ColumnType<Project>[] = [
+  const columns: ColumnType<IRowData<Project>>[] = [
     {
       title: '项目名称',
       dataIndex: 'name',
@@ -54,12 +53,12 @@ const ProjectPage: FC = () => {
       dataIndex: 'action',
       align: 'center',
       width: 200,
-      render: (text: any, row) => {
+      render: (data: string, row: IRowData<Project>) => {
         return (
           <Space size="middle">
             <Link to={row.id}>查看</Link>
             <Link to={`${row.id}/edit`} className="primary">修改</Link>
-            <DeleteTableRowsWrapper type='row' row={row} />
+            {/* <DeleteTableRowsWrapper<Project> type='row' row={row} /> */}
           </Space>
         );
       },
@@ -70,8 +69,8 @@ const ProjectPage: FC = () => {
     <TableListStoreProvider model={model} columns={(columns as unknown) as ColumnType<{}>[]}>
       <HelmetWrapper title={title}>
         <FilterWrapper />
-        <DeleteTableRowsWrapper type='list' />
-        <TableWrapper />
+        <DeleteTableRowsWrapper<Project> type='list' />
+        <TableWrapper<Project> />
       </HelmetWrapper>
     </TableListStoreProvider>
   );

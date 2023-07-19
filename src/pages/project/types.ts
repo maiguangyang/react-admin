@@ -1,3 +1,4 @@
+import { IRowData } from "~@/types/table_service_type";
 import { IFormDefaultData } from "~@/types/useGraphql_hook_type";
 import { Project, ProjectResultType } from "~@/__generated__/graphql";
 
@@ -45,5 +46,5 @@ export interface IProject extends Project {
 }
 
 export type IProjectResultType = Omit<ProjectResultType, 'data'> & {
-  data: Array<IProject>
+  data: Array<IRowData<IProject>>
 }

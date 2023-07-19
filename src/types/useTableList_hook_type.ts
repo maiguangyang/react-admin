@@ -3,7 +3,6 @@ import { IValueBaseType } from './base_type';
 
 export interface ITableListStoreProps {
   model: string
-  // columns: IColumnsDataType<ITabelColumnType>[]
   columns: ColumnType<{}>[]
 }
 

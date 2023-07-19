@@ -23,7 +23,6 @@ import { ModalFunc } from 'antd/es/modal/confirm';
 import { useAntdAction } from '~@/hooks/useAntd';
 import _ from 'lodash';
 import { IBaseListResultType } from '~@/types/base_type';
-import { Project } from '~@/__generated__/graphql';
 
 // 生成参数
 export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerateVariableType<T> {
@@ -41,7 +40,7 @@ export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerat
   };
 }
 
-// FormTempTableList ...
+// 统一生成返回字段结构 ...
 export function GenerateDefaultResult<T>() {
   const data: IBaseListResultType<T> = {
     current_page: 1,
@@ -62,9 +61,7 @@ function showTotal(total: number): string {
 // confirm 弹框
 export function DeleteRowAll<T>(confirm: ModalFunc, {...agm}: T) {
   confirm({
-    // title: '是否要删除选中项？',
     icon: <ExclamationCircleOutlined />,
-    // content: '删除后不可恢复，请小心操作',
     okText: '确认',
     okType: 'danger',
     cancelText: '取消',
@@ -73,16 +70,16 @@ export function DeleteRowAll<T>(confirm: ModalFunc, {...agm}: T) {
 }
 
 // 删除
-function TableRowItemDelete(props: ITableRowItemProps) {
+function TableRowItemDelete<TData>(props: ITableRowItemProps<TData>) {
   const { ids } = props;
   const { modal, message } = useAntdAction();
-  const { model, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model]);
+  const { model, formTempTable, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model]);
   const [mutation, { data }] = useGraphql<boolean, ITDeleteOrRecoveryVariables>(model).Delete();
 
   useEffect(() => {
     if (data) {
       message.success('删除成功');
-      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids);
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids, formTempTable);
     }
   }, [data]);
 
@@ -103,16 +100,16 @@ function TableRowItemDelete(props: ITableRowItemProps) {
 }
 
 // 恢复
-function TableRowItemRecovery(props: ITableRowItemProps) {
+function TableRowItemRecovery<TData>(props: ITableRowItemProps<TData>) {
   const { ids } = props;
   const { modal, message } = useAntdAction();
-  const { model, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
+  const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
   const [mutation, { data }] = useGraphql<boolean, ITDeleteOrRecoveryVariables>(model).Recovery();
 
   useEffect(() => {
     if (data) {
       message.success('恢复成功');
-      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids);
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids, formTempTable);
     }
   }, [data]);
 
@@ -135,16 +132,16 @@ function TableRowItemRecovery(props: ITableRowItemProps) {
 }
 
 // rows 数据
-export function DeleteTableRowsWrapper(props: IDeleteTableRowsType<Project>) {
+export function DeleteTableRowsWrapper<TData>(props: IDeleteTableRowsType<TData>) {
   const {type, row } = props;
   const { modal, message } = useAntdAction();
   const navigate = useNavigate();
-  const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.formTempTable, store.selectedRowKeys]);
+  const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
   const [mutation, { loading, data }] = useGraphql<boolean, ITDeleteOrRecoveryVariables>(model).Delete();
 
   const ids: string[] = [];
   const hasSelected = selectedRowKeys.length > 0;
-  if (!hasSelected && row?.id) ids.push(row?.id);
+  if (!hasSelected && row?.id) ids.push(row.id);
 
   // 排除已删除状态的id
   selectedRowKeys.forEach((key) => {
@@ -155,7 +152,7 @@ export function DeleteTableRowsWrapper(props: IDeleteTableRowsType<Project>) {
   useEffect(() => {
     if (data) {
       message.success('删除成功');
-      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids);
+      if (onDeleteStatusChangeCallback && _.isFunction(onDeleteStatusChangeCallback)) onDeleteStatusChangeCallback(ids, formTempTable);
     }
   }, [data]);
 
@@ -190,11 +187,10 @@ export function DeleteTableRowsWrapper(props: IDeleteTableRowsType<Project>) {
 }
 
 // TableWrapper ...
-export function TableWrapper() {
+export function TableWrapper<TData>() {
   const { columns, variables, formTempTable, selectedRowKeys, fetchStatus, setSelectedRowKeys, setFetchStatus } = useTableListStore((store) => [
     store.columns,
     store.variables,
-    store.formTempTable,
     store.selectedRowKeys,
     store.fetchStatus,
   ]);
@@ -216,10 +212,10 @@ export function TableWrapper() {
     setFetchStatus(!fetchStatus);
   };
 
-  const { ...props } = TableConfig<Project>(rowSelection, columns, formTempTable, { onChange });
+  const { ...other } = TableConfig<TData>(rowSelection, columns, formTempTable, { onChange });
 
   return (
-    <Table className='table-layer' rowKey="id" { ...props } />
+    <Table className='table-layer' rowKey="id" { ...other } />
   );
 }
 

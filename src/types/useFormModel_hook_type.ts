@@ -4,8 +4,6 @@ import { RouteObject } from '~@/router/types';
 
 export interface IFormModelType<TData, TVariables> {
   model: string
-  // formAdd: any
-  // formEdit: any
   loading: boolean
   disabled: string[]
   params: Readonly<Params<string>>

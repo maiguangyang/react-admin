@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import { Key, useEffect, useRef, useState } from 'react';
 import { createStore } from 'hox';
-import { GenerateDefaultResult, GenerateVariable } from '~@/services/table_service';
-import { IValueBaseType } from '~@/types/base_type';
-import { ISortInputType, IVariableType } from '~@/types/table_service_type';
+import { IBaseListResultType, IValueBaseType } from '~@/types/base_type';
+import { IRowData, ISortInputType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
-import { ExtractColumnIndex, useGraphql } from './useGraphql';
-import { Project, QueryProjectsArgs } from '~@/__generated__/graphql';
-import { IProjectResultType } from '~@/pages/project/types';
+import { GenerateDefaultResult, GenerateVariable } from '~@/services/table_service';
+
+import { ExtractColumnIndex, useGraphql } from '~@/hooks/useGraphql';
 
 const sortInput: ISortInputType[] = [{weight: 'ASC'}];
+
 export const [useTableListStore, TableListStoreProvider] = createStore((props: ITableListStoreProps) => {
   const { model, columns } = props;
 
@@ -17,7 +17,7 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
   const filterInputRef = useRef<IFilterInputType>({});
   const sortInputRef = useRef<ISortInputType[]>(sortInput);
 
-  const tableDefaultData = GenerateDefaultResult<Project>();
+  const tableDefaultData = GenerateDefaultResult<any>();
   const selectedRow: string[] = [];
   let { variables } = GenerateVariable(filterInputRef.current, sortInputRef.current);
 
@@ -25,8 +25,9 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>(selectedRow);
 
   const [formTempTable, setFormTempTable] = useState(tableDefaultData);
+
   const fields: string = ExtractColumnIndex<{}>(columns, ['isDelete']);
-  const { loading, data } = useGraphql<IProjectResultType, QueryProjectsArgs>(model, fields, variables).List();
+  const { loading, data } = useGraphql<any, any>(model, fields, variables).List();
 
   useEffect(() => {
     if (data) setFormTempTable({...formTempTable, ...data});
@@ -52,13 +53,14 @@ export const [useTableListStore, TableListStoreProvider] = createStore((props: I
   };
 
   // 删除选中项目
-  const onDeleteStatusChangeCallback = (ids: string[]) => {
+  // const onDeleteStatusChangeCallback = (ids: string[], formTempTable: TData) => {
+  function onDeleteStatusChangeCallback<TData>(ids: string[], formTempTable: IBaseListResultType<IRowData<TData>>) {
     const cloneData = _.cloneDeep(formTempTable);
     cloneData.data.forEach((item) => {
       if (ids.includes(item.id)) item.isDelete = item.isDelete === 1 ? 2 : 1;
     });
     setFormTempTable(cloneData);
-  };
+  }
 
   return {
     model,
