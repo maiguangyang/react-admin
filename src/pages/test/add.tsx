@@ -8,7 +8,7 @@ const Add: FC = () => {
   const [formAdd, { loading }] = useGraphql<Project, ProjectCreateInput>(model).Create();
 
   return (
-    <FormData<Project, ProjectCreateInput> title={`新增${title}`} model={model} loading={loading} disabled={[]} required={[]} onCallback={formAdd} />
+    <FormData title={`新增${title}`} model={model} loading={loading} disabled={[]} required={[]} onCallback={formAdd} />
   );
 };
 
