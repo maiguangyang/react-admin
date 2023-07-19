@@ -1,4 +1,4 @@
-import React, { FC, useEffect }  from 'react';
+import React, { useEffect }  from 'react';
 import { Form, Tabs } from 'antd';
 import { useNavigate, useParams }  from 'react-router-dom';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -7,37 +7,32 @@ import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
 import { useFormModel } from '~@/hooks/useFormModel';
 import { HelmetWrapper } from '~@/services/table_service';
-import { IComponentPropsDataType } from '~@/types/useGraphql_hook_type';
-import { useAction } from '../hooks';
 import { GenerateFormTemp } from './formTemp';
+import { IFormModelComponentProps } from '~@/types/useGraphql_hook_type';
+import { Project, QueryProjectArgs } from '~@/__generated__/graphql';
+import { useAction } from '../hooks';
 
-const formModel: FC<IComponentPropsDataType> = ({ title, model, disabled }) => {
+export function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVariables>) {
+  const { model, loading, disabled, onCallback } = props;
+  const params = useParams();
   const navigate  = useNavigate();
-
-  const params    = useParams();
-  const { breadcrumb } = useBreadcrumb();
   const { message } = useAntdAction();
-  const { isReadOnly, loading, setLoading } = useAction();
+  const { title, isReadOnly } = useAction();
+  const { breadcrumb } = useBreadcrumb();
 
   const [form] = Form.useForm();
-  const [formAdd, { addLoading }] = useGraphql(`${model}Add`);
-  const [formEdit, { editLoading }] = useGraphql(`${model}Edit`);
 
-  useEffect(() => {
-    setLoading(addLoading !== editLoading);
-  }, [addLoading, editLoading]);
-
-  const { onFinish } = useFormModel({ model, loading, formAdd, formEdit, disabled, params, breadcrumb, navigate });
+  const { onFinish } = useFormModel<TData, TVariables>({ model, loading, disabled, params, breadcrumb, navigate, onCallback });
 
   // 获取详情
   if (params.id) {
-    const { data, loading, error } = useGraphql(`${model}Detail`, `{
+    const { data, loading, error } = useGraphql<Project, QueryProjectArgs>(model, `{
       id
       name
       desc
       state
       weight
-    }`, { id: params.id });
+    }`, { id: params.id }).Detail();
 
     useEffect(() => {
       if (error) message.error(error.message);
@@ -57,6 +52,6 @@ const formModel: FC<IComponentPropsDataType> = ({ title, model, disabled }) => {
       <Tabs type="card" items={tabItems} />
     </HelmetWrapper>
   );
-};
+}
 
-export default formModel;
+export default FormData;
