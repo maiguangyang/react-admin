@@ -9,11 +9,11 @@ import { IColumnsDataType } from '~@/types/extract_utils_type';
 import { useAction } from './hooks';
 import { IColumnType, IProject, IProjectResultType } from './types';
 import { useAntdAction } from '~@/hooks/useAntd';
-import { ExtractColumnIndex, useGraphql } from '~@/hooks/useGraphql';
+import { useGraphql } from '~@/hooks/useGraphql';
 import Meta from 'antd/es/card/Meta';
-import { GenerateVariable } from '~@/services/table_service';
 import { IFilterInputType } from '~@/types/useTableList_hook_type';
 import { ISortInputType } from '~@/types/table_service_type';
+import { GenerateVariable, ExtractColumnIndex } from '~@/hooks/useTableList';
 import { QueryProjectsArgs } from '~@/__generated__/graphql';
 import './styles.less';
 

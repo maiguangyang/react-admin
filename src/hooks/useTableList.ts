@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { Key, useEffect, useRef, useState } from 'react';
 import { createStore } from 'hox';
+import { ColumnType } from 'antd/lib/table/interface';
+import pluralize from 'pluralize';
 import { IBaseListResultType, IValueBaseType } from '~@/types/base_type';
 import { IGenerateVariableType, IRowData, ISortInputType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
 
-import { ColumnType } from 'antd/lib/table/interface';
-import pluralize from 'pluralize';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
 import utils from '~@/utils/utils';
 

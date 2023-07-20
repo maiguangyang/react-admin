@@ -10,7 +10,7 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export function useGraphql<TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) {
+export const useGraphql = <TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) => {
   return {
     // 新增
     Create() {
@@ -109,4 +109,4 @@ export function useGraphql<TData, TVariables>(mode: string, columns?: string, va
       return res;
     },
   };
-}
+};

@@ -58,7 +58,7 @@ const ProjectPage: FC = () => {
           <Space size="middle">
             <Link to={row.id}>查看</Link>
             <Link to={`${row.id}/edit`} className="primary">修改</Link>
-            {/* <DeleteTableRowsWrapper<Project> type='row' row={row} /> */}
+            <DeleteTableRowsWrapper<Project> type='row' row={row} />
           </Space>
         );
       },
