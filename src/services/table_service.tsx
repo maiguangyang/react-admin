@@ -8,12 +8,9 @@ import { useGraphql } from '~@/hooks/useGraphql';
 import { useTableListStore } from '~@/hooks/useTableList';
 import {
   IDeleteTableRowsType,
-  IGenerateVariableType,
   IScrollType,
   ITableCallback,
-  IVariableType,
   ITablePaginationPosition,
-  ISortInputType,
   IHelmetWrapperProps,
   ITableRowItemProps,
   ITDeleteOrRecoveryVariables,
@@ -23,35 +20,6 @@ import { ModalFunc } from 'antd/es/modal/confirm';
 import { useAntdAction } from '~@/hooks/useAntd';
 import _ from 'lodash';
 import { IBaseListResultType } from '~@/types/base_type';
-
-// 生成参数
-export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerateVariableType<T> {
-  const variables: IVariableType<T> = {
-    currentPage: 1,
-    perPage: 10,
-    search: null,
-    rand: false,
-    filter,
-    sort,
-  };
-
-  return {
-    variables,
-  };
-}
-
-// 统一生成返回字段结构 ...
-export function GenerateDefaultResult<T>() {
-  const data: IBaseListResultType<T> = {
-    current_page: 1,
-    per_page: 1,
-    data: [],
-    total: 0,
-    total_page: 0,
-  };
-
-  return data;
-}
 
 // showTotal ...
 function showTotal(total: number): string {

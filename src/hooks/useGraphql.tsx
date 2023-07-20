@@ -3,7 +3,6 @@ import { gql, useQuery, useMutation, TypedDocumentNode } from '@apollo/client';
 import Router from '~@/router';
 import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
-export { ExtractColumnIndex } from '~@/utils/extract';
 export { Router };
 
 export const FormDefaultDataValue: IFormDefaultData = {
@@ -11,7 +10,7 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export function useGraphql<TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page'], children = false) {
+export function useGraphql<TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) {
   return {
     // 新增
     Create() {

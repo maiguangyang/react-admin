@@ -4,6 +4,7 @@ import { IValueBaseType } from './base_type';
 export interface ITableListStoreProps {
   model: string
   columns: ColumnType<{}>[]
+  pages?: string[]
 }
 
 export interface IFilterInputType {

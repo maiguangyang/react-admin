@@ -40,7 +40,8 @@ module.exports = {
     'object-curly-spacing'   : 'off',
     'key-spacing'            : 'off',
     "react/display-name"     : 'off',
-    "@typescript-eslint/ban-types"     : 'off',
+    "@typescript-eslint/ban-types": 'off',
+    "@typescript-eslint/no-explicit-any": 'off',
   },
   settings: {
     react: {
