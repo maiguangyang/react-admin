@@ -1,6 +1,6 @@
 import { PaginationProps } from 'antd';
 import { InputMaybe, Scalars } from '~@/__generated__/graphql';
-import { IBaseListResultType, IValueBaseType } from './base_type';
+import { IValueBaseType } from './base_type';
 
 export interface ISortInputType {
   [key: string]: IValueBaseType

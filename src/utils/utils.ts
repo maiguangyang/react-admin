@@ -1,4 +1,5 @@
 import { RouteObject } from '~@/router/types';
+import { ISortInputType } from '~@/types/table_service_type';
 
 // isValidKey ...
 function isValidKey(key: string | number | symbol, object: object): key is keyof typeof object {
@@ -27,10 +28,20 @@ const getListRoutePath = (breadcrumb: RouteObject[]) => {
   return breadcrumb.filter(item => item.path !== 'none').pop()?.path ?? '/';
 };
 
+const removeEmptyProperties = (obj: ISortInputType) => {
+  for (const key in obj) {
+    if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
+      delete obj[key];
+    }
+  }
+  return obj;
+};
+
 // 导出
 export default {
   isValidKey,
   firstChildPath,
   checkIsFormModel,
   getListRoutePath,
+  removeEmptyProperties,
 };

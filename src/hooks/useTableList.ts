@@ -8,6 +8,7 @@ import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_ho
 import { ColumnType } from 'antd/lib/table/interface';
 import pluralize from 'pluralize';
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
+import utils from '~@/utils/utils';
 
 const sortInput: ISortInputType[] = [{weight: 'ASC'}];
 
@@ -101,7 +102,7 @@ export const [useTableListStore, TableListStoreProvider] = createStore(({ model,
 
   // 过滤筛选
   const onFilterChangeCallback = (value: IVariableType<IFilterInputType>) => {
-    const filter = {...filterInputRef.current, ...value.filter};
+    const filter = utils.removeEmptyProperties({...filterInputRef.current, ...value.filter});
     const sort = value.sort.length > 0 ? value.sort : sortInputRef.current;
     variables = {...variables, filter, sort};
 
