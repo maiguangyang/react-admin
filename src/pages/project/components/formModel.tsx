@@ -7,7 +7,7 @@ import Sider from 'antd/es/layout/Sider';
 import { Content } from 'antd/es/layout/layout';
 import { IFormModelComponentProps } from '~@/types/useGraphql_hook_type';
 import { useGraphql } from '~@/hooks/useGraphql';
-import { useAntdAction } from '~@/hooks/useAntd';
+// import { useAntdAction } from '~@/hooks/useAntd';
 import { useFormModel } from '~@/hooks/useFormModel';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 
@@ -17,6 +17,7 @@ import { RenderTemp } from './renderTemp';
 import { SettingTemp } from './settingTemp';
 import { ITableTemp } from '../types';
 import { Project, QueryProjectArgs } from '~@/__generated__/graphql';
+import ChatImComponent from '~@/components/ChatIm';
 // import { useAction } from '../hooks';
 
 // const formModel: FC<IFormModelComponentProps<>> = ({ model, loading, disabled }) => {
@@ -24,7 +25,7 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
   const { model, loading, disabled, onCallback } = props;
   const params = useParams();
   const navigate  = useNavigate();
-  const { message } = useAntdAction();
+  // const { message } = useAntdAction();
   // const { loading, setLoading } = useAction();
   const { breadcrumb } = useBreadcrumb();
   const [menuItem, setMenuItem] = useState<MenuProps['items']>([]);
@@ -42,42 +43,45 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
   // }, [addLoading, editLoading]);
 
   const { onFinish } = useFormModel<TData, TVariables>({ model, loading, disabled, params, breadcrumb, navigate, onCallback });
-
-  // 获取详情
-  if (params.id) {
-    const { data, loading, error } = useGraphql<Project, QueryProjectArgs>(model, `{
+  const [getDetail, { data }] = useGraphql<Project, QueryProjectArgs>(model, `{
+    id
+    name
+    desc
+    state
+    weight
+    tables {
       id
-      name
-      desc
-      state
-      weight
-      tables {
+      title
+      tableName
+      isNav
+      isAuth
+      fields {
         id
         title
-        tableName
-        isNav
-        isAuth
-        fields {
-          id
-          title
-          name
-          required
-          model
-          len
-          comment
-          index
-          value
-          validator
-        }
+        name
+        required
+        model
+        len
+        comment
+        index
+        value
+        validator
       }
-    }`, { id: params.id }).Detail();
+    }
+  }`, { id: params.id }).Detail();
 
-    useEffect(() => {
-      if (error) {
-        message.error(error.message);
-        return;
-      }
-      setMenuItem([]);
+  useEffect(() => {
+    getDetail();
+  }, []);
+
+  useEffect(() => {
+    // 获取详情
+    if (params.id) {
+    // if (error) {
+    //   message.error(error.message);
+    //   return;
+    // }
+      // setMenuItem([]);
       if (data) {
         const children: MenuProps['items'] = [];
         if (data.tables.length > 0) {
@@ -88,8 +92,8 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
 
         setMenuItem([{ key: 'menu_01', label: data.name, children }]);
       }
-    }, [loading]);
-  }
+    }
+  }, [data]);
 
   const tableTemp: ITableTemp[] = [
     { label: '实时预览', children: <>实时预览</> },
@@ -130,6 +134,7 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
           </Form.Item>
         </Form>
       </Content>
+      <ChatImComponent id={params.id} callback={getDetail} />
     </Layout>
   );
 }

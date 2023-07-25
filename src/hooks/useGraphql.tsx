@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { gql, useQuery, useMutation, TypedDocumentNode } from '@apollo/client';
+import { gql, useQuery, useMutation, TypedDocumentNode, useLazyQuery } from '@apollo/client';
 import Router from '~@/router';
 import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
@@ -71,9 +71,15 @@ export const useGraphql = <TData, TVariables>(mode: string, columns?: string, va
         }
       `;
 
-      const res = useQuery<TData, TVariables>(text, { variables });
-      if (res.data) {
-        res.data = (res.data[name as keyof TData] as unknown as TData);
+      // const res = useQuery<TData, TVariables>(text, { variables });
+      // if (res.data) {
+      //   res.data = (res.data[name as keyof TData] as unknown as TData);
+      // }
+
+      const res = useLazyQuery<TData, TVariables>(text, { variables });
+
+      if (res[1].data) {
+        res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
       }
       return res;
     },
@@ -88,9 +94,14 @@ export const useGraphql = <TData, TVariables>(mode: string, columns?: string, va
         }
       `;
 
-      const res = useQuery<TData, TVariables>(text, { variables });
-      if (res.data) {
-        res.data = (res.data[name as keyof TData] as unknown as TData);
+      // const res = useQuery<TData, TVariables>(text, { variables });
+      // if (res.data) {
+      //   res.data = (res.data[name as keyof TData] as unknown as TData);
+      // }
+
+      const res = useLazyQuery<TData, TVariables>(text, { variables });
+      if (res[1].data) {
+        res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
       }
       return res;
     },

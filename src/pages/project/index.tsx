@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Dropdown, MenuProps, Progress, Row, Spin, Tooltip } from 'antd';
+import { Button, Card, Col, Dropdown, Empty, MenuProps, Progress, Row, Spin, Tooltip } from 'antd';
 import { ExclamationCircleFilled, CiOutlined, CloudSyncOutlined, CloudDownloadOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Filter } from '~@/utils/filter';
 
@@ -15,6 +15,8 @@ import { IFilterInputType } from '~@/types/useTableList_hook_type';
 import { ISortInputType } from '~@/types/table_service_type';
 import { GenerateVariable, ExtractColumnIndex } from '~@/hooks/useTableList';
 import { QueryProjectsArgs } from '~@/__generated__/graphql';
+import ChatImComponent from '~@/components/ChatIm';
+
 import './styles.less';
 
 const sortInput: ISortInputType[] = [{weight: 'ASC'}];
@@ -43,7 +45,7 @@ const columns: IColumnsDataType<IColumnType>[] = [
     title: '下载次数',
     align: 'center',
     width: 200,
-    render: (data: string, row) => {
+    render: () => {
       return 1;
     },
   },
@@ -72,7 +74,11 @@ const ProjectPage: FC = () => {
   const fields: string = ExtractColumnIndex(columns, ['isDelete']);
 
   // const [getList, { loading, data }] = useGraphql<IFormTempTableListType<ITabelColumnType>>(`${model}s`, fields, variables);
-  const { loading, data } = useGraphql<IProjectResultType, QueryProjectsArgs>(model, fields, variables).List();
+  const [getList, { loading, data }] = useGraphql<IProjectResultType, QueryProjectsArgs>(model, fields, variables).List();
+
+  useEffect(() => {
+    getList();
+  }, []);
 
   useEffect(() => {
     if (data) setTableData(data);
@@ -117,7 +123,6 @@ const ProjectPage: FC = () => {
         }
       });
       if (value) handleRowTimes(id);
-      console.log('cloneData', cloneData);
       return cloneData;
     });
   };
@@ -153,64 +158,77 @@ const ProjectPage: FC = () => {
 
   const handleOnCi = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, row: IProject) => {
     event.stopPropagation();
+    console.log('row', row);
     message.success('这是ci操作：在线编译打包');
   };
 
+  const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.stopPropagation();
+  };
+
   const items: MenuProps['items'] = [
-    { key: '1', label: (<Button type='link'>管理后台</Button>) },
-    { key: '2', label: (<Button type='link'>服务端Api</Button>) },
+    { key: '1', label: (<Button type='link' onClick={handleButtonClick}>管理后台</Button>) },
+    { key: '2', label: (<Button type='link' onClick={handleButtonClick}>服务端Api</Button>) },
+    { key: '3', label: (<Button type='link' onClick={handleButtonClick}>删除项目</Button>) },
   ];
 
   return (
-    <Row gutter={[16, 24]}>
+    <>
       {
-        tableData?.data.map((item) => {
-          return (
-            <Col key={item.id} className="gutter-row" span={6} xxl={4} xl={6} lg={8} md={12} sm={24} xs={24}>
+        !tableData || tableData?.data.length <= 0
+          ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          : <Row gutter={[16, 24]}>
               {
-                !item.isBuild
-                  ? null
-                  : <div className="progress-layer">
-                    <Spin />
-                  </div>
-              }
+                tableData?.data.map((item) => {
+                  return (
+                    <Col key={item.id} className="gutter-row" span={6} xxl={4} xl={6} lg={8} md={12} sm={24} xs={24}>
+                      {
+                        !item.isBuild
+                          ? null
+                          : <div className="progress-layer">
+                            <Spin />
+                          </div>
+                      }
 
-              <Card style={{ padding: '1px' }}
-                loading={loading}
-                hoverable
-                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                actions={[
-                  <Tooltip key="cloudSync" title="同步更改内容">
-                    <CloudSyncOutlined style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />
-                  </Tooltip>,
-                  <Tooltip key="ci" title="在线编译打包">
-                    <CiOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
-                  </Tooltip>,
-                  <Tooltip key="download" title="下载编译文件">
-                    <CloudDownloadOutlined style={{ fontSize: '20px' }} />
-                  </Tooltip>,
-                  <Tooltip key="ellipsis" title="在线预览">
-                    <Dropdown menu={{ items }} placement="bottomRight" arrow>
-                      <EllipsisOutlined style={{ fontSize: '20px' }} />
-                    </Dropdown>
-                  </Tooltip>,
-                ]}
-                onClick={() => navigate(item.id)}
-              >
-                <Meta className='meta-layer' title={item.name} description={item.desc} />
-              </Card>
-              {
-                !item.isBuild
-                  ? null
-                  : <div className="ant-progress-layer">
-                    <Progress showInfo={false} strokeColor='#52c41a' percent={item.percent ?? 0} />
-                  </div>
+                      <Card style={{ padding: '1px' }}
+                        loading={loading}
+                        hoverable
+                        cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+                        actions={[
+                          <Tooltip key="cloudSync" title="同步更改内容">
+                            <CloudSyncOutlined style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />
+                          </Tooltip>,
+                          <Tooltip key="ci" title="在线编译打包">
+                            <CiOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                          </Tooltip>,
+                          <Tooltip key="download" title="下载编译文件">
+                            <CloudDownloadOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                          </Tooltip>,
+                          <Tooltip key="ellipsis" title="在线预览">
+                            <Dropdown menu={{ items }} placement="bottomRight" arrow>
+                              <EllipsisOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                            </Dropdown>
+                          </Tooltip>,
+                        ]}
+                        onClick={() => navigate(item.id)}
+                      >
+                        <Meta className='meta-layer' title={item.name} description={item.desc} />
+                      </Card>
+                      {
+                        !item.isBuild
+                          ? null
+                          : <div className="ant-progress-layer">
+                            <Progress showInfo={false} strokeColor='#52c41a' percent={item.percent ?? 0} />
+                          </div>
+                      }
+                    </Col>
+                  );
+                })
               }
-            </Col>
-          );
-        })
+            </Row>
       }
-    </Row>
+      <ChatImComponent callback={getList} />
+    </>
   );
 };
 

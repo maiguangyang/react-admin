@@ -25,6 +25,9 @@ module.exports = {
     'react',
     '@typescript-eslint'
   ],
+  "globals": {
+    "NodeJS": true
+  },
   rules: {
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],

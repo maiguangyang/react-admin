@@ -240,6 +240,7 @@ export type GoodUpdateInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  chatGPT?: Maybe<Scalars['Any']['output']>;
   createGood: Good;
   createOrder: Order;
   createProject: Project;
@@ -273,6 +274,11 @@ export type Mutation = {
   updateUploadFile: UploadFile;
   updateUser: User;
   upload?: Maybe<Scalars['Any']['output']>;
+};
+
+
+export type MutationChatGptArgs = {
+  text: Scalars['String']['input'];
 };
 
 
@@ -1401,7 +1407,6 @@ export type ProjectUpdateInput = {
 
 export type Query = {
   __typename?: 'Query';
-  chatGPT?: Maybe<Scalars['Any']['output']>;
   good?: Maybe<Good>;
   goods?: Maybe<GoodResultType>;
   order?: Maybe<Order>;
@@ -1416,11 +1421,6 @@ export type Query = {
   uploadFiles?: Maybe<UploadFileResultType>;
   user?: Maybe<User>;
   users?: Maybe<UserResultType>;
-};
-
-
-export type QueryChatGptArgs = {
-  content: Scalars['String']['input'];
 };
 
 

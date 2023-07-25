@@ -9,7 +9,7 @@ const BreadcrumbLayer: FC = memo(() => {
   const { breadcrumb } = useBreadcrumb();
 
   // 面包屑点击
-  const itemRender = (route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>, params: any, routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[], paths: string[]) => {
+  const itemRender = (route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>, _: any, routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[]) => {
     const last = routes.indexOf(route) === routes.length - 1;
     return last ? <span>{route.title}</span> : <Link to={route.path ?? '/'}>{route.title}</Link>;
   };
