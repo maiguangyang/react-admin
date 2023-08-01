@@ -38,6 +38,12 @@ const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
     setIsCollapsed(!isCollapsed);
   };
 
+  if (parenRoute.current?.path === 'welcome') {
+    return (
+      <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
+    );
+  }
+
   return (
     <ConfigProvider locale={zhCN} theme={{ token: { fontSize: 13 } }}>
       <App>

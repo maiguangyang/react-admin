@@ -17,7 +17,7 @@ const ChatImIcon: FC = () => {
 
   return (
     <div className={styles.chatImIcon} onClick={handleIsActiveChange}>
-      <img src={ChatIcon} />
+      <img src={ChatIcon} alt='chat icon' />
     </div>
   );
 };

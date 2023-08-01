@@ -1719,6 +1719,7 @@ export type User = {
   isDelete?: Maybe<Scalars['Int']['output']>;
   nickname?: Maybe<Scalars['String']['output']>;
   password: Scalars['String']['output'];
+  phone: Scalars['String']['output'];
   state?: Maybe<Scalars['Int']['output']>;
   updatedAt?: Maybe<Scalars['Int']['output']>;
   updatedBy?: Maybe<Scalars['ID']['output']>;
@@ -1731,6 +1732,7 @@ export type UserCreateInput = {
   isDelete?: InputMaybe<Scalars['Int']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
   state?: InputMaybe<Scalars['Int']['input']>;
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1827,6 +1829,17 @@ export type UserFilterType = {
   password_null?: InputMaybe<Scalars['Boolean']['input']>;
   password_prefix?: InputMaybe<Scalars['String']['input']>;
   password_suffix?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  phone_gt?: InputMaybe<Scalars['String']['input']>;
+  phone_gte?: InputMaybe<Scalars['String']['input']>;
+  phone_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  phone_like?: InputMaybe<Scalars['String']['input']>;
+  phone_lt?: InputMaybe<Scalars['String']['input']>;
+  phone_lte?: InputMaybe<Scalars['String']['input']>;
+  phone_ne?: InputMaybe<Scalars['String']['input']>;
+  phone_null?: InputMaybe<Scalars['Boolean']['input']>;
+  phone_prefix?: InputMaybe<Scalars['String']['input']>;
+  phone_suffix?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['Int']['input']>;
   state_gt?: InputMaybe<Scalars['Int']['input']>;
   state_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -1868,6 +1881,7 @@ export type UserRelationship = {
   isDelete?: InputMaybe<Scalars['Int']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
   state?: InputMaybe<Scalars['Int']['input']>;
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1892,6 +1906,7 @@ export type UserSortType = {
   isDelete?: InputMaybe<ObjectSortType>;
   nickname?: InputMaybe<ObjectSortType>;
   password?: InputMaybe<ObjectSortType>;
+  phone?: InputMaybe<ObjectSortType>;
   state?: InputMaybe<ObjectSortType>;
   updatedAt?: InputMaybe<ObjectSortType>;
   updatedBy?: InputMaybe<ObjectSortType>;
@@ -1904,6 +1919,7 @@ export type UserUpdateInput = {
   isDelete?: InputMaybe<Scalars['Int']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['Int']['input']>;
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
