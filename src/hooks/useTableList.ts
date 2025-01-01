@@ -8,9 +8,10 @@ import { IGenerateVariableType, IRowData, ISortInputType, IVariableType } from '
 import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
 
 import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
+
 import utils from '~@/utils/utils';
 
-const sortInput: ISortInputType[] = [{weight: 'ASC'}];
+const sortInput: ISortInputType[] = [{ weight: 'ASC' }];
 
 // 生成参数
 export function GenerateVariable<T>(filter: T, sort: ISortInputType[]): IGenerateVariableType<T> {
@@ -90,21 +91,21 @@ export const [useTableListStore, TableListStoreProvider] = createStore(({ model,
   const { loading, data } = getList(model, fields, variables, pages);
 
   useEffect(() => {
-    if (data) setFormTempTable({...formTempTable, ...data});
+    if (data) setFormTempTable({ ...formTempTable, ...data });
   }, [data]);
 
   // 搜索
   const onSearchCallback = (value: IValueBaseType, key: string) => {
     filterInputRef.current = { ...filterInputRef.current, [key]: value };
-    variables.filter = {...filterInputRef.current, ...variables.filter, [key]: value};
+    variables.filter = { ...filterInputRef.current, ...variables.filter, [key]: value };
     onFilterChangeCallback(variables);
   };
 
   // 过滤筛选
   const onFilterChangeCallback = (value: IVariableType<IFilterInputType>) => {
-    const filter = utils.removeEmptyProperties({...filterInputRef.current, ...value.filter});
+    const filter = utils.removeEmptyProperties({ ...filterInputRef.current, ...value.filter });
     const sort = value.sort.length > 0 ? value.sort : sortInputRef.current;
-    variables = {...variables, filter, sort};
+    variables = { ...variables, filter, sort };
 
     filterInputRef.current = _.isEmpty(value.filter) ? {} : variables.filter;
     sortInputRef.current = value.sort.length <= 0 ? sortInput : variables.sort;

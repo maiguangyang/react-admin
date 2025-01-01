@@ -1,9 +1,14 @@
-import { resolve }      from 'path';
+/*
+ * @Author: Marlon.M
+ * @Email: maiguangyang@163.com
+ * @Date: 2025-01-01 09:08:09
+ */
 import { defineConfig } from 'vite'
-import react            from '@vitejs/plugin-react';
-import eslintPlugin     from 'vite-plugin-eslint';
+import { resolve } from 'path';
+import react from '@vitejs/plugin-react'
+import eslintPlugin from 'vite-plugin-eslint';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
@@ -25,16 +30,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    // react({
-    //   jsxRuntime: 'automatic',
-    //   jsxImportSource: '@emotion/react',
-    //   babel: {
-    //     plugins: ['@emotion/babel-plugin']
-    //   }
-    // }),
     eslintPlugin(),
   ],
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' }
-  }
 })

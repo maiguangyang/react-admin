@@ -1,5 +1,5 @@
-import _      from 'lodash';
-import dayjs  from 'dayjs';
+import _ from 'lodash';
+import dayjs from 'dayjs';
 import { IValueBaseType } from '~@/types/base_type';
 
 type labelType = {

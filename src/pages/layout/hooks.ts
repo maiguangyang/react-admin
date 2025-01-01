@@ -1,3 +1,8 @@
+/*
+ * @Author: Marlon.M
+ * @Email: maiguangyang@163.com
+ * @Date: 2025-01-01 09:12:40
+ */
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -14,7 +19,7 @@ export const useLayoutStore = () => {
   const [childMenu, setChildMenu] = useState<RouteObject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  const parenRoute = useRef<RouteObject>();
+  const parenRoute = useRef<RouteObject | undefined>(undefined);
   // const breadcrumbList = useRef<RouteObject[]>([]);
 
   const routers: RouteObject[] = Routes || [];

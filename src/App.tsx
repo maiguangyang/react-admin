@@ -1,5 +1,9 @@
+/*
+ * @Author: Marlon.M
+ * @Email: maiguangyang@163.com
+ * @Date: 2025-01-01 09:12:40
+ */
 import '~@/assets/stylus/public.less';
-import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import LayoutWrapper from './pages/layout';
 import routes from './router';

@@ -19,7 +19,7 @@ import ChatImComponent from '~@/components/ChatIm';
 
 import './styles.less';
 
-const sortInput: ISortInputType[] = [{weight: 'ASC'}];
+const sortInput: ISortInputType[] = [{ weight: 'ASC' }];
 
 // 获取列表数据
 const columns: IColumnsDataType<IColumnType>[] = [
@@ -59,7 +59,7 @@ const columns: IColumnsDataType<IColumnType>[] = [
 ];
 
 const ProjectPage: FC = () => {
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const [tableData, setTableData] = useState<IProjectResultType | null | undefined>(null);
   const filterInputRef = useRef<IFilterInputType>({});
   const sortInputRef = useRef<ISortInputType[]>(sortInput);
@@ -178,54 +178,54 @@ const ProjectPage: FC = () => {
         !tableData || tableData?.data.length <= 0
           ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
           : <Row gutter={[16, 24]}>
-              {
-                tableData?.data.map((item) => {
-                  return (
-                    <Col key={item.id} className="gutter-row" span={6} xxl={4} xl={6} lg={8} md={12} sm={24} xs={24}>
-                      {
-                        !item.isBuild
-                          ? null
-                          : <div className="progress-layer">
-                            <Spin />
-                          </div>
-                      }
+            {
+              tableData?.data.map((item) => {
+                return (
+                  <Col key={item.id} className="gutter-row" span={6} xxl={4} xl={6} lg={8} md={12} sm={24} xs={24}>
+                    {
+                      !item.isBuild
+                        ? null
+                        : <div className="progress-layer">
+                          <Spin />
+                        </div>
+                    }
 
-                      <Card style={{ padding: '1px' }}
-                        loading={loading}
-                        hoverable
-                        cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                        actions={[
-                          <Tooltip key="cloudSync" title="同步更改内容">
-                            <CloudSyncOutlined style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />
-                          </Tooltip>,
-                          <Tooltip key="ci" title="在线编译打包">
-                            <CiOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
-                          </Tooltip>,
-                          <Tooltip key="download" title="下载编译文件">
-                            <CloudDownloadOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
-                          </Tooltip>,
-                          <Tooltip key="ellipsis" title="在线预览">
-                            <Dropdown menu={{ items }} placement="bottomRight" arrow>
-                              <EllipsisOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
-                            </Dropdown>
-                          </Tooltip>,
-                        ]}
-                        onClick={() => navigate(item.id)}
-                      >
-                        <Meta className='meta-layer' title={item.name} description={item.desc} />
-                      </Card>
-                      {
-                        !item.isBuild
-                          ? null
-                          : <div className="ant-progress-layer">
-                            <Progress showInfo={false} strokeColor='#52c41a' percent={item.percent ?? 0} />
-                          </div>
-                      }
-                    </Col>
-                  );
-                })
-              }
-            </Row>
+                    <Card style={{ padding: '1px' }}
+                      loading={loading}
+                      hoverable
+                      cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+                      actions={[
+                        <Tooltip key="cloudSync" title="同步更改内容">
+                          <CloudSyncOutlined style={{ fontSize: '20px' }} onClick={(e) => downLoadConfirm(e, item)} />
+                        </Tooltip>,
+                        <Tooltip key="ci" title="在线编译打包">
+                          <CiOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                        </Tooltip>,
+                        <Tooltip key="download" title="下载编译文件">
+                          <CloudDownloadOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                        </Tooltip>,
+                        <Tooltip key="ellipsis" title="在线预览">
+                          <Dropdown menu={{ items }} placement="bottomRight" arrow>
+                            <EllipsisOutlined style={{ fontSize: '20px' }} onClick={(e) => handleOnCi(e, item)} />
+                          </Dropdown>
+                        </Tooltip>,
+                      ]}
+                      onClick={() => navigate(item.id)}
+                    >
+                      <Meta className='meta-layer' title={item.name} description={item.desc} />
+                    </Card>
+                    {
+                      !item.isBuild
+                        ? null
+                        : <div className="ant-progress-layer">
+                          <Progress showInfo={false} strokeColor='#52c41a' percent={item.percent ?? 0} />
+                        </div>
+                    }
+                  </Col>
+                );
+              })
+            }
+          </Row>
       }
       <ChatImComponent callback={getList} />
     </>
