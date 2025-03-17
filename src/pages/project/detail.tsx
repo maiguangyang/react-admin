@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Project, ProjectCreateInput } from '~@/__generated__/graphql';
 import { useAction } from './hooks';
 

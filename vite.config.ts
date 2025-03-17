@@ -6,10 +6,10 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react'
-import eslintPlugin from 'vite-plugin-eslint';
+import { EsLinter, linterPlugin, TypeScriptLinter } from "vite-plugin-linter";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig((configEnv) => ({
   resolve: {
     alias: {
       '~@': resolve('src')
@@ -30,6 +30,9 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    eslintPlugin(),
+    linterPlugin({
+      include: ["./src/**/*.ts", "./src/**/*.tsx"],
+      linters: [new EsLinter({ configEnv: configEnv }), new TypeScriptLinter()],
+    }),
   ],
-})
+}))

@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { Input, Spin } from 'antd';
 
 import ChatIcon from '~@/assets/icon/chat_icon.png';
@@ -87,7 +87,7 @@ const ChatImInput: FC<IChatImComponentProps> = ({ id, callback }) => {
 
   return (
     <div className={styles.textArea}>
-      { isSubmit ? <Spin className={styles.spin} /> : null }
+      {isSubmit ? <Spin className={styles.spin} /> : null}
       <TextArea ref={textAreaRef} value={value}
         onBlur={handleBlur}
         onChange={handleInput}
@@ -106,7 +106,7 @@ const ChatImComponent: FC<IChatImComponentProps> = ({ id, callback }) => {
 
   return (
     <div className={styles.chatImComponent}>
-      { isActive ? <ChatImInput id={id} callback={callback} /> : <ChatImIcon /> }
+      {isActive ? <ChatImInput id={id} callback={callback} /> : <ChatImIcon />}
     </div>
   );
 };

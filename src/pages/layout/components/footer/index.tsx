@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Footer } from 'antd/lib/layout/layout';
 import { Link } from 'react-router-dom';
 

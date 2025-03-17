@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Col, Dropdown, Empty, MenuProps, Progress, Row, Spin, Tooltip } from 'antd';
 import { ExclamationCircleFilled, CiOutlined, CloudSyncOutlined, CloudDownloadOutlined, EllipsisOutlined } from '@ant-design/icons';

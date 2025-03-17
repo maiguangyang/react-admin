@@ -1,6 +1,6 @@
 import './index.less';
 
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Row, Col, Select, Radio } from 'antd';
 import { IFilterLayerProps } from './types';
 import { useTableListStore } from '~@/hooks/useTableList';
@@ -54,7 +54,7 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
       {props.children}
       <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
         <div className="filter-item flex align-center">
-        <span className='title'>状态：</span>
+          <span className='title'>状态：</span>
           <Select allowClear onChange={(value: number) => onSearchCallback(value, 'state')} placeholder='请选择状态'>
             <Option value={1}>启用</Option>
             <Option value={2}>禁用</Option>
@@ -63,7 +63,7 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
       </Col>
       <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
         <div className="filter-item flex align-center">
-        <span className='title'>是否删除：</span>
+          <span className='title'>是否删除：</span>
           <Select allowClear onChange={(value: number) => onSearchCallback(value, 'isDelete')} placeholder='请选择状态'>
             <Option value={1}>正常</Option>
             <Option value={2}>删除</Option>
@@ -72,7 +72,7 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
       </Col>
       <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={6}>
         <div className="filter-item flex align-center" id='sort'>
-        <span className='title'>排序：</span>
+          <span className='title'>排序：</span>
           <Select allowClear open={selectOpen} value={sortValue} optionLabelProp="label" placeholder='请选择排序'
             onBlur={() => setSelectOpen(false)}
             onFocus={() => setSelectOpen(!selectOpen)}
@@ -81,7 +81,7 @@ const FilterLayer: FC<IFilterLayerProps> = (props) => {
               sortsArray.map((item: sortsType, index: number) =>
                 <Option key={index} label={`${item.label} ${sortFilter(item.value)}`} value={item.value} disabled>
                   <span>{item.label}</span>
-                  <div className="right-layer" style={{float:'right', color: '#999'}}>
+                  <div className="right-layer" style={{ float: 'right', color: '#999' }}>
                     <Radio.Group value={sortsWeightValue} size='small' className='group' onChange={handleRadioOnChange}>
                       <Radio.Button value={`${item.value}.ASC`}>↑ 升</Radio.Button>
                       <Radio.Button value={`${item.value}.DESC`}>↓ 降</Radio.Button>

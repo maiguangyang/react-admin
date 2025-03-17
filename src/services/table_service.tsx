@@ -1,4 +1,4 @@
-import React, { FC, Key, useEffect } from 'react';
+import { FC, Key, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { Button, Table } from 'antd';
@@ -27,7 +27,7 @@ function showTotal(total: number): string {
 }
 
 // confirm 弹框
-export function DeleteRowAll<T>(confirm: ModalFunc, {...agm}: T) {
+export function DeleteRowAll<T>(confirm: ModalFunc, { ...agm }: T) {
   confirm({
     icon: <ExclamationCircleOutlined />,
     okText: '确认',
@@ -38,7 +38,7 @@ export function DeleteRowAll<T>(confirm: ModalFunc, {...agm}: T) {
 }
 
 // 删除
-function TableRowItemDelete<TData>(props: ITableRowItemProps<TData>) {
+function TableRowItemDelete(props: ITableRowItemProps) {
   const { ids } = props;
   const { modal, message } = useAntdAction();
   const { model, formTempTable, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model]);
@@ -68,7 +68,7 @@ function TableRowItemDelete<TData>(props: ITableRowItemProps<TData>) {
 }
 
 // 恢复
-function TableRowItemRecovery<TData>(props: ITableRowItemProps<TData>) {
+function TableRowItemRecovery(props: ITableRowItemProps) {
   const { ids } = props;
   const { modal, message } = useAntdAction();
   const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
@@ -94,14 +94,14 @@ function TableRowItemRecovery<TData>(props: ITableRowItemProps<TData>) {
 
   return (
     <>
-      { selectedRowKeys.length <= 0 && <a className="text-desc" onClick={handleDelete}>恢复</a> }
+      {selectedRowKeys.length <= 0 && <a className="text-desc" onClick={handleDelete}>恢复</a>}
     </>
   );
 }
 
 // rows 数据
 export function DeleteTableRowsWrapper<TData>(props: IDeleteTableRowsType<TData>) {
-  const {type, row } = props;
+  const { type, row } = props;
   const { modal, message } = useAntdAction();
   const navigate = useNavigate();
   const { model, formTempTable, selectedRowKeys, onDeleteStatusChangeCallback } = useTableListStore((store) => [store.model, store.selectedRowKeys]);
@@ -138,7 +138,7 @@ export function DeleteTableRowsWrapper<TData>(props: IDeleteTableRowsType<TData>
   if (type !== 'list') {
     return (
       <>
-        { row?.isDelete !== 1 ? <TableRowItemRecovery ids={ids} /> : <TableRowItemDelete ids={ids} /> }
+        {row?.isDelete !== 1 ? <TableRowItemRecovery ids={ids} /> : <TableRowItemDelete ids={ids} />}
       </>
     );
   }
@@ -183,7 +183,7 @@ export function TableWrapper<TData>() {
   const { ...other } = TableConfig<TData>(rowSelection, columns, formTempTable, { onChange });
 
   return (
-    <Table className='table-layer' rowKey="id" { ...other } />
+    <Table className='table-layer' rowKey="id" {...other} />
   );
 }
 
@@ -217,7 +217,7 @@ export const HelmetWrapper: FC<IHelmetWrapperProps> = ({ title, children }) => {
   return (
     <>
       <Helmet><title>{title}</title></Helmet>
-      { children }
+      {children}
     </>
   );
 };

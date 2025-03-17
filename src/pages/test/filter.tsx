@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Col, Input } from 'antd';
 import { FilterLayer } from '~@/components/Filter';
 import { useTableListStore } from '~@/hooks/useTableList';

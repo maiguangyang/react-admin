@@ -1,5 +1,5 @@
-import React, { FC, memo }                from 'react';
-import { Menu }                     from 'antd';
+import { FC, memo } from 'react';
+import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { MenuItem, SiderMenuProps } from './types';
 import { RouteObject } from '~@/router/types';

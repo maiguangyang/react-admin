@@ -35,7 +35,7 @@ export interface IDeleteTableRowsType<TData> {
   // value: IBaseListResultType<IRowData<TData>>
 };
 
-export interface ITableRowItemProps<TData> {
+export interface ITableRowItemProps {
   ids: string[]
   // value: IBaseListResultType<IRowData<TData>>
 }
@@ -54,6 +54,6 @@ export interface IHelmetWrapperProps {
   children?: React.ReactNode
 }
 
-export type IScrollType = ({x?: string | number | true | undefined; y?: string | number | undefined;} & { scrollToFirstRowOnChange?: boolean | undefined;}) | undefined;
+export type IScrollType = ({ x?: string | number | true | undefined; y?: string | number | undefined; } & { scrollToFirstRowOnChange?: boolean | undefined; }) | undefined;
 
 export type ITablePaginationPosition = 'topLeft' | 'topCenter' | 'topRight' | 'bottomLeft' | 'bottomCenter' | 'bottomRight';

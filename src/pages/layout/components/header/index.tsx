@@ -1,8 +1,8 @@
 import styles from './index.module.less';
-import React, { FC, memo }     from 'react';
+import { FC, memo } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import classNames        from 'classnames';
-import { Header }        from 'antd/lib/layout/layout';
+import classNames from 'classnames';
+import { Header } from 'antd/lib/layout/layout';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import {
   Avatar,
@@ -39,7 +39,7 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
                   className={classNames(styles.menuItem, current?.path === item.path && styles.active)}
                   to={utils.firstChildPath(item)} title={item.title}
                 >
-                  { item.title }
+                  {item.title}
                 </NavLink>
               );
             })
@@ -51,7 +51,7 @@ const HeaderLayer: FC<HeaderLayerProps> = (props) => {
             <Link to='/' className={styles.linkGroupLink} title='帮助中心' target='_blank'>帮助中心</Link>
           </div>
           <Avatar size="large" icon={<UserOutlined />} />
-          <Dropdown className={styles.company} menu={{items, onClick}}>
+          <Dropdown className={styles.company} menu={{ items, onClick }}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
               <span className='margin-l-5'>中山华定科技有限公司</span>
               <DownOutlined className='margin-l-5' />

@@ -8,7 +8,7 @@ export interface ITabelColumnBase {
   isDelete: number
 }
 
-export interface IFormTempProps<T extends any> {
+export interface IFormTempProps<T> {
   form: FormInstance<T>
   disabled: string[]
   loading: boolean

@@ -32,5 +32,10 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/__generated__"
   ]
 }

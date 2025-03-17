@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useState }  from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Form, Layout, Menu, MenuProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -24,7 +24,7 @@ import ChatImComponent from '~@/components/ChatIm';
 function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVariables>) {
   const { model, loading, disabled, onCallback } = props;
   const params = useParams();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   // const { message } = useAntdAction();
   // const { loading, setLoading } = useAction();
   const { breadcrumb } = useBreadcrumb();
@@ -77,10 +77,10 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
   useEffect(() => {
     // 获取详情
     if (params.id) {
-    // if (error) {
-    //   message.error(error.message);
-    //   return;
-    // }
+      // if (error) {
+      //   message.error(error.message);
+      //   return;
+      // }
       // setMenuItem([]);
       if (data) {
         const children: MenuProps['items'] = [];

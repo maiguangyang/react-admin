@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useAction } from './hooks';
 
 const Detail: FC = () => {

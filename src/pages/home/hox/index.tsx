@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import ButtonWrapper from './components/button';
 import TaskList from './components/task';
 // import { TaskStoreProvider } from './components/task/hook';
@@ -8,8 +8,8 @@ const HomeHox: FC = () => {
     <>
       <header>header12</header>
       {/* <TaskStoreProvider> */}
-        <ButtonWrapper />
-        <TaskList />
+      <ButtonWrapper />
+      <TaskList />
       {/* </TaskStoreProvider> */}
     </>
   );

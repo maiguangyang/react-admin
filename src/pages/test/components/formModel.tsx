@@ -1,8 +1,8 @@
-import React, { useEffect }  from 'react';
+import { useEffect } from 'react';
 import { Form, Tabs } from 'antd';
-import { useNavigate, useParams }  from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Tab } from 'rc-tabs/lib/interface';
-import { useGraphql }  from '~@/hooks/useGraphql';
+import { useGraphql } from '~@/hooks/useGraphql';
 import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
 import { useAntdAction } from '~@/hooks/useAntd';
 import { useFormModel } from '~@/hooks/useFormModel';
@@ -15,7 +15,7 @@ import { useAction } from '../hooks';
 export function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVariables>) {
   const { model, loading, disabled, onCallback } = props;
   const params = useParams();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const { message } = useAntdAction();
   const { title, isReadOnly } = useAction();
   const { breadcrumb } = useBreadcrumb();
@@ -36,7 +36,7 @@ export function FormData<TData, TVariables>(props: IFormModelComponentProps<TDat
 
     useEffect(() => {
       if (error) message.error(error.message);
-      else if (data) form.setFieldsValue({...data});
+      else if (data) form.setFieldsValue({ ...data });
     }, [loading]);
   }
 

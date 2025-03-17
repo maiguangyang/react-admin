@@ -19,7 +19,7 @@ export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVa
     }
 
     // setLoading(true);
-    formData.state  = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
+    formData.state = typeof formData.state !== 'boolean' ? formData.state : formData.state === true ? 1 : 2;
 
     disabled.forEach(item => {
       if (utils.isValidKey(item, formData) && formData[item]) delete formData[item];
@@ -32,7 +32,7 @@ export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVa
     // let res: any = {};
     // 编辑
     if (params.id) {
-      variables = {...variables, id: params.id};
+      variables = { ...variables, id: params.id };
       // res = await formEdit({ variables }).catch((err: any) => message.error(err.message)) || {};
     }
     // else {

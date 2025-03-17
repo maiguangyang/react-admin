@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProjectResultType, QueryProjectsArgs } from '~@/__generated__/graphql';
 import { useGraphql } from '~@/hooks/useGraphql';
 

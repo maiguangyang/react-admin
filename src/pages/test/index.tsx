@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Space, Tooltip } from 'antd';
 import { ColumnType } from 'antd/lib/table/interface';
@@ -37,7 +37,7 @@ const ProjectPage: FC = () => {
       title: '删除状态',
       align: 'center',
       width: 200,
-      render: (data: string, row: Project) => {
+      render: (_: string, row: Project) => {
         return row?.isDelete !== 1 ? '已删除' : '正常';
       },
     },
@@ -53,7 +53,7 @@ const ProjectPage: FC = () => {
       dataIndex: 'action',
       align: 'center',
       width: 200,
-      render: (data: string, row: IRowData<Project>) => {
+      render: (_: string, row: IRowData<Project>) => {
         return (
           <Space size="middle">
             <Link to={row.id}>查看</Link>

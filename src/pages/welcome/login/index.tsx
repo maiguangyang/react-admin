@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Row, Col, Form, Input, Checkbox, Button } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 

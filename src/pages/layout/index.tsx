@@ -1,16 +1,16 @@
 import 'antd/dist/reset.css';
 import styles from './index.module.less';
 
-import React, { FC, memo, Suspense, useEffect, useState }  from 'react';
+import { FC, memo, Suspense, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { App, Layout, ConfigProvider, notification, Spin } from 'antd';
-import zhCN       from 'antd/lib/locale/zh_CN';
+import zhCN from 'antd/lib/locale/zh_CN';
 import classNames from 'classnames';
 
-import HeaderLayer     from './components/header';
-import FooterLayer     from './components/footer';
+import HeaderLayer from './components/header';
+import FooterLayer from './components/footer';
 import BreadcrumbLayer from './components/breadcrumb';
-import SiderMenuLayer  from './components/siderMenu';
+import SiderMenuLayer from './components/siderMenu';
 
 import { Routes } from '~@/router';
 import { RouteObject } from '~@/router/types';

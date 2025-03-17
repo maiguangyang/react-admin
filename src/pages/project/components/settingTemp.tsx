@@ -1,5 +1,5 @@
 import { Cascader, Col, Form, Radio } from 'antd';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { IOption, IValueBaseType } from '~@/types/base_type';
 
 const options: IOption[] = [
