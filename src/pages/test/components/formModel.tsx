@@ -26,7 +26,7 @@ export function FormData<TData, TVariables>(props: IFormModelComponentProps<TDat
 
   // 获取详情
   if (params.id) {
-    const { data, loading, error } = useGraphql<Project, QueryProjectArgs>(model, `{
+    const [_, { data, loading, error }] = useGraphql<Project, QueryProjectArgs>(model, `{
       id
       name
       desc

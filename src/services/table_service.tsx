@@ -155,7 +155,7 @@ export function DeleteTableRowsWrapper<TData>(props: IDeleteTableRowsType<TData>
 }
 
 // TableWrapper ...
-export function TableWrapper<TData>() {
+export function TableWrapper<TData extends {}>() {
   const { columns, variables, formTempTable, selectedRowKeys, fetchStatus, setSelectedRowKeys, setFetchStatus } = useTableListStore((store) => [
     store.columns,
     store.variables,

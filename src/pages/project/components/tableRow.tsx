@@ -28,7 +28,7 @@ export const TableRow = ({ children, ...props }: IRowProps) => {
     <tr {...props} ref={setNodeRef} style={style} {...attributes}>
       {React.Children.map(children, (child) => {
         if ((child as React.ReactElement).key === 'sort') {
-          return React.cloneElement(child as React.ReactElement, {
+          return React.cloneElement<any>(child as React.ReactElement, {
             children: (
               <MenuOutlined
                 ref={setActivatorNodeRef}

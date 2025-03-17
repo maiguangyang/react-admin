@@ -25,7 +25,7 @@ export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVa
       if (utils.isValidKey(item, formData) && formData[item]) delete formData[item];
     });
 
-    let variables: TVariables = {
+    let variables: any = {
       data: { ...formData },
     };
 
@@ -40,10 +40,17 @@ export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVa
     //   // res = await formAdd({ variables }).catch((err: any) => message.error(err.message)) || {};
     // }
 
-    const res = await onCallback?.({ variables }).catch((err) => message.error(err.message)) || {};
-
+    // const res = await onCallback?.({ variables }).catch((err) => message.error(err.message)) || {};
     // setLoading(false);
-    let resData = res.data || {};
+
+    const res = (await onCallback?.({ variables }).catch((err) => {
+      message.error(err.message);
+      return null;
+    })) || {};
+
+
+    let resData = res.data as Record<string, any>;;
+
     resData = resData[`create${model}`] || resData[`update${model}`] || {};
     if (resData.id) {
       message.success('操作成功');

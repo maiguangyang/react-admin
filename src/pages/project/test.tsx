@@ -2,7 +2,7 @@ import { ProjectResultType, QueryProjectsArgs } from '~@/__generated__/graphql';
 import { useGraphql } from '~@/hooks/useGraphql';
 
 export default function RocketInventoryList() {
-  const { loading, data } = useGraphql<ProjectResultType, QueryProjectsArgs>('Projects', `
+  const [_, { loading, data }] = useGraphql<ProjectResultType, QueryProjectsArgs>('Projects', `
     {
       id
       name

@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { gql, useQuery, useMutation, TypedDocumentNode, useLazyQuery } from '@apollo/client';
+import { gql, useQuery, useMutation, TypedDocumentNode, useLazyQuery, OperationVariables } from '@apollo/client';
 import Router from '~@/router';
 import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
@@ -10,7 +10,7 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export const useGraphql = <TData, TVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) => {
+export const useGraphql = <TData, TVariables extends OperationVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) => {
   return {
     // 新增
     Create() {
@@ -103,6 +103,7 @@ export const useGraphql = <TData, TVariables>(mode: string, columns?: string, va
       if (res[1].data) {
         res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
       }
+
       return res;
     },
 
