@@ -22,6 +22,19 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          graphql: ['graphql'],
+          react: ['react', 'react-dom'],
+          reactRouter: ['react-router-dom'],
+          reactHooks: ['hox'],
+          lodash: ['lodash'],
+        }
+      }
+    },
+  },
   plugins: [
     react(),
   ],
