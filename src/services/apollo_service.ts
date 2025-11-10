@@ -4,8 +4,8 @@
  * @Date: 2025-01-01 09:12:40
  */
 import { notification } from 'antd';
-import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
+import { ApolloLink, ApolloClient, InMemoryCache, HttpLink, CombinedGraphQLErrors, ServerError } from '@apollo/client';
+import { ErrorLink } from '@apollo/client/link/error';
 import LocalStorage from '~@/utils/localStorage.cookie';
 import Env from '~@/env';
 
@@ -19,17 +19,22 @@ export const apolloClient = () => {
     Authorization: `Bearer ${token.data}`,
   } : {};
 
+  // HTTP 连接
   const httpLink = new HttpLink({
     uri,
     headers,
   });
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, path }) => {
-        if (message.indexOf('expired') !== -1) LocalStorage.remove('Authorization');
+  // 错误处理
+  const errorLink = new ErrorLink(({ error }) => {
+    // ✅ GraphQL 层错误（resolver 抛出的）
+    if (CombinedGraphQLErrors.is(error)) {
+      error.errors.forEach(({ message, path }) => {
+        if (message.includes('expired')) {
+          LocalStorage.remove('Authorization');
+        }
 
-        if (message.indexOf('exist') !== -1) {
+        if (message.includes('exist')) {
           notification.error({
             message: '',
             description: '该记录已存在',
@@ -37,34 +42,39 @@ export const apolloClient = () => {
           });
         } else {
           notification.error({
-            message: path,
+            message: path?.join(' / ') ?? '[GraphQL Error]',
             description: message,
             duration: 5,
           });
         }
       });
     }
-    if (networkError) {
+
+    // ✅ 网络层错误（HTTP 层）
+    else if (ServerError.is(error)) {
       notification.error({
         message: '[Network error]',
-        description: networkError.message,
+        description: error.message,
+        duration: 5,
+      });
+    }
+
+    // ✅ 其他未知错误
+    else if (error) {
+      notification.error({
+        message: '[Unknown error]',
+        description: error.message,
         duration: 5,
       });
     }
   });
 
-  const cache = new InMemoryCache({
-    addTypename: false,
-    // dataIdFromObject(responseObject) {
-    //   switch (responseObject.__typename) {
-    //     default: return defaultDataIdFromObject(responseObject);
-    //   }
-    // },
-  });
+  const cache = new InMemoryCache();
 
   const client = new ApolloClient({
-    link: from([errorLink, httpLink]),
+    link: ApolloLink.from([errorLink, httpLink]),
     cache,
+    assumeImmutableResults: true,
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'network-only',

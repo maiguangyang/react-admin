@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
-import { gql, useQuery, useMutation, TypedDocumentNode, useLazyQuery, OperationVariables } from '@apollo/client';
+import { gql, TypedDocumentNode, OperationVariables } from '@apollo/client';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 import Router from '~@/router';
 import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
 
@@ -71,12 +72,7 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
         }
       `;
 
-      // const res = useQuery<TData, TVariables>(text, { variables });
-      // if (res.data) {
-      //   res.data = (res.data[name as keyof TData] as unknown as TData);
-      // }
-
-      const res = useLazyQuery<TData, TVariables>(text, { variables });
+      const res = useLazyQuery<TData, TVariables>(text, variables);
 
       if (res[1].data) {
         res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
@@ -94,12 +90,7 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
         }
       `;
 
-      // const res = useQuery<TData, TVariables>(text, { variables });
-      // if (res.data) {
-      //   res.data = (res.data[name as keyof TData] as unknown as TData);
-      // }
-
-      const res = useLazyQuery<TData, TVariables>(text, { variables });
+      const res = useLazyQuery<TData, TVariables>(text, variables);
       if (res[1].data) {
         res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
       }
@@ -110,7 +101,7 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
     // 其他查询
     Query() {
       const text: TypedDocumentNode<TData, TVariables> = gql`${mode}`;
-      const res = useQuery(text, { variables });
+      const res = useQuery(text, { variables: variables as TVariables });
       return res;
     },
 

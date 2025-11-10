@@ -7,7 +7,8 @@ import { IBaseListResultType, IValueBaseType } from '~@/types/base_type';
 import { IGenerateVariableType, IRowData, ISortInputType, IVariableType } from '~@/types/table_service_type';
 import { IFilterInputType, ITableListStoreProps } from '~@/types/useTableList_hook_type';
 
-import { gql, TypedDocumentNode, useQuery } from '@apollo/client';
+import { gql, TypedDocumentNode } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 import utils from '~@/utils/utils';
 
