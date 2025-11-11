@@ -1,34 +1,40 @@
-import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Form, Layout, Menu, MenuProps, Tabs } from 'antd';
-import { Tab } from 'rc-tabs/lib/interface';
-import Sider from 'antd/es/layout/Sider';
-import { Content } from 'antd/es/layout/layout';
-import { IFormModelComponentProps } from '~@/types/useGraphql_hook_type';
-import { useGraphql } from '~@/hooks/useGraphql';
+import { Button, Form, Layout, Menu, MenuProps, Tabs } from "antd";
+import Sider from "antd/es/layout/Sider";
+import { Content } from "antd/es/layout/layout";
+import _ from "lodash";
+import { Tab } from "rc-tabs/lib/interface";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGraphql } from "~@/hooks/useGraphql";
+import { IFormModelComponentProps } from "~@/types/useGraphql_hook_type";
 // import { useAntdAction } from '~@/hooks/useAntd';
-import { useFormModel } from '~@/hooks/useFormModel';
-import { useBreadcrumb } from '~@/hooks/useBreadcrumb';
+import { useBreadcrumb } from "~@/hooks/useBreadcrumb";
+import { useFormModel } from "~@/hooks/useFormModel";
 
-import '../styles.less';
-import { FieldTemp } from './fieldTemp';
-import { RenderTemp } from './renderTemp';
-import { SettingTemp } from './settingTemp';
-import { ITableTemp } from '../types';
-import { Project, QueryProjectArgs } from '~@/__generated__/graphql';
-import ChatImComponent from '~@/components/ChatIm';
+import { OperationVariables } from "@apollo/client";
+import { Project, QueryProjectArgs } from "~@/__generated__/graphql";
+import ChatImComponent from "~@/components/ChatIm";
+import "../styles.less";
+import { ITableTemp } from "../types";
+import { FieldTemp } from "./fieldTemp";
+import { RenderTemp } from "./renderTemp";
+import { SettingTemp } from "./settingTemp";
 // import { useAction } from '../hooks';
 
 // const formModel: FC<IFormModelComponentProps<>> = ({ model, loading, disabled }) => {
-function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVariables>) {
+function FormData<TData, TVariables>(
+  props: IFormModelComponentProps<
+    TData,
+    TVariables extends OperationVariables ? TVariables : OperationVariables
+  >
+) {
   const { model, loading, disabled, onCallback } = props;
   const params = useParams();
   const navigate = useNavigate();
   // const { message } = useAntdAction();
   // const { loading, setLoading } = useAction();
   const { breadcrumb } = useBreadcrumb();
-  const [menuItem, setMenuItem] = useState<MenuProps['items']>([]);
+  const [menuItem, setMenuItem] = useState<MenuProps["items"]>([]);
 
   const [form] = Form.useForm();
   // const [formAdd] = useGraphql<Project, ProjectCreateInput>(model).Create();
@@ -42,8 +48,18 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
   //   setLoading(addLoading !== editLoading);
   // }, [addLoading, editLoading]);
 
-  const { onFinish } = useFormModel<TData, TVariables>({ model, loading, disabled, params, breadcrumb, navigate, onCallback });
-  const [getDetail, { data }] = useGraphql<Project, QueryProjectArgs>(model, `{
+  const { onFinish } = useFormModel<TData, TVariables>({
+    model,
+    loading,
+    disabled,
+    params,
+    breadcrumb,
+    navigate,
+    onCallback,
+  });
+  const [getDetail, { data }] = useGraphql<Project, QueryProjectArgs>(
+    model,
+    `{
     id
     name
     desc
@@ -68,7 +84,9 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
         validator
       }
     }
-  }`, { id: params.id }).Detail();
+  }`,
+    { id: params.id }
+  ).Detail();
 
   useEffect(() => {
     getDetail();
@@ -83,23 +101,26 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
       // }
       // setMenuItem([]);
       if (data) {
-        const children: MenuProps['items'] = [];
+        const children: MenuProps["items"] = [];
         if (data.tables.length > 0) {
           _.forEach(data.tables, (item, index) => {
-            children.push({ key: item.id, label: `${index + 1} - ${item.title}` });
+            children.push({
+              key: item.id,
+              label: `${index + 1} - ${item.title}`,
+            });
           });
         }
 
-        setMenuItem([{ key: 'menu_01', label: data.name, children }]);
+        setMenuItem([{ key: "menu_01", label: data.name, children }]);
       }
     }
   }, [data]);
 
   const tableTemp: ITableTemp[] = [
-    { label: '实时预览', children: <>实时预览</> },
-    { label: '字段管理', children: <FieldTemp /> },
-    { label: '渲染管理', children: <RenderTemp /> },
-    { label: '常规设置', children: <SettingTemp /> },
+    { label: "实时预览", children: <>实时预览</> },
+    { label: "字段管理", children: <FieldTemp /> },
+    { label: "渲染管理", children: <RenderTemp /> },
+    { label: "常规设置", children: <SettingTemp /> },
   ];
 
   // tabItems ...
@@ -112,23 +133,34 @@ function FormData<TData, TVariables>(props: IFormModelComponentProps<TData, TVar
   };
 
   return (
-    <Layout style={{ background: '#fff' }}>
-      <Sider width={180} style={{ background: '#fff' }}>
+    <Layout style={{ background: "#fff" }}>
+      <Sider width={180} style={{ background: "#fff" }}>
         <Menu
           mode="inline"
-          defaultOpenKeys={['menu_01']}
-          style={{ height: '100%', background: '#fff' }}
+          defaultOpenKeys={["menu_01"]}
+          style={{ height: "100%", background: "#fff" }}
           items={menuItem}
         />
       </Sider>
-      <Content style={{ padding: '10px' }}>
-        <Form form={form} name="form" autoComplete="off" className='clear' scrollToFirstError onFinish={onFinish}>
+      <Content style={{ padding: "10px" }}>
+        <Form
+          form={form}
+          name="form"
+          autoComplete="off"
+          className="clear"
+          scrollToFirstError
+          onFinish={onFinish}
+        >
           <Tabs type="card" items={tabItems} />
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
-            <Button htmlType="button" onClick={onReset} style={{ marginLeft: '10px' }}>
+            <Button
+              htmlType="button"
+              onClick={onReset}
+              style={{ marginLeft: "10px" }}
+            >
               Reset
             </Button>
           </Form.Item>

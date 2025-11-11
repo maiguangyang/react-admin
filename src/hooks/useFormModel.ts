@@ -1,10 +1,16 @@
+/*
+ * @Author: Marlon.M
+ * @Email: maiguangyang@163.com
+ * @Date: 2025-11-11 07:55:57
+ */
 import { IFormDataType } from '~@/pages/project/types';
 import { IFormModelType } from '~@/types/useFormModel_hook_type';
 import utils from '~@/utils/utils';
 import { useAntdAction } from './useAntd';
+import { OperationVariables } from '@apollo/client';
 
 // export const useFormModel: = (props: IFormModelType) => {
-export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVariables>) {
+export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVariables extends OperationVariables ? TVariables : OperationVariables>) {
   const { model, loading, onCallback, disabled, params, breadcrumb, navigate } = props;
   const { message, notification } = useAntdAction();
 
@@ -43,7 +49,7 @@ export function useFormModel<TData, TVariables>(props: IFormModelType<TData, TVa
     // const res = await onCallback?.({ variables }).catch((err) => message.error(err.message)) || {};
     // setLoading(false);
 
-    const res = (await onCallback?.({ variables }).catch((err) => {
+    const res = (await onCallback?.(variables).catch((err) => {
       message.error(err.message);
       return null;
     })) || {};

@@ -1,21 +1,21 @@
-import 'antd/dist/reset.css';
-import styles from './index.module.less';
+import "antd/dist/reset.css";
+import styles from "./index.module.less";
 
-import { FC, memo, Suspense, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { App, Layout, ConfigProvider, notification, Spin } from 'antd';
-import zhCN from 'antd/lib/locale/zh_CN';
-import classNames from 'classnames';
+import { App, ConfigProvider, Layout, notification, Spin } from "antd";
+import zhCN from "antd/lib/locale/zh_CN";
+import classNames from "classnames";
+import { FC, memo, Suspense, useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 
-import HeaderLayer from './components/header';
-import FooterLayer from './components/footer';
-import BreadcrumbLayer from './components/breadcrumb';
-import SiderMenuLayer from './components/siderMenu';
+import BreadcrumbLayer from "./components/breadcrumb";
+import FooterLayer from "./components/footer";
+import HeaderLayer from "./components/header";
+import SiderMenuLayer from "./components/siderMenu";
 
-import { Routes } from '~@/router';
-import { RouteObject } from '~@/router/types';
-import { useLayoutStore } from './hooks';
-import { LayoutWrapperProps } from './types';
+import { Routes } from "~@/router";
+import { RouteObject } from "~@/router/types";
+import { useLayoutStore } from "./hooks";
+import { LayoutWrapperProps } from "./types";
 
 notification.config({
   top: 55,
@@ -31,16 +31,25 @@ const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
   const { parenRoute, childMenu, selectedKeys } = useLayoutStore();
 
   useEffect(() => {
-    setIsCollapsed(parenRoute.current?.path === 'project');
+    setIsCollapsed(parenRoute.current?.path === "project");
   }, [parenRoute.current]);
 
   const handleOnCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  if (parenRoute.current?.path === 'welcome') {
+  if (parenRoute.current?.path === "welcome") {
     return (
-      <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
+      <Suspense
+        fallback={
+          <Spin
+            className="flex align-center flex-center flex-one"
+            size="large"
+          />
+        }
+      >
+        {element}
+      </Suspense>
     );
   }
 
@@ -50,13 +59,39 @@ const LayoutWrapper: FC<LayoutWrapperProps> = ({ element }) => {
         <Layout className={styles.pcLayout}>
           <HeaderLayer current={parenRoute.current} data={routes} />
           <Layout>
-            <Sider width={230} className={classNames(styles.leftMenu)} collapsible collapsed={isCollapsed} onCollapse={handleOnCollapse}>
-              <SiderMenuLayer paren={parenRoute.current} data={childMenu} selectedKeys={selectedKeys} />
+            <Sider
+              width={230}
+              className={classNames(styles.leftMenu)}
+              collapsible
+              collapsed={isCollapsed}
+              onCollapse={handleOnCollapse}
+            >
+              <SiderMenuLayer
+                paren={parenRoute.current}
+                data={childMenu}
+                selectedKeys={selectedKeys}
+              />
             </Sider>
-            <Layout style={{ padding: '0 24px 0px' }}>
+            <Layout style={{ padding: "0 24px 0px" }}>
               <BreadcrumbLayer />
-              <Content className={classNames('flex', 'flex-direction', 'border', styles.mainContent)}>
-                <Suspense fallback={<Spin className='flex align-center flex-center flex-one' size="large" />}>{element}</Suspense>
+              <Content
+                className={classNames(
+                  "flex",
+                  "flex-direction",
+                  "border",
+                  styles.mainContent
+                )}
+              >
+                <Suspense
+                  fallback={
+                    <Spin
+                      className="flex align-center flex-center flex-one"
+                      size="large"
+                    />
+                  }
+                >
+                  {element}
+                </Suspense>
                 <Outlet />
               </Content>
               <FooterLayer />

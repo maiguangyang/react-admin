@@ -11,6 +11,7 @@ export interface IFormDefaultData {
   state: boolean | number
 }
 
+// useMutation.MutationFunction
 export interface IFormModelComponentProps<TData, TVariables extends OperationVariables> {
   title: string;
   model: string;

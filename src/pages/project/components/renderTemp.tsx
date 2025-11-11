@@ -1,35 +1,39 @@
-import { FC, useState } from 'react';
-import type { DragEndEvent } from '@dnd-kit/core';
-import { DndContext } from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { TableRow } from './tableRow';
-import { RenderColumns } from './columns';
-import { Table } from 'antd';
+import type { DragEndEvent } from "@dnd-kit/core";
+import { DndContext } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { Table } from "antd";
+import { FC, useState } from "react";
+import { RenderColumns } from "./columns";
+import { TableRow } from "./tableRow";
 
 export const RenderTemp: FC = () => {
   const [dataSource, setDataSource] = useState([
     {
-      key: '1',
-      name: 'John-1',
-      tableName: 'John-1',
-      typeName: 'Brown',
+      key: "1",
+      name: "John-1",
+      tableName: "John-1",
+      typeName: "Brown",
       len: 32,
-      comment: 'New York No. 1 Lake Park',
-      indexName: 'New York No. 1 Lake Park',
-      defaultValue: '123',
-      validator: 'New York No. 1 Lake Park',
+      comment: "New York No. 1 Lake Park",
+      indexName: "New York No. 1 Lake Park",
+      defaultValue: "123",
+      validator: "New York No. 1 Lake Park",
     },
     {
-      key: '2',
-      name: 'John-2',
-      tableName: 'John-2',
-      typeName: 'Brown',
+      key: "2",
+      name: "John-2",
+      tableName: "John-2",
+      typeName: "Brown",
       len: 32,
-      comment: 'New York No. 1 Lake Park',
-      indexName: 'New York No. 1 Lake Park',
-      defaultValue: '123',
-      validator: 'New York No. 1 Lake Park',
+      comment: "New York No. 1 Lake Park",
+      indexName: "New York No. 1 Lake Park",
+      defaultValue: "123",
+      validator: "New York No. 1 Lake Park",
     },
   ]);
 

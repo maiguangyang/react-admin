@@ -1,8 +1,8 @@
-import pluralize from 'pluralize';
-import { gql, TypedDocumentNode, OperationVariables } from '@apollo/client';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
-import Router from '~@/router';
-import { IFormDefaultData } from '~@/types/useGraphql_hook_type';
+import { gql, OperationVariables, TypedDocumentNode } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react";
+import pluralize from "pluralize";
+import Router from "~@/router";
+import { IFormDefaultData } from "~@/types/useGraphql_hook_type";
 
 export { Router };
 
@@ -11,7 +11,12 @@ export const FormDefaultDataValue: IFormDefaultData = {
   state: true,
 };
 
-export const useGraphql = <TData, TVariables extends OperationVariables>(mode: string, columns?: string, variables?: TVariables, fields: string[] = ['current_page', 'per_page', 'total', 'total_page']) => {
+export const useGraphql = <TData, TVariables extends OperationVariables>(
+  mode: string,
+  columns?: string,
+  variables?: TVariables,
+  fields: string[] = ["current_page", "per_page", "total", "total_page"]
+) => {
   return {
     // 新增
     Create() {
@@ -22,23 +27,27 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
           }
         }
       `;
+
       return useMutation(text);
     },
 
     // 修改
     Update() {
-      const text: TypedDocumentNode<TData, TVariables> = gql`mutation ${mode}Edit ($id: ID!, $data: ${mode}UpdateInput!) {
-        update${mode}(id: $id, input: $data) {
-          id
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        mutation ${mode}Edit ($id: ID!, $data: ${mode}UpdateInput!) {
+          update${mode}(id: $id, input: $data) {
+            id
+          }
         }
-      }`;
-
+      `;
       return useMutation(text);
     },
 
     // 删除
     Delete() {
-      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
+      const name = pluralize(
+        mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase())
+      );
       const text: TypedDocumentNode<TData, TVariables> = gql`
         mutation ${name}Delete ($id: [ID!]!) {
           delete${name}(id: $id)
@@ -50,7 +59,9 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
 
     // 恢复
     Recovery() {
-      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase()));
+      const name = pluralize(
+        mode.replace(mode.slice(0, 1), mode.slice(0, 1).toUpperCase())
+      );
       const text: TypedDocumentNode<TData, TVariables> = gql`
         mutation ${name}Recovery ($id: [ID!]!) {
           recovery${name}(id: $id)
@@ -62,7 +73,9 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
 
     // 列表
     List() {
-      const name = pluralize(mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase()));
+      const name = pluralize(
+        mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase())
+      );
       const text: TypedDocumentNode<TData, TVariables> = gql`
         query ${name} ($current_page: Int = 1, $per_page: Int = 10, $sort: [${mode}SortType!], $q: String, $filter: ${mode}FilterType, $rand: Boolean = false) {
           ${name}(current_page: $current_page, per_page: $per_page, sort: $sort, q: $q, filter: $filter, rand: $rand) {
@@ -75,14 +88,17 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
       const res = useLazyQuery<TData, TVariables>(text, variables);
 
       if (res[1].data) {
-        res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
+        res[1].data = res[1].data[name as keyof TData] as unknown as TData;
       }
       return res;
     },
 
     // 详情
     Detail() {
-      const name = mode.replace(mode.slice(0, 1), mode.slice(0, 1).toLowerCase());
+      const name = mode.replace(
+        mode.slice(0, 1),
+        mode.slice(0, 1).toLowerCase()
+      );
       const text: TypedDocumentNode<TData, TVariables> = gql`
         query ${name} ($id: ID, $filter: ${mode}FilterType) {
           ${name}(id: $id, filter: $filter)
@@ -92,7 +108,7 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
 
       const res = useLazyQuery<TData, TVariables>(text, variables);
       if (res[1].data) {
-        res[1].data = (res[1].data[name as keyof TData] as unknown as TData);
+        res[1].data = res[1].data[name as keyof TData] as unknown as TData;
       }
 
       return res;
@@ -100,14 +116,18 @@ export const useGraphql = <TData, TVariables extends OperationVariables>(mode: s
 
     // 其他查询
     Query() {
-      const text: TypedDocumentNode<TData, TVariables> = gql`${mode}`;
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        ${mode}
+      `;
       const res = useQuery(text, { variables: variables as TVariables });
       return res;
     },
 
     // 其他更改
     Mutation() {
-      const text: TypedDocumentNode<TData, TVariables> = gql`${mode}`;
+      const text: TypedDocumentNode<TData, TVariables> = gql`
+        ${mode}
+      `;
       const res = useMutation(text, { variables });
       return res;
     },
